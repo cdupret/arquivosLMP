@@ -1,0 +1,1163 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Módulo 01 · Aula 1 — A Lei Maria da Penha · Penha em Cena</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --rosa: #D4537E;
+  --rosa-claro: #E8789E;
+  --fundo: #0E0B14;
+  --fundo2: #17122A;
+  --fundo3: #211A38;
+  --roxo: #7F77DD;
+  --texto: #F0EAF8;
+  --muted: #9B8FBC;
+  --borda: rgba(212,83,126,0.2);
+  --verde: #1D9E75;
+  --dourado: #C9963A;
+  --azul: #3A8ADC;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--fundo);
+  color: var(--texto);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* PARTÍCULAS DE FUNDO */
+.bg-particles {
+  position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  background:
+    radial-gradient(ellipse 60% 40% at 20% 20%, rgba(127,119,221,0.08) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 60% at 80% 80%, rgba(212,83,126,0.07) 0%, transparent 60%),
+    radial-gradient(ellipse 30% 30% at 50% 50%, rgba(201,150,58,0.04) 0%, transparent 70%);
+}
+
+/* HEADER */
+.header {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(14,11,20,0.92);
+  border-bottom: 1px solid var(--borda);
+  padding: 14px 24px;
+  display: flex; align-items: center; gap: 14px;
+  backdrop-filter: blur(16px);
+}
+.logo { font-family: 'Playfair Display', serif; font-size: 17px; color: var(--rosa); font-weight: 700; }
+.sep { color: var(--muted); font-size: 13px; }
+.curso-info { font-size: 12px; color: var(--muted); }
+
+/* PROGRESSO */
+.progress-bar {
+  background: var(--fundo2);
+  border-bottom: 1px solid var(--borda);
+  padding: 14px 24px;
+  position: sticky; top: 53px; z-index: 99;
+}
+.steps {
+  max-width: 760px; margin: 0 auto;
+  display: flex; align-items: center;
+}
+.step {
+  display: flex; flex-direction: column; align-items: center;
+  gap: 5px; flex: 1; cursor: pointer; border: none; background: none;
+}
+.step-dot {
+  width: 30px; height: 30px; border-radius: 50%;
+  border: 2px solid rgba(155,143,188,0.3);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 500; color: var(--muted);
+  transition: all 0.35s cubic-bezier(.4,0,.2,1);
+  position: relative; z-index: 1;
+}
+.step-dot.active {
+  background: var(--rosa); border-color: var(--rosa); color: #fff;
+  box-shadow: 0 0 24px rgba(212,83,126,0.5);
+}
+.step-dot.done { background: var(--verde); border-color: var(--verde); color: #fff; }
+.step-label { font-size: 10px; color: var(--muted); white-space: nowrap; letter-spacing: 0.04em; }
+.step-label.active { color: var(--rosa); }
+.step-label.done { color: var(--verde); }
+.step-line { flex: 1; height: 2px; background: rgba(155,143,188,0.15); margin-bottom: 16px; transition: background 0.4s; }
+.step-line.done { background: var(--verde); }
+
+/* MAIN */
+.main { max-width: 820px; margin: 0 auto; padding: 36px 24px 100px; position: relative; z-index: 1; }
+
+/* TELAS */
+.tela { display: none; animation: reveal 0.45s cubic-bezier(.4,0,.2,1); }
+.tela.active { display: block; }
+@keyframes reveal { from { opacity:0; transform: translateY(14px); } to { opacity:1; transform: translateY(0); } }
+
+/* HERO DA AULA — TELA 0 */
+.hero {
+  text-align: center; padding: 20px 0 36px;
+}
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(212,83,126,0.12);
+  border: 1px solid rgba(212,83,126,0.3);
+  border-radius: 20px; padding: 5px 14px;
+  font-size: 11px; font-weight: 500; color: var(--rosa);
+  letter-spacing: 0.06em; text-transform: uppercase;
+  margin-bottom: 18px;
+}
+.hero-titulo {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(28px, 5vw, 44px);
+  font-weight: 900;
+  line-height: 1.15;
+  color: var(--texto);
+  margin-bottom: 14px;
+}
+.hero-titulo span { color: var(--rosa); font-style: italic; }
+.hero-desc {
+  font-size: 15px; color: var(--muted);
+  line-height: 1.8; max-width: 580px; margin: 0 auto 28px;
+}
+
+/* LINHA DO TEMPO */
+.timeline { position: relative; margin: 0 0 12px; }
+.timeline::before {
+  content: ''; position: absolute;
+  left: 50%; top: 0; bottom: 0; width: 2px;
+  background: linear-gradient(to bottom, transparent, rgba(212,83,126,0.3), var(--rosa), rgba(212,83,126,0.3), transparent);
+  transform: translateX(-50%);
+}
+@media (max-width: 600px) {
+  .timeline::before { left: 24px; }
+}
+
+.tl-item {
+  display: flex; gap: 28px; margin-bottom: 0;
+  align-items: flex-start;
+  position: relative;
+}
+.tl-item:nth-child(odd) { flex-direction: row; }
+.tl-item:nth-child(even) { flex-direction: row-reverse; }
+
+@media (max-width: 600px) {
+  .tl-item, .tl-item:nth-child(even) { flex-direction: row !important; padding-left: 52px; }
+  .tl-dot { left: 24px !important; right: auto !important; }
+  .tl-content { margin: 0 !important; }
+}
+
+.tl-content {
+  flex: 1; max-width: calc(50% - 28px);
+  background: var(--fundo2);
+  border: 1px solid var(--borda);
+  border-radius: 14px; padding: 16px 18px;
+  cursor: pointer; transition: all 0.25s;
+  margin-bottom: 24px;
+  position: relative;
+}
+.tl-content:hover { border-color: var(--rosa); transform: translateY(-2px); box-shadow: 0 8px 30px rgba(212,83,126,0.15); }
+.tl-content.expandido { border-color: var(--rosa); background: rgba(212,83,126,0.05); }
+
+@media (max-width: 600px) {
+  .tl-content { max-width: 100%; }
+}
+
+.tl-ano {
+  font-size: 11px; font-weight: 500; color: var(--rosa);
+  letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 4px;
+}
+.tl-titulo { font-family: 'Playfair Display', serif; font-size: 15px; font-weight: 700; color: var(--texto); margin-bottom: 4px; }
+.tl-resumo { font-size: 12px; color: var(--muted); line-height: 1.6; }
+.tl-detalhe {
+  display: none; margin-top: 12px;
+  padding-top: 12px; border-top: 1px solid rgba(212,83,126,0.15);
+  font-size: 13px; color: var(--muted); line-height: 1.75;
+}
+.tl-detalhe.show { display: block; }
+.tl-tag {
+  display: inline-block; font-size: 10px; padding: 2px 8px;
+  border-radius: 20px; margin-top: 8px; font-weight: 500;
+}
+
+.tl-dot {
+  position: absolute; left: 50%; top: 20px;
+  width: 14px; height: 14px; border-radius: 50%;
+  background: var(--rosa); border: 3px solid var(--fundo);
+  transform: translateX(-50%);
+  box-shadow: 0 0 12px rgba(212,83,126,0.5);
+  z-index: 2;
+}
+.tl-spacer { flex: 1; max-width: calc(50% - 28px); }
+
+/* ARTIGOS */
+.artigo-block {
+  background: var(--fundo2);
+  border: 1px solid var(--borda);
+  border-radius: 16px; padding: 22px 24px;
+  margin-bottom: 16px;
+}
+.artigo-block.destaque { border-color: rgba(212,83,126,0.5); background: rgba(212,83,126,0.04); }
+.artigo-numero {
+  font-size: 11px; font-weight: 600; color: var(--rosa);
+  text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px;
+}
+.artigo-titulo {
+  font-family: 'Playfair Display', serif; font-size: 17px; font-weight: 700;
+  color: var(--texto); margin-bottom: 12px;
+}
+.artigo-texto {
+  font-size: 13px; color: var(--muted); line-height: 1.8;
+  border-left: 3px solid var(--rosa); padding-left: 14px;
+  margin-bottom: 14px;
+  font-style: italic;
+}
+.artigo-analise { font-size: 13px; color: var(--muted); line-height: 1.75; margin-bottom: 12px; }
+
+.incisos { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; }
+.inciso {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(155,143,188,0.15);
+  border-radius: 10px; padding: 12px 14px;
+  cursor: pointer; transition: all 0.2s;
+}
+.inciso:hover { border-color: var(--rosa); background: rgba(212,83,126,0.06); }
+.inciso.ativo { border-color: var(--rosa); background: rgba(212,83,126,0.08); }
+.inciso-header { display: flex; align-items: center; gap: 10px; }
+.inciso-num {
+  font-size: 11px; font-weight: 600; color: var(--rosa);
+  background: rgba(212,83,126,0.15); padding: 2px 8px; border-radius: 10px;
+  white-space: nowrap;
+}
+.inciso-nome { font-size: 13px; font-weight: 500; color: var(--texto); }
+.inciso-chev { margin-left: auto; font-size: 11px; color: var(--muted); transition: transform 0.2s; }
+.inciso.ativo .inciso-chev { transform: rotate(180deg); }
+.inciso-corpo {
+  display: none; margin-top: 10px;
+  font-size: 13px; color: var(--muted); line-height: 1.75;
+  padding-top: 10px; border-top: 1px solid rgba(155,143,188,0.1);
+}
+.inciso-corpo.show { display: block; }
+.inciso-alerta {
+  margin-top: 8px; padding: 8px 12px; border-radius: 8px;
+  font-size: 12px; line-height: 1.6;
+}
+
+/* JULGADOS */
+.julgado-card {
+  background: var(--fundo2);
+  border: 1px solid var(--borda);
+  border-radius: 14px; padding: 18px 20px;
+  margin-bottom: 12px; cursor: pointer; transition: all 0.2s;
+}
+.julgado-card:hover { border-color: var(--rosa); }
+.julgado-card.expandido { border-color: var(--rosa); background: rgba(212,83,126,0.04); }
+.julgado-header { display: flex; align-items: flex-start; gap: 12px; }
+.julgado-tribunal {
+  font-size: 10px; font-weight: 700; padding: 3px 9px; border-radius: 6px;
+  text-transform: uppercase; letter-spacing: 0.06em; white-space: nowrap; flex-shrink: 0;
+  margin-top: 2px;
+}
+.stf-badge { background: rgba(58,138,220,0.2); color: #85B7EB; border: 1px solid rgba(58,138,220,0.3); }
+.stj-badge { background: rgba(29,158,117,0.2); color: #5DCAA5; border: 1px solid rgba(29,158,117,0.3); }
+.julgado-meta { flex: 1; }
+.julgado-ref { font-size: 11px; color: var(--muted); margin-bottom: 3px; }
+.julgado-tese { font-size: 13px; font-weight: 500; color: var(--texto); line-height: 1.5; }
+.julgado-chev { color: var(--muted); font-size: 12px; margin-top: 2px; transition: transform 0.2s; }
+.julgado-card.expandido .julgado-chev { transform: rotate(180deg); }
+.julgado-corpo {
+  display: none; margin-top: 14px;
+  padding-top: 14px; border-top: 1px solid rgba(212,83,126,0.15);
+  font-size: 13px; color: var(--muted); line-height: 1.75;
+}
+.julgado-corpo.show { display: block; }
+.julgado-impacto {
+  margin-top: 10px; padding: 10px 12px;
+  background: rgba(212,83,126,0.08);
+  border-left: 3px solid var(--rosa);
+  border-radius: 0 8px 8px 0;
+  font-size: 12px; color: var(--rosa-claro); line-height: 1.6;
+}
+
+/* QUIZ */
+.quiz-card {
+  background: var(--fundo2);
+  border: 1px solid var(--borda);
+  border-radius: 16px; padding: 22px 22px;
+  margin-bottom: 16px;
+}
+.q-num { font-size: 11px; font-weight: 600; color: var(--rosa); letter-spacing: 0.07em; text-transform: uppercase; margin-bottom: 8px; }
+.q-enunciado {
+  font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 700;
+  line-height: 1.5; color: var(--texto); margin-bottom: 18px;
+}
+.q-opcao {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(155,143,188,0.2);
+  border-radius: 9px; padding: 11px 14px;
+  margin-bottom: 8px; cursor: pointer; font-size: 13px;
+  color: var(--muted); transition: all 0.2s; line-height: 1.5;
+}
+.q-opcao:hover:not(.bloq) { border-color: var(--rosa); color: var(--texto); background: rgba(212,83,126,0.07); }
+.q-opcao.ok { background: rgba(29,158,117,0.12); border-color: var(--verde); color: #9FE1CB; }
+.q-opcao.err { background: rgba(212,83,126,0.1); border-color: var(--rosa); color: #EDB0C5; }
+.q-opcao.bloq { cursor: default; }
+.q-feedback {
+  display: none; margin-top: 12px; padding: 12px 14px;
+  border-radius: 9px; font-size: 13px; line-height: 1.7;
+}
+.q-feedback.show { display: block; }
+.q-feedback.ok { background: rgba(29,158,117,0.12); border: 1px solid rgba(29,158,117,0.25); color: #9FE1CB; }
+.q-feedback.err { background: rgba(212,83,126,0.1); border: 1px solid rgba(212,83,126,0.25); color: #EDB0C5; }
+
+/* RESUMO */
+.resumo-intro {
+  text-align: center; padding: 8px 0 28px;
+}
+.resumo-intro-titulo {
+  font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 900;
+  color: var(--texto); margin-bottom: 8px;
+}
+.resumo-intro-titulo span { color: var(--rosa); }
+.resumo-intro-sub { font-size: 14px; color: var(--muted); }
+
+.resumo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 10px; margin-bottom: 20px;
+}
+.resumo-item {
+  background: var(--fundo2);
+  border: 1px solid var(--borda);
+  border-radius: 12px; padding: 14px 16px;
+  transition: border-color 0.2s;
+}
+.resumo-item:hover { border-color: rgba(212,83,126,0.4); }
+.resumo-item-icon { font-size: 20px; margin-bottom: 8px; }
+.resumo-item-titulo { font-size: 13px; font-weight: 500; color: var(--texto); margin-bottom: 5px; }
+.resumo-item-texto { font-size: 12px; color: var(--muted); line-height: 1.65; }
+
+.encerramento {
+  background: linear-gradient(135deg, rgba(212,83,126,0.08), rgba(127,119,221,0.06));
+  border: 1px solid rgba(212,83,126,0.25);
+  border-radius: 16px; padding: 28px; text-align: center; margin-top: 20px;
+}
+.enc-icone { font-size: 36px; margin-bottom: 10px; }
+.enc-titulo {
+  font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700;
+  color: var(--verde); margin-bottom: 8px;
+}
+.enc-texto { font-size: 13px; color: var(--muted); line-height: 1.7; }
+
+/* TELA LABEL */
+.tela-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(212,83,126,0.1);
+  border: 1px solid rgba(212,83,126,0.25);
+  border-radius: 20px; padding: 4px 12px;
+  font-size: 11px; font-weight: 500; color: var(--rosa);
+  letter-spacing: 0.05em; text-transform: uppercase;
+  margin-bottom: 12px;
+}
+.tela-titulo {
+  font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 900;
+  color: var(--texto); margin-bottom: 8px; line-height: 1.3;
+}
+.tela-desc { font-size: 14px; color: var(--muted); line-height: 1.75; margin-bottom: 24px; }
+
+/* NAV */
+.nav-bar {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-top: 32px; padding-top: 22px;
+  border-top: 1px solid var(--borda);
+}
+.nav-info { font-size: 12px; color: var(--muted); }
+.btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 11px 22px; border-radius: 10px;
+  font-size: 14px; font-weight: 500; cursor: pointer;
+  transition: all 0.2s; border: none; font-family: 'DM Sans', sans-serif;
+}
+.btn-sec {
+  background: rgba(255,255,255,0.05);
+  color: var(--muted); border: 1px solid rgba(155,143,188,0.2);
+}
+.btn-sec:hover { background: rgba(255,255,255,0.09); color: var(--texto); }
+.btn-pri {
+  background: var(--rosa); color: #fff;
+  box-shadow: 0 4px 22px rgba(212,83,126,0.35);
+}
+.btn-pri:hover { background: #b93d6a; transform: translateY(-1px); box-shadow: 0 6px 28px rgba(212,83,126,0.45); }
+
+/* DESTAQUE DE DADO */
+.dado-destaque {
+  background: rgba(201,150,58,0.08);
+  border: 1px solid rgba(201,150,58,0.25);
+  border-radius: 12px; padding: 14px 16px;
+  margin: 16px 0; font-size: 13px; color: #E8C46A; line-height: 1.7;
+}
+.dado-num { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 900; color: var(--dourado); }
+
+/* CONVENÇÕES */
+.conv-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; margin-top: 14px; }
+.conv-card {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(127,119,221,0.2);
+  border-radius: 11px; padding: 12px 14px;
+}
+.conv-ano { font-size: 10px; font-weight: 600; color: var(--roxo); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 4px; }
+.conv-nome { font-size: 12px; font-weight: 500; color: var(--texto); margin-bottom: 4px; line-height: 1.4; }
+.conv-desc { font-size: 11px; color: var(--muted); line-height: 1.5; }
+
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--fundo); }
+::-webkit-scrollbar-thumb { background: var(--fundo3); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<div class="bg-particles"></div>
+
+<header class="header">
+  <span class="logo">PENHA em Cena</span>
+  <span class="sep">/</span>
+  <span class="curso-info">Módulo 01 · Aula 1 — A Lei Maria da Penha</span>
+</header>
+
+<div class="progress-bar">
+  <div class="steps" id="steps"></div>
+</div>
+
+<main class="main">
+
+  <!-- TELA 0: ORIGEM -->
+  <div class="tela active" id="t0">
+    <div class="hero">
+      <div class="hero-badge">Módulo 01 · Aula 1 · Fundamento essencial</div>
+      <h1 class="hero-titulo">A Lei que nasceu<br>de uma <span>história real</span></h1>
+      <p class="hero-desc">Antes de aplicar a Lei Maria da Penha, você precisa entender por que ela existe, quem a motivou e como chegou ao Brasil. Essa história muda a forma como você argumenta em juízo.</p>
+    </div>
+
+    <!-- QUEM É MARIA DA PENHA -->
+    <div class="artigo-block destaque" style="margin-bottom:20px;">
+      <div class="artigo-numero">A pessoa por trás da lei</div>
+      <div class="artigo-titulo">Maria da Penha Maia Fernandes</div>
+      <p class="artigo-analise">Nascida em 1º de fevereiro de 1945 em Fortaleza (CE), biofarmacêutica, mãe de três filhas. Em 1983, seu marido — o economista e professor universitário colombiano <strong style="color:var(--texto)">Marco Antônio Heredia Viveros</strong> — tentou matá-la duas vezes.</p>
+      <div class="dado-destaque">
+        <div style="display:flex;gap:24px;flex-wrap:wrap;">
+          <div><div class="dado-num">1ª</div><div style="font-size:12px;margin-top:2px;">Tentativa: tiro enquanto dormia → paraplegia irreversível</div></div>
+          <div><div class="dado-num">2ª</div><div style="font-size:12px;margin-top:2px;">Tentativa: eletrocussão durante o banho</div></div>
+          <div><div class="dado-num">19</div><div style="font-size:12px;margin-top:2px;">anos de processo sem sentença definitiva</div></div>
+        </div>
+      </div>
+      <p class="artigo-analise">Heredia foi a júri duas vezes. Recorreu em ambas. Em outubro de 2002, quando faltavam apenas seis meses para a prescrição, foi finalmente condenado — e cumpriu apenas dois anos, sendo solto em 2004. Em março de 2025, Maria da Penha recebeu o título de <strong style="color:var(--texto)">Doutora Honoris Causa da Universidade Federal do Ceará (UFC)</strong>.</p>
+    </div>
+
+    <!-- LINHA DO TEMPO -->
+    <div class="tela-badge">A trajetória até a lei</div>
+    <h2 class="tela-titulo">Da tragédia à conquista</h2>
+    <p class="tela-desc">Clique em cada marco para expandir os detalhes. Essa cronologia é fundamental para compreender a responsabilidade internacional do Brasil — tema recorrente em provas e audiências.</p>
+
+    <div class="timeline" id="timeline"></div>
+
+    <div class="nav-bar">
+      <span class="nav-info">Explore todos os marcos antes de avançar</span>
+      <button class="btn btn-pri" onclick="ir(1)">Próximo: Contexto internacional →</button>
+    </div>
+  </div>
+
+  <!-- TELA 1: CONTEXTO INTERNACIONAL -->
+  <div class="tela" id="t1">
+    <div class="tela-badge">Etapa 2 de 5</div>
+    <h2 class="tela-titulo">O Brasil perante o mundo</h2>
+    <p class="tela-desc">A Lei Maria da Penha não surgiu no vácuo — ela é resultado de pressões do sistema internacional de direitos humanos e de compromissos assumidos pelo Brasil em convenções que vinculam o Estado.</p>
+
+    <div class="artigo-block" style="margin-bottom:16px;">
+      <div class="artigo-numero">O que a ONU diz sobre a LMP</div>
+      <div class="artigo-titulo">Reconhecimento mundial</div>
+      <p class="artigo-analise">A ONU reconhece a Lei Maria da Penha como uma das <strong style="color:var(--texto)">três legislações mais avançadas do mundo</strong> no enfrentamento à violência de gênero. Antes da LMP, autores de violência doméstica respondiam na Lei 9.099/95 e eram punidos com cesta básica ou multa — o que a CIDH considerou tolerância estatal.</p>
+    </div>
+
+    <div class="artigo-block" style="margin-bottom:16px;">
+      <div class="artigo-numero">O caso que mudou tudo — CIDH, Caso nº 12.051</div>
+      <div class="artigo-titulo">A primeira condenação internacional por violência doméstica</div>
+      <p class="artigo-analise">Em 1998, Maria da Penha, o CEJIL (Centro para a Justiça e o Direito Internacional) e o CLADEM (Comitê Latino-Americano e do Caribe para a Defesa dos Direitos da Mulher) denunciaram o Brasil à <strong style="color:var(--texto)">CIDH/OEA</strong>. Foi a primeira vez na história da OEA que uma denúncia de violência doméstica foi acolhida com análise de mérito.</p>
+      <p class="artigo-analise" style="margin-top:10px;">Em abril de 2001, pelo <strong style="color:var(--texto)">Relatório 54/01</strong>, a CIDH condenou o Brasil por omissão, negligência e tolerância. Recomendações: finalizar o processo penal, investigar irregularidades, reparar a vítima e criar legislação específica. O Brasil respondeu com a Lei 11.340/2006.</p>
+    </div>
+
+    <div class="artigo-block" style="margin-bottom:16px;">
+      <div class="artigo-numero">Convenções que embasam a LMP</div>
+      <div class="artigo-titulo">O arcabouço internacional</div>
+      <p class="artigo-analise" style="margin-bottom:12px;">A LMP menciona expressamente na ementa dois diplomas internacionais vinculantes para o Brasil:</p>
+      <div class="conv-grid">
+        <div class="conv-card">
+          <div class="conv-ano">CEDAW — 1979</div>
+          <div class="conv-nome">Convenção sobre a Eliminação de Todas as Formas de Discriminação contra as Mulheres</div>
+          <div class="conv-desc">Adotada pela ONU. Ratificada pelo Brasil. Obriga o Estado a eliminar discriminações contra mulheres em todas as esferas.</div>
+          <a href="https://www.planalto.gov.br/ccivil_03/decreto/2002/d4377.htm" target="_blank" style="display:inline-block;margin-top:8px;font-size:11px;color:var(--roxo);text-decoration:underline;">→ Texto oficial (Decreto 4.377/2002)</a>
+        </div>
+        <div class="conv-card">
+          <div class="conv-ano">Convenção de Belém do Pará — 1994</div>
+          <div class="conv-nome">Convenção Interamericana para Prevenir, Punir e Erradicar a Violência contra a Mulher</div>
+          <div class="conv-desc">Primeiro caso de aplicação da Convenção de Belém do Pará pela CIDH. Reconhece a violência de gênero como violação de direitos humanos.</div>
+          <a href="https://www.planalto.gov.br/ccivil_03/decreto/1996/d1973.htm" target="_blank" style="display:inline-block;margin-top:8px;font-size:11px;color:var(--roxo);text-decoration:underline;">→ Texto oficial (Decreto 1.973/1996)</a>
+        </div>
+        <div class="conv-card">
+          <div class="conv-ano">CF/88 — Art. 226, §8º</div>
+          <div class="conv-nome">Fundamento constitucional direto</div>
+          <div class="conv-desc">"O Estado assegurará a assistência à família, na pessoa de cada um dos que a integram, criando mecanismos para coibir a violência no âmbito de suas relações."</div>
+          <a href="https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm#art226" target="_blank" style="display:inline-block;margin-top:8px;font-size:11px;color:var(--roxo);text-decoration:underline;">→ Constituição Federal — Art. 226</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="dado-destaque">
+      <strong style="color:var(--dourado);">Por que isso importa na sua prática?</strong><br>
+      Ao argumentar em favor da vítima, você pode invocar diretamente a Convenção de Belém do Pará e a CEDAW como fundamentos autônomos — especialmente em pedidos de medidas protetivas e na exigência de devida diligência investigativa do Estado.
+    </div>
+
+    <div class="nav-bar">
+      <button class="btn btn-sec" onclick="ir(0)">← Voltar</button>
+      <button class="btn btn-pri" onclick="ir(2)">Próximo: Art. 2º e Art. 5º →</button>
+    </div>
+  </div>
+
+  <!-- TELA 2: ARTIGOS 2 E 5 -->
+  <div class="tela" id="t2">
+    <div class="tela-badge">Etapa 3 de 5</div>
+    <h2 class="tela-titulo">O coração da lei</h2>
+    <p class="tela-desc">O art. 2º define quem a lei protege. O art. 5º define quando ela se aplica. Dominar esses dois artigos é pré-requisito para qualquer atuação na LMP.</p>
+
+    <!-- ART 2 -->
+    <div class="artigo-block destaque" style="margin-bottom:16px;">
+      <div class="artigo-numero">Art. 2º da Lei 11.340/2006</div>
+      <div class="artigo-titulo">Quem a lei protege</div>
+      <div class="artigo-texto">"Toda mulher, independentemente de classe, raça, etnia, orientação sexual, renda, cultura, nível educacional, idade, religião, gozando dos direitos fundamentais inerentes à pessoa humana, sendo-lhe asseguradas as oportunidades e facilidades para viver sem violência, preservar sua saúde física e mental e seu aperfeiçoamento moral, intelectual e social."</div>
+      <p class="artigo-analise">A universalidade é absoluta: a lei não faz distinção de classe social, raça, etnia, orientação sexual ou nível educacional. Não existe mulher que "não mereça" a proteção da LMP — qualquer argumento nesse sentido é inconstitucional. Inclui mulheres transexuais (STJ — Sexta Turma).</p>
+    </div>
+
+    <!-- ART 5 COM INCISOS -->
+    <div class="artigo-block destaque" style="margin-bottom:16px;">
+      <div class="artigo-numero">Art. 5º da Lei 11.340/2006</div>
+      <div class="artigo-titulo">O conceito de violência doméstica</div>
+      <div class="artigo-texto">"Para os efeitos desta Lei, configura violência doméstica e familiar contra a mulher qualquer ação ou omissão baseada no gênero que lhe cause morte, lesão, sofrimento físico, sexual ou psicológico e dano moral ou patrimonial."</div>
+
+      <p class="artigo-analise">Três elementos estruturais que você precisa identificar em cada caso:</p>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;margin-top:8px;">
+        <div style="background:rgba(212,83,126,0.1);border:1px solid rgba(212,83,126,0.2);border-radius:8px;padding:8px 12px;font-size:12px;color:var(--rosa-claro);">① Ação ou omissão</div>
+        <div style="background:rgba(212,83,126,0.1);border:1px solid rgba(212,83,126,0.2);border-radius:8px;padding:8px 12px;font-size:12px;color:var(--rosa-claro);">② Baseada no gênero</div>
+        <div style="background:rgba(212,83,126,0.1);border:1px solid rgba(212,83,126,0.2);border-radius:8px;padding:8px 12px;font-size:12px;color:var(--rosa-claro);">③ Nos âmbitos abaixo</div>
+      </div>
+
+      <p class="artigo-analise" style="margin-bottom:10px;">Os três âmbitos (incisos I, II e III) — clique para expandir cada um:</p>
+      <div class="incisos" id="incisos-art5"></div>
+
+      <div style="margin-top:14px;padding:12px 14px;background:rgba(127,119,221,0.08);border:1px solid rgba(127,119,221,0.2);border-radius:10px;">
+        <p style="font-size:12px;color:#AFA9EC;line-height:1.65;"><strong>Parágrafo único:</strong> As relações pessoais enunciadas neste artigo independem de orientação sexual. → A LMP protege mulheres em relacionamentos homoafetivos, inclusive quando a agressora é outra mulher.</p>
+      </div>
+    </div>
+
+    <div class="nav-bar">
+      <button class="btn btn-sec" onclick="ir(1)">← Voltar</button>
+      <button class="btn btn-pri" onclick="ir(3)">Próximo: Julgados STF e STJ →</button>
+    </div>
+  </div>
+
+  <!-- TELA 3: JULGADOS -->
+  <div class="tela" id="t3">
+    <div class="tela-badge">Etapa 4 de 5</div>
+    <h2 class="tela-titulo">O que os tribunais dizem</h2>
+    <p class="tela-desc">Os julgados que moldam a aplicação da LMP na prática. Clique em cada um para ver a tese completa e o impacto direto na sua atuação.</p>
+    <div id="julgados-lista"></div>
+    <div class="nav-bar">
+      <button class="btn btn-sec" onclick="ir(2)">← Voltar</button>
+      <button class="btn btn-pri" onclick="ir(4)">Próximo: Quiz →</button>
+    </div>
+  </div>
+
+  <!-- TELA 4: QUIZ + RESUMO -->
+  <div class="tela" id="t4">
+    <div class="tela-badge">Etapa 5 de 5 — Fixação e resumo</div>
+    <h2 class="tela-titulo">Teste seu domínio</h2>
+    <p class="tela-desc">Quatro questões sobre o que você acabou de estudar. Clique na alternativa correta e receba feedback imediato.</p>
+    <div id="quiz-lista"></div>
+
+    <div style="margin-top:32px;border-top:1px solid var(--borda);padding-top:28px;">
+      <div class="resumo-intro">
+        <div class="resumo-intro-titulo">O que <span>fixar</span> desta aula</div>
+        <div class="resumo-intro-sub">Os pontos que aparecem em provas, audiências e petições</div>
+      </div>
+      <div class="resumo-grid" id="resumo-grid"></div>
+
+      <div class="encerramento">
+        <div class="enc-icone">✓</div>
+        <div class="enc-titulo">Aula 1 concluída</div>
+        <div class="enc-texto">Você conhece a origem da lei, o caso Maria da Penha, o contexto internacional, o art. 2º, o art. 5º e os principais julgados do STF e STJ.<br>Continue para a Aula 2: As 6 espécies de violência.</div>
+        <button class="btn btn-download" onclick="baixarResumo()" style="margin-top:18px;background:rgba(29,158,117,0.15);border:1px solid rgba(29,158,117,0.4);color:#5DCAA5;padding:11px 22px;border-radius:10px;font-size:14px;font-weight:500;cursor:pointer;display:inline-flex;align-items:center;gap:8px;font-family:'DM Sans',sans-serif;">
+          ↓ Baixar resumo desta aula (PDF)
+        </button>
+      </div>
+    </div>
+
+    <div class="nav-bar">
+      <button class="btn btn-sec" onclick="ir(3)">← Revisitar julgados</button>
+      <button class="btn btn-pri" onclick="ir(0)">↺ Rever do início</button>
+    </div>
+  </div>
+
+</main>
+
+<script>
+// DADOS
+const passos = ["Origem", "Internacional", "Art. 2º e 5º", "Julgados", "Quiz + Resumo"];
+
+const marcos = [
+  {
+    ano: "1983", titulo: "As duas tentativas de homicídio",
+    resumo: "Marco Antônio Heredia Viveros atenta contra a vida de Maria da Penha duas vezes.",
+    detalhe: "Na 1ª tentativa, simulando um assalto, disparou enquanto ela dormia — Maria da Penha ficou com paraplegia irreversível. Na 2ª, semanas depois, tentou eletrocutá-la enquanto tomava banho. Maria da Penha saiu de casa com as filhas após ordem judicial e denunciou o marido.",
+    tag: "Fato gerador", tagBg: "rgba(212,83,126,0.15)", tagCl: "#E8789E"
+  },
+  {
+    ano: "1991 e 1996", titulo: "Os dois júris sem desfecho definitivo",
+    resumo: "Heredia é levado a júri duas vezes. Em ambas, a defesa recorre e impede a condenação definitiva.",
+    detalhe: "No 1º julgamento (1991), a defesa obteve a anulação. No 2º (1996), foi condenado a 10 anos e 6 meses, mas recorreu e permaneceu livre. Por mais de 15 anos, o processo tramitou sem sentença transitada em julgado — o Brasil não cumpriu seu dever de punir.",
+    tag: "Impunidade sistêmica", tagBg: "rgba(186,117,23,0.15)", tagCl: "#EF9F27"
+  },
+  {
+    ano: "1998", titulo: "Denúncia à CIDH/OEA",
+    resumo: "Maria da Penha, CEJIL e CLADEM levam o caso ao sistema interamericano.",
+    detalhe: "Foi a primeira vez na história da OEA que uma denúncia de violência doméstica foi recebida com análise de mérito. O caso recebeu o número 12.051. O Brasil não respondeu às notificações da CIDH durante o processo.",
+    tag: "Marco histórico internacional", tagBg: "rgba(58,138,220,0.15)", tagCl: "#85B7EB"
+  },
+  {
+    ano: "Abril de 2001", titulo: "Relatório 54/01 da CIDH — Brasil condenado",
+    resumo: "A CIDH responsabiliza o Estado brasileiro por omissão, negligência e tolerância.",
+    detalhe: "Pela primeira vez, o Sistema Interamericano aplicou a Convenção de Belém do Pará em um caso de violência doméstica. A CIDH determinou: (1) finalizar o processo penal; (2) investigar irregularidades; (3) reparar a vítima; (4) criar legislação específica. O Brasil foi colocado no banco dos réus perante a OEA.",
+    tag: "Condenação internacional", tagBg: "rgba(226,75,74,0.15)", tagCl: "#F09595"
+  },
+  {
+    ano: "Outubro de 2002", titulo: "Condenação tardia — 19 anos depois",
+    resumo: "Heredia é finalmente condenado quando a prescrição estava a seis meses de ocorrer.",
+    detalhe: "Cumpriu apenas dois anos — um terço da pena — e foi solto em 2004. A demora de 19 anos sem sentença definitiva foi o principal argumento da CIDH para responsabilizar o Brasil. O caso mostrou que a impunidade não era exceção, mas padrão sistêmico.",
+    tag: "Condenação em 2002", tagBg: "rgba(29,158,117,0.15)", tagCl: "#5DCAA5"
+  },
+  {
+    ano: "7 de agosto de 2006", titulo: "Sanção da Lei 11.340/2006",
+    resumo: "O Brasil cria a Lei Maria da Penha — resposta às recomendações da CIDH.",
+    detalhe: "A lei retira a violência doméstica da esfera do privado e a transforma em responsabilidade do Estado. Cria mecanismos de prevenção, proteção e punição. Veda a aplicação da Lei 9.099/95 (Juizados Especiais) a esses crimes. Define os Juizados de Violência Doméstica e Familiar contra a Mulher. É batizada com o nome de Maria da Penha como reconhecimento de sua luta.",
+    tag: "Sanção da lei", tagBg: "rgba(29,158,117,0.15)", tagCl: "#5DCAA5"
+  },
+];
+
+const incisos5 = [
+  {
+    num: "Inciso I", nome: "Âmbito da unidade doméstica",
+    texto: "Compreendida como o espaço de convívio permanente de pessoas, com ou sem vínculo familiar, inclusive as esporadicamente agregadas.",
+    alerta: "Empregadas domésticas, hóspedes, cuidadoras — se convivem no espaço doméstico, estão abrangidas. A relação não precisa ser de parentesco nem permanente.",
+    alertaBg: "rgba(212,83,126,0.08)", alertaCl: "#E8789E"
+  },
+  {
+    num: "Inciso II", nome: "Âmbito da família",
+    texto: "Compreendida como a comunidade formada por indivíduos que são ou se consideram aparentados, unidos por laços naturais, por afinidade ou por vontade expressa.",
+    alerta: "Inclui irmãs, mães, sogras, cunhadas. Relação entre irmãs — a LMP pode incidir se houver contexto de gênero e vulnerabilidade (debate atual no STJ).",
+    alertaBg: "rgba(212,83,126,0.08)", alertaCl: "#E8789E"
+  },
+  {
+    num: "Inciso III", nome: "Relação íntima de afeto",
+    texto: "Em qualquer relação íntima de afeto, na qual o agressor conviva ou tenha convivido com a ofendida, independentemente de coabitação.",
+    alerta: "EX-COMPANHEIRO, EX-NAMORADO: a coabitação não é requisito. Se houve convivência íntima anterior, a LMP se aplica — inclusive após o término. Fundamental nos casos de feminicídio pós-separação.",
+    alertaBg: "rgba(226,75,74,0.1)", alertaCl: "#F09595"
+  }
+];
+
+const julgados = [
+  {
+    tribunal: "STF", badge: "stf-badge",
+    ref: "ADC 19 + ADI 4424 — 9 de fevereiro de 2012",
+    tese: "Constitucionalidade da LMP declarada. MP pode propor ação penal sem representação da vítima.",
+    corpo: "Na ADC 19, o Plenário declarou a constitucionalidade dos arts. 1º, 33 e 41 da LMP, por unanimidade. Na ADI 4424 (10 votos a 1), decidiu-se que nos crimes de lesão corporal no ambiente doméstico, mesmo leve, o Ministério Público tem legitimidade para deflagrar a ação penal sem representação da vítima. Também afastou definitivamente a Lei 9.099/95 desses casos.",
+    impacto: "Prático: a vítima não pode 'retirar a queixa' após o registro em lesão corporal. O MP age de ofício. Use isso para blindar sua cliente de pressões do agressor."
+  },
+  {
+    tribunal: "STF", badge: "stf-badge",
+    ref: "ADPF 779 — Rel. Min. Dias Toffoli",
+    tese: "Proibição da tese de 'legítima defesa da honra' em feminicídio.",
+    corpo: "O STF proibiu o uso da tese de legítima defesa da honra (ou qualquer argumento equivalente) pela defesa, acusação, autoridade policial e juízo em casos de feminicídio. A tese foi declarada inconstitucional por violar a dignidade humana, os direitos à vida e à igualdade. Decisão aplicável em todo o país.",
+    impacto: "Se você atua pela vítima (assistente de acusação), pode arguir a nulidade imediata da decisão que aceitar essa tese. Se atua pela defesa, esteja ciente que essa linha é vedada."
+  },
+  {
+    tribunal: "STF", badge: "stf-badge",
+    ref: "ADI 7267 — 2023",
+    tese: "Juiz não pode convocar audiência de retratação sem pedido da vítima.",
+    corpo: "O STF decidiu que o juiz não pode, sem pedido da vítima, designar audiência para que ela desista de processar o agressor nos crimes em que a ação penal é condicionada à representação. A iniciativa deve partir exclusivamente da mulher, garantindo sua autonomia e evitando pressões institucionais.",
+    impacto: "Se o juiz designar audiência de retratação de ofício, oponha exceção ou agravo. Essa prática é inconstitucional após a ADI 7267."
+  },
+  {
+    tribunal: "STJ", badge: "stj-badge",
+    ref: "Jurisprudência em Teses, Ed. 231 — março de 2024",
+    tese: "14 teses sobre julgamentos com perspectiva de gênero (destaques abaixo).",
+    corpo: "Tese 1: Vítima deve ser ouvida para prorrogação de medidas protetivas, mesmo extinta a punibilidade. Tese 2: Medida protetiva tem natureza indisponível e pode ser requerida pelo MP. Tese 3: Arquivamento de inquérito deve observar devida diligência e Protocolo CNJ de perspectiva de gênero. Tese 4: Possível dispensar exame de corpo de delito se houver outras provas idôneas. Tese 6: Qualificadora do feminicídio (art. 121 §2º-A, II, CP) tem natureza objetiva — dispensa análise do animus. Tema 1.189 (repetitivo): art. 17 da LMP impede pena de multa isolada.",
+    impacto: "A Tese 4 é ouro: se sua cliente não tem laudo do IML, use BO, prontuário médico, fotos e testemunhos. O STJ chancelou essa prova."
+  },
+  {
+    tribunal: "STJ", badge: "stj-badge",
+    ref: "Tema Repetitivo 1.333 — 7 de agosto de 2025",
+    tese: "Agravante do art. 61, II, 'f', CP aplica-se às contravenções penais no contexto de violência doméstica, salvo vias de fato (art. 21 LCP com §2º).",
+    corpo: "A 3ª Seção do STJ fixou que a agravante genérica de violência contra a mulher (art. 61, II, 'f', CP) incide nas contravenções penais praticadas em contexto de violência doméstica — com exceção das vias de fato quando incide o §2º do art. 21 da LCP (inserido pela Lei 14.994/2024), por força da especialidade e proibição de bis in idem.",
+    impacto: "Relevante especialmente em casos de perturbação da tranquilidade (art. 65, LCP) e importunação praticadas no contexto doméstico. A agravante é aplicável."
+  },
+  {
+    tribunal: "STJ", badge: "stj-badge",
+    ref: "APn 902 — Corte Especial, 2024",
+    tese: "Palavra da vítima pode fundamentar condenação em violência doméstica.",
+    corpo: "A Corte Especial do STJ condenou um desembargador por violência doméstica praticada contra sua companheira em 2017. O relator, Min. Sebastião Reis Junior, reafirmou que a violência doméstica é comumente praticada na ausência de testemunhas e que as declarações da vítima podem fundamentar decreto condenatório, desde que seguras e harmônicas com os demais elementos de convicção.",
+    impacto: "A ausência de testemunhas não é obstáculo à condenação. Na instrução, valorize e preserve o depoimento da vítima — ele pode ser a prova central do caso."
+  }
+];
+
+const quizData = [
+  {
+    p: "Em 2001, a CIDH condenou o Brasil no Caso 12.051. O que tornou esse caso historicamente inédito no sistema interamericano?",
+    ops: ["Foi a primeira condenação de um país da América Latina", "Foi a primeira vez que a OEA acolheu uma denúncia de violência doméstica com análise de mérito", "Foi o primeiro caso julgado com base na Convenção de Belém do Pará em qualquer foro", "Foi a primeira vez que uma cidadã brasileira acessou o sistema interamericano"],
+    c: 1,
+    fb: "Correto! O Caso 12.051 foi a primeira vez na história da OEA que uma denúncia de violência doméstica foi recebida com análise de mérito. Também foi o primeiro caso de aplicação da Convenção de Belém do Pará pela CIDH. Esses dois marcos são frequentemente cobrados em provas e fundamentam argumentos sobre responsabilidade internacional do Estado."
+  },
+  {
+    p: "O art. 5º, III, da LMP prevê a aplicação da lei em 'qualquer relação íntima de afeto, na qual o agressor conviva ou tenha convivido com a ofendida, independentemente de coabitação'. O que esse dispositivo garante na prática?",
+    ops: ["Que a LMP só se aplica a relacionamentos com mais de 6 meses de duração", "Que ex-namorados e ex-companheiros estão abrangidos pela lei, mesmo após o término do relacionamento", "Que a lei se aplica apenas enquanto há convivência no mesmo endereço", "Que namorados que nunca coabitaram estão excluídos do âmbito da lei"],
+    c: 1,
+    fb: "Correto! A independência de coabitação é ponto central do inciso III. O ex-namorado que nunca morou com a vítima pode estar sujeito à LMP se houve relação íntima de afeto — e isso é especialmente relevante nos feminicídios e ameaças pós-término de relacionamento."
+  },
+  {
+    p: "Na ADI 4424 (STF, 2012), por 10 votos a 1, o Plenário decidiu que o MP pode propor ação penal por lesão corporal em contexto de violência doméstica sem representação da vítima. Qual o principal fundamento?",
+    ops: ["A LMP criou tipo penal autônomo que dispensa a representação", "A exigência de representação esvaziaria a proteção constitucional da mulher e a tornaria refém do agressor", "O STF entendeu que o art. 41 da LMP é constitucional ao afastar a Lei 9.099/95, que exigia representação da vítima no art. 88 para lesão leve", "O Ministério Público sempre deteve essa prerrogativa no Código de Processo Penal"],
+    c: 2,
+    fb: "Correto! Na ADI 4424, o STF declarou constitucional o art. 41 da LMP, que veda a aplicação da Lei 9.099/95 aos crimes de violência doméstica. A exigência de representação da vítima para a lesão corporal leve estava no art. 88 da Lei 9.099/95 — ao afastar essa lei, a LMP tornou a ação penal pública incondicionada. O MP pode agir independentemente da vontade da vítima."
+  },
+  {
+    p: "Segundo o art. 2º da LMP, qual mulher está protegida pela lei?",
+    ops: ["Mulheres com renda acima de um salário mínimo que não possuam meios de se defender", "Toda mulher, independentemente de classe, raça, etnia, orientação sexual, renda, cultura, nível educacional, idade e religião", "Mulheres maiores de 18 anos que estejam em relação conjugal formalizada", "Mulheres brasileiras natas ou naturalizadas com residência no território nacional"],
+    c: 1,
+    fb: "Correto! O art. 2º consagra a universalidade absoluta da proteção. Não existe mulher que 'não se enquadre' na LMP por razões de classe, raça, etnia ou qualquer outro critério. Essa universalidade é um argumento poderoso contra qualquer tentativa de relativizar a proteção da vítima."
+  }
+];
+
+const resumoData = [
+  { icon: "⚖️", titulo: "Caso 12.051 — CIDH/2001", texto: "Brasil condenado por omissão, negligência e tolerância. Primeiro caso de violência doméstica na OEA. Base da LMP." },
+  { icon: "🌎", titulo: "Convenções vinculantes", texto: "CEDAW (1979) e Convenção de Belém do Pará (1994) obrigam o Brasil. Podem ser invocadas diretamente em peças." },
+  { icon: "👩", titulo: "Art. 2º — Proteção universal", texto: "Toda mulher, sem distinção de qualquer ordem. Inclui mulheres transexuais (STJ). Sem exceções." },
+  { icon: "🏠", titulo: "Art. 5º — Três âmbitos", texto: "Unidade doméstica, família (laços naturais, afinidade ou vontade expressa) e relação íntima de afeto — independe de coabitação." },
+  { icon: "🔑", titulo: "Art. 5º, parágrafo único", texto: "As relações independem de orientação sexual. LMP protege mulheres em relações homoafetivas." },
+  { icon: "📋", titulo: "STF — ADC 19 + ADI 4424", texto: "Constitucionalidade declarada. Ação penal pública incondicionada em lesão corporal. Vítima não precisa representar para que o agressor responda por lesão corporal ainda que leve." },
+  { icon: "🚫", titulo: "STF — ADPF 779", texto: "Legítima defesa da honra é inconstitucional e vedada em feminicídio. Nulidade imediata se arguida." },
+  { icon: "💡", titulo: "STJ — Ed. 231/2024", texto: "Sem laudo do IML? Use BO, fotos e testemunhos. Palavra da vítima pode fundamentar condenação (APn 902)." },
+];
+
+// STATE
+let atual = 0;
+let respostas = {};
+
+function buildSteps() {
+  const el = document.getElementById('steps');
+  el.innerHTML = '';
+  passos.forEach((nome, i) => {
+    if (i > 0) {
+      const line = document.createElement('div');
+      line.className = 'step-line' + (i <= atual ? ' done' : '');
+      el.appendChild(line);
+    }
+    const btn = document.createElement('button');
+    btn.className = 'step';
+    btn.onclick = () => ir(i);
+    const dot = document.createElement('div');
+    dot.className = 'step-dot' + (i === atual ? ' active' : i < atual ? ' done' : '');
+    dot.textContent = i < atual ? '✓' : i + 1;
+    const label = document.createElement('div');
+    label.className = 'step-label' + (i === atual ? ' active' : i < atual ? ' done' : '');
+    label.textContent = nome;
+    btn.appendChild(dot);
+    btn.appendChild(label);
+    el.appendChild(btn);
+  });
+}
+
+function ir(n) {
+  document.querySelectorAll('.tela').forEach(t => t.classList.remove('active'));
+  document.getElementById('t' + n).classList.add('active');
+  atual = n;
+  buildSteps();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function buildTimeline() {
+  const el = document.getElementById('timeline');
+  marcos.forEach((m, i) => {
+    const item = document.createElement('div');
+    item.className = 'tl-item';
+
+    const content = document.createElement('div');
+    content.className = 'tl-content';
+    content.innerHTML = `
+      <div class="tl-ano">${m.ano}</div>
+      <div class="tl-titulo">${m.titulo}</div>
+      <div class="tl-resumo">${m.resumo}</div>
+      <div class="tl-detalhe" id="tld${i}">${m.detalhe}<br><span class="tl-tag" style="background:${m.tagBg};color:${m.tagCl}">${m.tag}</span></div>`;
+    content.onclick = () => {
+      const exp = content.classList.toggle('expandido');
+      document.getElementById('tld' + i).classList.toggle('show', exp);
+    };
+
+    const dot = document.createElement('div');
+    dot.className = 'tl-dot';
+
+    const spacer = document.createElement('div');
+    spacer.className = 'tl-spacer';
+
+    if (i % 2 === 0) {
+      item.appendChild(content);
+      item.appendChild(dot);
+      item.appendChild(spacer);
+    } else {
+      item.appendChild(spacer);
+      item.appendChild(dot);
+      item.appendChild(content);
+    }
+    el.appendChild(item);
+  });
+}
+
+function buildIncisos() {
+  const el = document.getElementById('incisos-art5');
+  incisos5.forEach((inc, i) => {
+    const div = document.createElement('div');
+    div.className = 'inciso';
+    div.innerHTML = `
+      <div class="inciso-header">
+        <span class="inciso-num">${inc.num}</span>
+        <span class="inciso-nome">${inc.nome}</span>
+        <span class="inciso-chev">▼</span>
+      </div>
+      <div class="inciso-corpo" id="inc${i}">
+        <p style="margin-bottom:8px;">${inc.texto}</p>
+        <div class="inciso-alerta" style="background:${inc.alertaBg};color:${inc.alertaCl};border-left:3px solid ${inc.alertaCl};">
+          <strong>Prático:</strong> ${inc.alerta}
+        </div>
+      </div>`;
+    div.onclick = () => {
+      div.classList.toggle('ativo');
+      document.getElementById('inc' + i).classList.toggle('show');
+    };
+    el.appendChild(div);
+  });
+}
+
+function buildJulgados() {
+  const el = document.getElementById('julgados-lista');
+  julgados.forEach((j, i) => {
+    const card = document.createElement('div');
+    card.className = 'julgado-card';
+    card.innerHTML = `
+      <div class="julgado-header">
+        <span class="julgado-tribunal ${j.badge}">${j.tribunal}</span>
+        <div class="julgado-meta">
+          <div class="julgado-ref">${j.ref}</div>
+          <div class="julgado-tese">${j.tese}</div>
+        </div>
+        <span class="julgado-chev">▼</span>
+      </div>
+      <div class="julgado-corpo" id="jc${i}">
+        <p style="margin-bottom:10px;">${j.corpo}</p>
+        <div class="julgado-impacto"><strong>Impacto prático:</strong> ${j.impacto}</div>
+      </div>`;
+    card.onclick = () => {
+      card.classList.toggle('expandido');
+      document.getElementById('jc' + i).classList.toggle('show');
+    };
+    el.appendChild(card);
+  });
+}
+
+function buildQuiz() {
+  const el = document.getElementById('quiz-lista');
+  quizData.forEach((q, qi) => {
+    const card = document.createElement('div');
+    card.className = 'quiz-card';
+    card.innerHTML = `
+      <div class="q-num">Questão ${qi + 1} de ${quizData.length}</div>
+      <div class="q-enunciado">${q.p}</div>
+      ${q.ops.map((op, oi) => `<div class="q-opcao" id="op${qi}_${oi}" onclick="resp(${qi},${oi})">${String.fromCharCode(65+oi)}) ${op}</div>`).join('')}
+      <div class="q-feedback" id="fb${qi}"></div>`;
+    el.appendChild(card);
+  });
+}
+
+function resp(qi, oi) {
+  if (respostas[qi] !== undefined) return;
+  respostas[qi] = oi;
+  const q = quizData[qi];
+  for (let j = 0; j < q.ops.length; j++) {
+    const el = document.getElementById(`op${qi}_${j}`);
+    el.classList.add('bloq');
+    if (j === q.c) el.classList.add('ok');
+    else if (j === oi) el.classList.add('err');
+  }
+  const fb = document.getElementById('fb' + qi);
+  const acertou = oi === q.c;
+  fb.className = 'q-feedback show ' + (acertou ? 'ok' : 'err');
+  fb.innerHTML = `<strong>${acertou ? '✓ Correto!' : '✗ Atenção.'}</strong> ${q.fb}`;
+}
+
+function buildResumo() {
+  const el = document.getElementById('resumo-grid');
+  resumoData.forEach(r => {
+    const div = document.createElement('div');
+    div.className = 'resumo-item';
+    div.innerHTML = `<div class="resumo-item-icon">${r.icon}</div><div class="resumo-item-titulo">${r.titulo}</div><div class="resumo-item-texto">${r.texto}</div>`;
+    el.appendChild(div);
+  });
+}
+
+// DOWNLOAD RESUMO EM PDF via jsPDF
+function baixarResumo() {
+  const btn = document.querySelector('.btn-download');
+  const textoOriginal = btn.innerHTML;
+  btn.innerHTML = '⏳ Gerando PDF...';
+  btn.style.opacity = '0.7';
+  btn.disabled = true;
+
+  const script = document.createElement('script');
+  script.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
+  script.onload = () => {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ unit: 'mm', format: 'a4' });
+    const rosa = [212, 83, 126];
+    const roxo = [127, 119, 221];
+    const escuro = [26, 18, 40];
+    const muted = [100, 90, 130];
+    const W = 210;
+    const M = 18;
+    const LW = W - M * 2;
+    let y = 0;
+
+    function novaPage() {
+      doc.addPage();
+      y = 18;
+    }
+    function checkY(h) { if (y + h > 272) novaPage(); }
+
+    // CABEÇALHO
+    doc.setFillColor(...rosa);
+    doc.rect(0, 0, W, 16, 'F');
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(11);
+    doc.setFont('helvetica', 'bold');
+    doc.text('PENHA em Cena', M, 10);
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(9);
+    doc.text('Módulo 01 · Aula 1 · Resumo', W - M, 10, { align: 'right' });
+    y = 24;
+
+    // TÍTULO
+    doc.setTextColor(...escuro);
+    doc.setFontSize(18);
+    doc.setFont('helvetica', 'bold');
+    doc.text('A Lei Maria da Penha', M, y);
+    y += 7;
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(...muted);
+    doc.text('Origem, contexto internacional, Art. 2º, Art. 5º e Julgados essenciais', M, y);
+    y += 10;
+
+    // linha divisória
+    doc.setDrawColor(...rosa);
+    doc.setLineWidth(0.5);
+    doc.line(M, y, W - M, y);
+    y += 8;
+
+    function titulo(txt) {
+      checkY(12);
+      doc.setFillColor(...rosa);
+      doc.roundedRect(M, y, LW, 7, 1, 1, 'F');
+      doc.setTextColor(255, 255, 255);
+      doc.setFontSize(9);
+      doc.setFont('helvetica', 'bold');
+      doc.text(txt, M + 4, y + 4.8);
+      y += 11;
+      doc.setTextColor(...escuro);
+    }
+
+    function paragrafo(txt, indent) {
+      const x = M + (indent || 0);
+      const linhas = doc.splitTextToSize(txt, LW - (indent || 0));
+      checkY(linhas.length * 5 + 2);
+      doc.setFontSize(9);
+      doc.setFont('helvetica', 'normal');
+      doc.setTextColor(...escuro);
+      doc.text(linhas, x, y);
+      y += linhas.length * 5 + 2;
+    }
+
+    function bullet(txt) {
+      checkY(6);
+      doc.setFillColor(...rosa);
+      doc.circle(M + 2, y - 1, 1, 'F');
+      const linhas = doc.splitTextToSize(txt, LW - 6);
+      doc.setFontSize(9);
+      doc.setFont('helvetica', 'normal');
+      doc.setTextColor(...escuro);
+      doc.text(linhas, M + 6, y);
+      y += linhas.length * 5 + 1;
+    }
+
+    function destaque(txt, cor) {
+      const linhas = doc.splitTextToSize(txt, LW - 10);
+      const h = linhas.length * 5 + 8;
+      checkY(h + 4);
+      const c = cor || rosa;
+      doc.setFillColor(c[0], c[1], c[2], 0.08);
+      doc.setDrawColor(...c);
+      doc.setLineWidth(0.3);
+      doc.roundedRect(M, y, LW, h, 2, 2, 'FD');
+      doc.setDrawColor(...c);
+      doc.setLineWidth(1.5);
+      doc.line(M, y, M, y + h);
+      doc.setTextColor(...escuro);
+      doc.setFontSize(9);
+      doc.setFont('helvetica', 'italic');
+      doc.text(linhas, M + 5, y + 5);
+      y += h + 5;
+      doc.setFont('helvetica', 'normal');
+    }
+
+    function julgadoBox(tribunal, ref, corpo, cor) {
+      const linhasRef = doc.splitTextToSize(ref, LW - 22);
+      const linhasCorpo = doc.splitTextToSize(corpo, LW - 6);
+      const h = linhasRef.length * 5 + linhasCorpo.length * 4.5 + 14;
+      checkY(h + 4);
+      doc.setFillColor(248, 248, 255);
+      doc.setDrawColor(...cor);
+      doc.setLineWidth(0.3);
+      doc.roundedRect(M, y, LW, h, 2, 2, 'FD');
+      doc.setLineWidth(2);
+      doc.line(M, y, M, y + h);
+      // Badge
+      doc.setFillColor(...cor);
+      doc.roundedRect(M + 3, y + 3, 12, 5, 1, 1, 'F');
+      doc.setTextColor(255, 255, 255);
+      doc.setFontSize(6.5);
+      doc.setFont('helvetica', 'bold');
+      doc.text(tribunal, M + 9, y + 6.5, { align: 'center' });
+      // Ref
+      doc.setTextColor(...cor);
+      doc.setFontSize(8.5);
+      doc.setFont('helvetica', 'bold');
+      doc.text(linhasRef, M + 18, y + 6.5);
+      // Corpo
+      doc.setTextColor(60, 60, 80);
+      doc.setFontSize(8.5);
+      doc.setFont('helvetica', 'normal');
+      doc.text(linhasCorpo, M + 4, y + linhasRef.length * 5 + 9);
+      y += h + 4;
+    }
+
+    // 1. CASO
+    titulo('1. O caso que originou a lei');
+    paragrafo('Maria da Penha Maia Fernandes — biofarmacêutica, nascida em 1/2/1945 em Fortaleza (CE). Marido: Marco Antônio Heredia Viveros (economista colombiano).');
+    bullet('1983: 1ª tentativa — tiro enquanto dormia → paraplegia irreversível. 2ª tentativa — eletrocussão no banho.');
+    bullet('1991 e 1996: Dois júris sem condenação definitiva por recursos da defesa.');
+    bullet('1998: Denúncia à CIDH/OEA com CEJIL e CLADEM — 1ª vez na história da OEA que caso de violência doméstica foi acolhido com análise de mérito (Caso nº 12.051).');
+    bullet('Abril/2001: Relatório 54/01 — Brasil condenado por omissão, negligência e tolerância. 1ª aplicação da Convenção de Belém do Pará pela CIDH.');
+    bullet('Outubro/2002: Heredia finalmente condenado — cumpriu apenas 2 anos de pena.');
+    bullet('7/8/2006: Sanção da Lei 11.340/2006 (Lei Maria da Penha).');
+    bullet('Março/2025: Maria da Penha recebe título de Doutora Honoris Causa da UFC.');
+    y += 2;
+
+    // 2. ARCABOUÇO
+    titulo('2. Arcabouço internacional');
+    bullet('CEDAW (1979) — Convenção sobre a Eliminação de Todas as Formas de Discriminação contra as Mulheres. Decreto 4.377/2002.');
+    bullet('Convenção de Belém do Pará (1994) — Convenção Interamericana para Prevenir, Punir e Erradicar a Violência contra a Mulher. Decreto 1.973/1996.');
+    bullet('CF/88, art. 226, §8º — Fundamento constitucional direto da LMP.');
+    bullet('ONU reconhece a LMP como uma das 3 legislações mais avançadas do mundo no enfrentamento à violência de gênero.');
+    y += 2;
+
+    // 3. ART 2
+    titulo('3. Art. 2º — Quem a lei protege');
+    destaque('"Toda mulher, independentemente de classe, raça, etnia, orientação sexual, renda, cultura, nível educacional, idade, religião, gozando dos direitos fundamentais inerentes à pessoa humana..."');
+    paragrafo('Proteção universal e absoluta. Inclui mulheres transexuais (STJ — Sexta Turma). Sem exceções por qualquer critério.');
+    y += 2;
+
+    // 4. ART 5
+    titulo('4. Art. 5º — Conceito de violência doméstica');
+    destaque('"Qualquer ação ou omissão baseada no gênero que lhe cause morte, lesão, sofrimento físico, sexual ou psicológico e dano moral ou patrimonial."');
+    paragrafo('Três âmbitos de aplicação:');
+    bullet('Inciso I — Unidade doméstica: espaço de convívio permanente, inclusive esporadicamente agregadas (empregadas, hóspedes).');
+    bullet('Inciso II — Família: laços naturais, afinidade ou vontade expressa (irmãs, sogras, cunhadas).');
+    bullet('Inciso III — Relação íntima de afeto: independente de coabitação. Ex-namorados e ex-companheiros estão abrangidos após o término.');
+    paragrafo('Parágrafo único: As relações independem de orientação sexual. A LMP protege mulheres em relações homoafetivas.');
+    y += 2;
+
+    // 5. JULGADOS
+    titulo('5. Julgados essenciais');
+    julgadoBox('STF', 'ADC 19 + ADI 4424 — 9 de fevereiro de 2012',
+      'Constitucionalidade da LMP declarada. Art. 41 da LMP é constitucional ao afastar a Lei 9.099/95. A exigência de representação na lesão leve estava no art. 88 da Lei 9.099/95 — ao afastar essa lei, a ação penal em lesão corporal tornou-se pública incondicionada. A vítima não precisa representar para que o agressor responda, ainda que a lesão seja leve.',
+      [58, 138, 220]);
+    julgadoBox('STF', 'ADPF 779 — Rel. Min. Dias Toffoli',
+      'Proibição absoluta da tese de "legítima defesa da honra" em feminicídio. Inconstitucional e vedada à defesa, acusação, autoridade policial e juízo.',
+      [58, 138, 220]);
+    julgadoBox('STF', 'ADI 7267 — 2023',
+      'Juiz não pode convocar audiência de retratação sem pedido da vítima nos crimes condicionados à representação.',
+      [58, 138, 220]);
+    julgadoBox('STJ', 'Jurisprudência em Teses, Ed. 231 — março/2024',
+      'Tese 4: possível dispensar exame de corpo de delito se houver outras provas idôneas. Tese 6: qualificadora do feminicídio tem natureza objetiva — dispensa análise do animus. Tema 1.189: art. 17 da LMP impede pena de multa isolada.',
+      [29, 158, 117]);
+    julgadoBox('STJ', 'Tema Repetitivo 1.333 — 07/08/2025',
+      'Agravante do art. 61, II, "f", CP aplica-se às contravenções penais no contexto de violência doméstica, salvo vias de fato (art. 21 LCP, §2º) — especialidade e bis in idem.',
+      [29, 158, 117]);
+    julgadoBox('STJ', 'APn 902 — Corte Especial, 2024',
+      'Palavra da vítima pode fundamentar decreto condenatório. Violência doméstica é comumente praticada sem testemunhas.',
+      [29, 158, 117]);
+
+    // RODAPÉ
+    const totalPgs = doc.getNumberOfPages();
+    for (let i = 1; i <= totalPgs; i++) {
+      doc.setPage(i);
+      doc.setFontSize(8);
+      doc.setTextColor(...muted);
+      doc.text('Penha em Cena · Módulo 01 · Aula 1 · Material de apoio exclusivo do aluno', M, 290);
+      doc.text(`${i} / ${totalPgs}`, W - M, 290, { align: 'right' });
+    }
+
+    doc.save('PenhaEmCena_M01_A01_Resumo.pdf');
+    btn.innerHTML = '✓ PDF baixado!';
+    btn.style.opacity = '1';
+    btn.style.background = 'rgba(29,158,117,0.2)';
+    btn.style.borderColor = 'rgba(29,158,117,0.5)';
+    btn.style.color = '#5DCAA5';
+    setTimeout(() => {
+      btn.innerHTML = textoOriginal;
+      btn.style.background = 'rgba(29,158,117,0.15)';
+      btn.style.borderColor = 'rgba(29,158,117,0.4)';
+      btn.style.color = '#5DCAA5';
+      btn.disabled = false;
+    }, 3000);
+  };
+  script.onerror = () => {
+    btn.innerHTML = '✗ Erro ao carregar. Tente novamente.';
+    btn.disabled = false;
+  };
+  document.head.appendChild(script);
+}
+
+// INIT
+buildSteps();
+buildTimeline();
+buildIncisos();
+buildJulgados();
+buildQuiz();
+buildResumo();
+</script>
+</body>
+</html>
