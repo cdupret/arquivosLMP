@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Módulo 01 · Aula 5 — Competência · Penha em Cena</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --rosa: #D4537E; --rosa2: #A33360;
+  --fundo: #0E0B14; --fundo2: #17122A; --fundo3: #211A38;
+  --roxo: #7F77DD; --texto: #F0EAF8; --muted: #9B8FBC;
+  --borda: rgba(212,83,126,0.2); --verde: #1D9E75;
+  --dourado: #C9963A; --azul: #3A8ADC;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'DM Sans', sans-serif; background: var(--fundo); color: var(--texto); min-height: 100vh; overflow-x: hidden; font-size: 18px; line-height: 1.75; }
+.bg-p { position:fixed;inset:0;pointer-events:none;z-index:0; background: radial-gradient(ellipse 60% 40% at 20% 20%, rgba(127,119,221,0.07) 0%, transparent 60%), radial-gradient(ellipse 40% 60% at 80% 80%, rgba(212,83,126,0.06) 0%, transparent 60%); }
+
+.header { position:sticky;top:0;z-index:100;background:rgba(14,11,20,0.95);border-bottom:1px solid var(--borda);padding:16px 32px;display:flex;align-items:center;gap:14px;backdrop-filter:blur(16px); }
+.logo { font-family:'Playfair Display',serif;font-size:20px;color:var(--rosa);font-weight:700; }
+.sep { color:var(--muted); }
+.info { font-size:15px;color:var(--muted); }
+
+.prog { background:var(--fundo2);border-bottom:1px solid var(--borda);padding:16px 32px;position:sticky;top:61px;z-index:99; }
+.steps { max-width:780px;margin:0 auto;display:flex;align-items:center; }
+.step { display:flex;flex-direction:column;align-items:center;gap:6px;flex:1;cursor:pointer;border:none;background:none; }
+.dot { width:36px;height:36px;border-radius:50%;border:2px solid rgba(155,143,188,0.3);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:500;color:var(--muted);transition:all .3s; }
+.dot.a { background:var(--rosa);border-color:var(--rosa);color:#fff;box-shadow:0 0 24px rgba(212,83,126,0.5); }
+.dot.d { background:var(--verde);border-color:var(--verde);color:#fff; }
+.slbl { font-size:11px;color:var(--muted);white-space:nowrap; }
+.slbl.a { color:var(--rosa); } .slbl.d { color:var(--verde); }
+.sline { flex:1;height:2px;background:rgba(155,143,188,0.15);margin-bottom:18px;transition:background .4s; }
+.sline.d { background:var(--verde); }
+
+.main { max-width:840px;margin:0 auto;padding:44px 32px 120px;position:relative;z-index:1; }
+.tela { display:none;animation:up .4s ease; }
+.tela.on { display:block; }
+@keyframes up { from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);} }
+
+.badge { display:inline-flex;align-items:center;gap:6px;background:rgba(212,83,126,0.12);border:1px solid rgba(212,83,126,0.3);border-radius:20px;padding:6px 16px;font-size:13px;font-weight:500;color:var(--rosa);letter-spacing:.06em;text-transform:uppercase;margin-bottom:20px; }
+.titulo { font-family:'Playfair Display',serif;font-size:clamp(28px,5vw,44px);font-weight:900;line-height:1.15;color:var(--texto);margin-bottom:16px; }
+.titulo em { color:var(--rosa);font-style:italic; }
+.desc { font-size:18px;color:var(--muted);line-height:1.9;margin-bottom:36px; }
+
+/* MAPA VISUAL */
+.mapa { display:flex;flex-direction:column;gap:0;margin-bottom:28px; }
+.mapa-item { display:flex;gap:20px;align-items:stretch;margin-bottom:4px; }
+.mapa-fio { display:flex;flex-direction:column;align-items:center;width:50px;flex-shrink:0; }
+.mapa-ic { width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;border:2px solid; }
+.mapa-linha { width:2px;flex:1;min-height:20px; }
+.mapa-box { flex:1;background:var(--fundo2);border:1px solid var(--borda);border-radius:14px;padding:20px 24px;margin-bottom:8px; }
+.mapa-box:hover { border-color:rgba(212,83,126,0.35); }
+.mapa-titulo { font-family:'Playfair Display',serif;font-size:19px;font-weight:700;color:var(--texto);margin-bottom:8px; }
+.mapa-sub { font-size:13px;font-weight:500;text-transform:uppercase;letter-spacing:.07em;margin-bottom:10px; }
+.mapa-p { font-size:17px;color:var(--muted);line-height:1.85;margin-bottom:10px; }
+.mapa-p strong { color:var(--texto); }
+.mapa-lei { font-size:16px;color:var(--muted);border-left:3px solid var(--rosa);padding-left:16px;margin-bottom:12px;font-style:italic;line-height:1.8; }
+
+/* ARTIGO */
+.art { background:var(--fundo2);border:1px solid var(--borda);border-radius:18px;padding:30px 34px;margin-bottom:22px; }
+.art.dest { border-color:rgba(212,83,126,0.5);background:rgba(212,83,126,0.04); }
+.art.novo { border-color:rgba(201,150,58,0.5);background:rgba(201,150,58,0.04); }
+.art-num { font-size:13px;font-weight:600;color:var(--rosa);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px; }
+.art-num.dourado { color:var(--dourado); }
+.art-h { font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:var(--texto);margin-bottom:18px; }
+.art-lei { font-size:17px;color:var(--muted);border-left:3px solid var(--rosa);padding-left:20px;margin-bottom:20px;font-style:italic;line-height:1.85; }
+.art-lei.dourado { border-left-color:var(--dourado); }
+.art-p { font-size:17px;color:var(--muted);line-height:1.85;margin-bottom:14px; }
+.art-p strong { color:var(--texto); }
+.alerta { background:rgba(212,83,126,0.07);border:1px solid rgba(212,83,126,0.25);border-radius:12px;padding:18px 24px;font-size:16px;color:rgba(240,234,248,0.85);line-height:1.8;margin-top:18px; }
+.alerta strong { color:var(--rosa); }
+.alerta-verde { background:rgba(29,158,117,0.07);border:1px solid rgba(29,158,117,0.25);border-radius:12px;padding:18px 24px;font-size:16px;color:rgba(240,234,248,0.85);line-height:1.8;margin-top:18px; }
+.alerta-verde strong { color:#5DCAA5; }
+.alerta-dourado { background:rgba(201,150,58,0.07);border:1px solid rgba(201,150,58,0.3);border-radius:12px;padding:18px 24px;font-size:16px;color:rgba(240,234,248,0.85);line-height:1.8;margin-top:18px; }
+.alerta-dourado strong { color:var(--dourado); }
+
+/* FLUXO */
+.fluxo { display:flex;flex-direction:column;gap:12px;margin-bottom:24px; }
+.fluxo-item { display:flex;gap:16px;align-items:flex-start;background:var(--fundo2);border:1px solid var(--borda);border-radius:14px;padding:20px 24px;cursor:pointer;transition:all .2s; }
+.fluxo-item:hover { border-color:rgba(212,83,126,0.4); }
+.fluxo-item.on { border-color:var(--rosa);background:rgba(212,83,126,0.04); }
+.fluxo-num { width:36px;height:36px;border-radius:50%;background:var(--rosa);color:#fff;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;flex-shrink:0;margin-top:2px; }
+.fluxo-corpo { flex:1; }
+.fluxo-titulo { font-size:18px;font-weight:500;color:var(--texto);margin-bottom:6px; }
+.fluxo-desc { font-size:16px;color:var(--muted);line-height:1.8;display:none; }
+.fluxo-desc.on { display:block; }
+
+/* QUIZ */
+.qcard { background:var(--fundo2);border:1px solid var(--borda);border-radius:18px;padding:32px 30px;margin-bottom:22px; }
+.qnum { font-size:13px;font-weight:600;color:var(--rosa);letter-spacing:.07em;text-transform:uppercase;margin-bottom:12px; }
+.qp { font-family:'Playfair Display',serif;font-size:21px;font-weight:700;line-height:1.5;color:var(--texto);margin-bottom:24px; }
+.qop { background:rgba(255,255,255,0.03);border:1px solid rgba(155,143,188,0.2);border-radius:10px;padding:16px 20px;margin-bottom:12px;cursor:pointer;font-size:17px;color:var(--muted);transition:all .2s;line-height:1.65; }
+.qop:hover:not(.bl) { border-color:var(--rosa);color:var(--texto);background:rgba(212,83,126,0.07); }
+.qop.ok { background:rgba(29,158,117,0.12);border-color:var(--verde);color:#9FE1CB; }
+.qop.er { background:rgba(212,83,126,0.1);border-color:var(--rosa);color:#EDB0C5; }
+.qop.bl { cursor:default; }
+.qfb { display:none;margin-top:14px;padding:18px 22px;border-radius:10px;font-size:17px;line-height:1.8; }
+.qfb.on { display:block; }
+.qfb.ok { background:rgba(29,158,117,0.1);border:1px solid rgba(29,158,117,0.25);color:#9FE1CB; }
+.qfb.er { background:rgba(212,83,126,0.08);border:1px solid rgba(212,83,126,0.2);color:#EDB0C5; }
+
+/* RESUMO */
+.rgrid { display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;margin-bottom:30px; }
+.rcard { background:var(--fundo2);border:1px solid var(--borda);border-radius:14px;padding:24px 26px;transition:border-color .2s; }
+.rcard:hover { border-color:rgba(212,83,126,0.35); }
+.ric { font-size:26px;margin-bottom:12px; }
+.rtit { font-size:18px;font-weight:500;color:var(--texto);margin-bottom:8px; }
+.rtxt { font-size:16px;color:var(--muted);line-height:1.8; }
+
+.conclusao { background:linear-gradient(135deg,rgba(212,83,126,0.08),rgba(127,119,221,0.05));border:1px solid rgba(212,83,126,0.2);border-radius:18px;padding:40px;text-align:center;margin-top:28px; }
+.c-ic { font-size:48px;margin-bottom:14px; }
+.c-tit { font-family:'Playfair Display',serif;font-size:28px;font-weight:900;color:var(--verde);margin-bottom:10px; }
+.c-txt { font-size:18px;color:var(--muted);line-height:1.85; }
+
+.nav { display:flex;align-items:center;justify-content:space-between;margin-top:48px;padding-top:30px;border-top:1px solid var(--borda); }
+.btn { display:inline-flex;align-items:center;gap:8px;padding:14px 28px;border-radius:10px;font-size:17px;font-weight:500;cursor:pointer;transition:all .2s;border:none;font-family:'DM Sans',sans-serif; }
+.btn-s { background:rgba(255,255,255,0.05);color:var(--muted);border:1px solid rgba(155,143,188,0.2); }
+.btn-s:hover { background:rgba(255,255,255,0.09);color:var(--texto); }
+.btn-p { background:var(--rosa);color:#fff;box-shadow:0 4px 18px rgba(212,83,126,0.3); }
+.btn-p:hover { background:var(--rosa2);transform:translateY(-1px);box-shadow:0 6px 24px rgba(212,83,126,0.4); }
+.btn-dl { display:inline-flex;align-items:center;gap:10px;margin-top:18px;padding:15px 26px;border-radius:10px;background:rgba(29,158,117,0.15);border:1px solid rgba(29,158,117,0.4);color:#5DCAA5;font-size:17px;font-weight:500;cursor:pointer;transition:all .2s;font-family:'DM Sans',sans-serif; }
+.btn-dl:hover { background:rgba(29,158,117,0.25); }
+
+.tag-novo { display:inline-block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:3px 10px;border-radius:20px;background:rgba(201,150,58,0.2);color:var(--dourado);border:1px solid rgba(201,150,58,0.35);margin-left:8px;vertical-align:middle; }
+</style>
+</head>
+<body>
+<div class="bg-p"></div>
+
+<header class="header">
+  <span class="logo">PENHA em Cena</span>
+  <span class="sep">/</span>
+  <span class="info">Módulo 01 · Aula 5</span>
+</header>
+
+<div class="prog">
+  <div class="steps" id="stps"></div>
+</div>
+
+<div class="main">
+
+  <!-- TELA 0: VISÃO GERAL -->
+  <div class="tela on" id="t0">
+    <div class="badge">Módulo 01 · Aula 5</div>
+    <h1 class="titulo">Competência:<br><em>quem julga o quê</em></h1>
+    <p class="desc">Em violência doméstica, a competência é um campo minado: há o Juizado de Violência Doméstica, a vara criminal comum, o Tribunal do Júri e, em casos específicos, a Justiça Militar. Errar o foro pode gerar nulidade do processo inteiro. Esta aula mapeia cada rota.</p>
+
+    <div class="art dest">
+      <div class="art-num">Art. 14 da Lei Maria da Penha — O órgão central</div>
+      <div class="art-h">O Juizado de Violência Doméstica e Familiar contra a Mulher</div>
+      <div class="art-lei">"Os Juizados de Violência Doméstica e Familiar contra a Mulher, órgãos da Justiça Ordinária com competência cível e criminal, poderão ser criados pela União, no Distrito Federal e nos Territórios, e pelos Estados, para o processo, o julgamento e a execução das causas decorrentes da prática de violência doméstica e familiar contra a mulher."</div>
+      <p class="art-p">O Juizado de Violência Doméstica tem <strong>competência cível e criminal cumuladas</strong> — uma singularidade do sistema da Lei Maria da Penha. Isso significa que o mesmo juiz que processa o crime também pode julgar divórcio, alimentos, guarda e dissolução de união estável decorrentes da violência.</p>
+      <p class="art-p">O parágrafo único do art. 14 permite que os atos processuais se realizem em <strong>horário noturno,</strong> conforme dispuser a organização judiciária local — ampliando o acesso da vítima à justiça.</p>
+    </div>
+
+    <div class="art">
+      <div class="art-num">Art. 33 da Lei Maria da Penha — Quando o Juizado de Violência Doméstica não existe</div>
+      <div class="art-h">A vara criminal como competência subsidiária</div>
+      <div class="art-lei">"Enquanto não estruturados os Juizados de Violência Doméstica e Familiar contra a Mulher, as varas criminais acumularão as competências cível e criminal para conhecer e julgar as causas decorrentes da prática de violência doméstica e familiar contra a mulher, observadas as previsões do Título IV desta Lei, subsidiada pela legislação processual pertinente. Parágrafo único. Será garantido o direito de preferência, nas varas criminais, para o processo e o julgamento das causas referidas no caput."</div>
+      <p class="art-p">Na prática, a maioria das comarcas do Brasil ainda <strong>não possui Juizado de Violência Doméstica estruturado.</strong> Nesses casos, a vara criminal acumula as competências cível e criminal — e tem preferência no processamento das causas de violência doméstica.</p>
+      <div class="alerta"><strong>Ponto prático:</strong> ao ajuizar uma ação cível (divórcio, alimentos, guarda) para uma vítima de violência doméstica, verifique se há Juizado de Violência Doméstica na comarca. Se houver, é lá que deve ser distribuída a ação. A competência é da ofendida — art. 15 da Lei Maria da Penha.</div>
+    </div>
+
+    <div class="art">
+      <div class="art-num">Art. 15 da Lei Maria da Penha — Competência territorial nos processos cíveis</div>
+      <div class="art-h">A opção da ofendida</div>
+      <div class="art-lei">"É competente, por opção da ofendida, para os processos cíveis regidos por esta Lei, o Juizado: I — do seu domicílio ou de sua residência; II — do lugar do fato em que se baseou a demanda; III — do domicílio do agressor."</div>
+      <p class="art-p">Nos processos cíveis, a competência é da <strong>ofendida</strong> — ela escolhe o foro mais conveniente entre três opções. Esse dispositivo existe porque muitas vezes a vítima deixou o lar e está em lugar diferente do agressor ou do local do fato.</p>
+    </div>
+
+    <div class="art dest">
+      <div class="art-num">Art. 17-A da Lei Maria da Penha — Lei 14.857/2024</div>
+      <div class="art-h">Sigilo do nome da ofendida nos processos</div>
+      <div class="art-lei">"O nome da ofendida ficará sob sigilo nos processos em que se apuram crimes praticados no contexto de violência doméstica e familiar contra a mulher.
+Parágrafo único. O sigilo referido no caput deste artigo não abrange o nome do autor do fato, tampouco os demais dados do processo."</div>
+      <p class="art-p">Incluído pela <strong>Lei 14.857, de 21/05/2024</strong> (em vigor 180 dias após a publicação — portanto a partir de novembro de 2024), o art. 17-A impõe sigilo automático sobre o nome da ofendida em todos os processos de violência doméstica e familiar.</p>
+      <p class="art-p">O sigilo é <strong>unilateral:</strong> protege apenas a vítima — o nome do agressor e os demais dados do processo permanecem públicos. O dispositivo tem impacto direto na forma de autuação dos processos, nas publicações de intimações e na pesquisa de jurisprudência.</p>
+      <div class="alerta"><strong>Ponto prático:</strong> ao consultar ou juntar documentos processuais em casos de violência doméstica, verifique se o nome da vítima está sendo mantido em sigilo. A violação do sigilo pode gerar nulidade e responsabilidade funcional. Nas petições, use as iniciais da vítima ou a expressão "ofendida" em vez do nome completo.</div>
+    </div>
+
+    <div class="nav">
+      <span></span>
+      <button class="btn btn-p" onclick="ir(1)">Próximo: Limites da competência do Juizado de Violência Doméstica →</button>
+    </div>
+  </div>
+
+  <!-- TELA 1: LIMITES DO Juizado de Violência Doméstica -->
+  <div class="tela" id="t1">
+    <div class="badge">Etapa 2 de 5</div>
+    <h1 class="titulo">Os <em>limites</em> do Juizado de Violência Doméstica</h1>
+    <p class="desc">O Juizado de Violência Doméstica tem competência ampla — mas não ilimitada. Há casos em que o foro correto é a vara criminal comum ou o Tribunal do Júri. Entender onde termina a competência do Juizado de Violência Doméstica é essencial para não propor ação no foro errado.</p>
+
+    <div class="art dest">
+      <div class="art-num">Crimes dolosos contra a vida — Competência do Tribunal do Júri</div>
+      <div class="art-h">O Juizado de Violência Doméstica não julga feminicídio nem vicaricídio</div>
+      <p class="art-p">A CF/88 (art. 5º, XXXVIII, "d") garante ao Tribunal do Júri a competência para o julgamento dos <strong>crimes dolosos contra a vida.</strong> Essa é uma cláusula pétrea — não pode ser alterada nem por emenda constitucional.</p>
+      <p class="art-p">Portanto, o feminicídio (art. 121-A do CP), o vicaricídio (art. 121-B do CP — Lei 15.384/2026) e o homicídio qualificado — tentado ou consumado — praticados em contexto de violência doméstica <strong>não são julgados pelo Juizado de Violência Doméstica.</strong> São julgados pelo <strong>Tribunal do Júri,</strong> com instrução e pronúncia perante o juiz singular da vara do Júri.</p>
+      <div class="alerta"><strong>Regra:</strong> Juizado de Violência Doméstica julga crimes que não são dolosos contra a vida (lesão corporal, ameaça, descumprimento de medida protetiva, violência psicológica, etc.). Crimes dolosos contra a vida vão ao Júri — mesmo quando praticados em contexto de violência doméstica.</div>
+    </div>
+
+    <div class="art">
+      <div class="art-num">Art. 14-A da Lei Maria da Penha — Lei 13.894/2019</div>
+      <div class="art-h">Divórcio e dissolução de união estável — opção da vítima</div>
+      <div class="art-lei">"A ofendida tem a opção de propor ação de divórcio ou de dissolução de união estável no Juizado de Violência Doméstica e Familiar contra a Mulher. § 1º Exclui-se da competência dos Juizados de Violência Doméstica e Familiar contra a Mulher a pretensão relacionada à partilha de bens."</div>
+      <p class="art-p">A ofendida pode, opcionalmente, propor divórcio ou dissolução de união estável no Juizado de Violência Doméstica. Mas <strong>a partilha de bens está excluída</strong> da competência do Juizado de Violência Doméstica — deve ser processada na vara de família ou cível competente.</p>
+      <p class="art-p">O §2º prevê que, se a situação de violência doméstica surgir após o ajuizamento de ação de divórcio em outro juízo, a ação terá preferência onde estiver — não há deslocamento automático para o Juizado de Violência Doméstica.</p>
+    </div>
+
+    <div class="art">
+      <div class="art-num">Contravenções penais</div>
+      <div class="art-h">Perturbação da tranquilidade e vias de fato — Juizado de Violência Doméstica julga</div>
+      <p class="art-p">As contravenções penais praticadas em contexto de violência doméstica são julgadas pelo Juizado de Violência Doméstica — não se aplicam os institutos despenalizadores da Lei 9.099/95 (STJ — HC 280.788), mas o julgamento ocorre no Juizado de Violência Doméstica ou na vara criminal competente.</p>
+      <p class="art-p">Atenção: a <strong>Lei 14.994/2024</strong> elevou a pena das vias de fato (art. 21 da LCP) para o triplo quando praticadas contra a mulher por razões da condição do sexo feminino — o que antes era uma contravenção de menor relevância penal ganhou nova dimensão.</p>
+    </div>
+
+    <div class="art">
+      <div class="art-num">Justiça Militar — exceção importante</div>
+      <div class="art-h">Feminicídio de militar vai ao Júri, não à Justiça Militar</div>
+      <p class="art-p">Quando o feminicídio envolve militares, surge conflito de competência. O STJ pacificou: <strong>o feminicídio vai ao Tribunal do Júri,</strong> ainda que autor e vítima sejam militares e o crime tenha ocorrido em área militar.</p>
+      <p class="art-p">O fundamento é que o feminicídio tem como núcleo a proteção da vida da mulher em contexto de desigualdade de gênero — o que afasta a competência da Justiça Militar, que pressupõe nexo funcional com a atividade castrense.</p>
+      <div class="alerta"><strong>STJ — CC 218.865 — 3ª Seção, rel. Min. Ribeiro Dantas, julgado em 08/04/2026:</strong> por 4 votos a 3, o colegiado fixou a competência do Tribunal do Júri para o feminicídio praticado em ambiente militar, por ausência de nexo funcional com a atividade castrense. O relator enfatizou que "a especial gravidade do feminicídio intensifica a razão de ser do júri, cuja competência não pode ser esvaziada por interpretação extensiva da jurisdição militar." <a href="https://www.stj.jus.br/sites/portalp/Paginas/Comunicacao/Noticias/2026/08042026-Terceira-Secao-desmembra-processo--e-ex-soldado-do-Exercito-acusado-de-feminicidio-vai-ao-tribunal-do-juri.aspx" target="_blank" style="color:#85B7EB;">→ Notícia no portal do STJ</a></div>
+    </div>
+
+    <div class="nav">
+      <button class="btn btn-s" onclick="ir(0)">← Voltar</button>
+      <button class="btn btn-p" onclick="ir(2)">Próximo: Vicaricídio — o novo crime →</button>
+    </div>
+  </div>
+
+  <!-- TELA 2: VICARICÍDIO -->
+  <div class="tela" id="t2">
+    <div class="badge">Etapa 3 de 5</div>
+    <h1 class="titulo">Vicaricídio <span class="tag-novo">Lei 15.384/2026</span></h1>
+    <p class="desc">Em 9 de abril de 2026 —  foi sancionada a Lei 15.384, criando o tipo penal autônomo do vicaricídio no art. 121-B do Código Penal. Esta é a alteração legislativa mais recente em violência doméstica.</p>
+
+    <div class="art novo">
+      <div class="art-num dourado">Art. 121-B do CP — Lei 15.384/2026 — publicada em 09/04/2026, em vigor desde 10/04/2026</div>
+      <div class="art-h">Vicaricídio — o homicídio para atingir a mulher através de quem ela ama</div>
+      <div class="art-lei dourado">"Art. 121-B. Matar descendente, ascendente, dependente, enteado ou pessoa sob guarda ou responsabilidade direta da mulher, com o fim específico de causar-lhe sofrimento, punição ou controle, no contexto de violência doméstica e familiar.
+Pena — reclusão, de 20 (vinte) a 40 (quarenta) anos.
+Parágrafo único. A pena do vicaricídio é aumentada de 1/3 (um terço) até a metade se o crime for praticado:
+I — na presença da mulher a quem se pretende causar sofrimento, punição ou controle;
+II — contra criança ou adolescente ou pessoa idosa ou com deficiência;
+III — em descumprimento de medida protetiva de urgência."</div>
+      <p class="art-p">O vicaricídio é a forma mais extrema da <strong>violência vicária</strong> — matar os filhos, pais, dependentes ou pessoas próximas da mulher como instrumento de dominação, punição ou controle sobre ela. O tipo exige <strong>dolo específico:</strong> a intenção de causar sofrimento, punição ou controle à mulher.</p>
+      <p class="art-p">A pena é idêntica à do feminicídio (art. 121-A): <strong>reclusão de 20 a 40 anos.</strong> O vicaricídio é <strong>crime hediondo</strong> — incluído no inciso I-C do art. 1º da Lei 8.072/1990 pela mesma lei.</p>
+      <div class="alerta-dourado">
+        <strong>Competência:</strong> como o vicaricídio é crime doloso contra a vida, a competência para julgamento é do <strong>Tribunal do Júri</strong> — não do Juizado de Violência Doméstica. A instrução ocorre perante o juiz singular da vara do Júri, com pronúncia encaminhando ao plenário.<br><br>
+        <strong>Atenção:</strong> a vítima do vicaricídio não é a mulher — é a pessoa morta (filho, pai, dependente, etc.). A mulher é a vítima mediata, a quem se pretende atingir com o crime. Isso tem implicações para a legitimidade ativa em eventual ação de reparação de danos.
+      </div>
+    </div>
+
+    <div class="art novo">
+      <div class="art-num dourado">Art. 7º, VI da Lei Maria da Penha — Lei 15.383/2026 — publicada em 09/04/2026, em vigor desde 10/04/2026</div>
+      <div class="art-h">Violência vicária como espécie autônoma de violência doméstica</div>
+      <div class="art-lei dourado">"VI — a violência vicária, entendida como qualquer forma de violência praticada contra descendente, ascendente, dependente, enteado, parente, pessoa sob guarda ou responsabilidade direta da mulher ou pessoa de sua rede de apoio, com vistas a atingi-la."</div>
+      <p class="art-p">A <strong>Lei 15.383/2026</strong> incluiu a violência vicária como a <strong>6ª espécie</strong> de violência doméstica no art. 7º da Lei Maria da Penha. É mais ampla que o vicaricídio: engloba qualquer forma de violência (física, psicológica, patrimonial, moral) praticada contra pessoas da rede da mulher para atingi-la.</p>
+      <p class="art-p">O vicaricídio (art. 121-B do CP, criado pela Lei 15.384/2026) é a modalidade mais grave da violência vicária — o homicídio. As demais formas de violência vicária (lesão corporal vicária, ameaça vicária, etc.) não têm tipo penal autônomo, sendo tipificadas nos crimes comuns com as qualificadoras e agravantes aplicáveis.</p>
+      <div class="alerta-dourado"><strong>Duas leis distintas, sancionadas no mesmo dia (09/04/2026), em vigor desde 10/04/2026:</strong> Lei 15.383 — alterou a Lei Maria da Penha para incluir violência vicária como espécie no art. 7º, VI. Lei 15.384 — criou o art. 121-B do CP (vicaricídio) e o incluiu no rol dos crimes hediondos.</div>
+    </div>
+
+    <div class="art dest">
+      <div class="art-num">Irretroatividade penal — tese de defesa essencial</div>
+      <div class="art-h">A lei penal mais grave não retroage — como usar isso na advocacia</div>
+      <p class="art-p">A <strong>irretroatividade da lei penal mais grave</strong> é garantia constitucional expressa: o art. 5º, XL da CF/88 dispõe que "a lei penal não retroagirá, salvo para beneficiar o réu." O art. 2º do Código Penal replica o princípio e o art. 9º da Convenção Americana de Direitos Humanos o reforça no plano internacional.</p>
+      <p class="art-p"><strong>O que isso significa na prática:</strong> nenhuma lei que crie crime, aumente pena, crie qualificadora ou agravante pode ser aplicada a fatos praticados antes de sua entrada em vigor. A vigência do vicaricídio (art. 121-B do CP) e da nova pena do art. 129, §9º do CP começou em <strong>10/04/2026.</strong> Condutas anteriores a essa data não podem ser tipificadas pelo art. 121-B nem receber a pena de 2 a 5 anos do §9º — aplica-se a lei vigente ao tempo do fato.</p>
+      <p class="art-p"><strong>Quando usar como tese de defesa na Lei Maria da Penha:</strong></p>
+      <p class="art-p">① <strong>Vicaricídio (art. 121-B CP):</strong> se a morte de descendente, ascendente ou dependente da mulher ocorreu antes de 10/04/2026, não pode ser tipificada como vicaricídio — deve ser processada como homicídio qualificado pelo motivo torpe ou outro elemento típico aplicável à época. O Ministério Público que denunciar pelo art. 121-B em fato anterior comete erro grave, e a defesa deve arguir.</p>
+      <p class="art-p">② <strong>Pena do art. 129, §9º CP (lesão doméstica):</strong> se a conduta ocorreu antes de 10/10/2024 (data de vigência da Lei 14.994/2024), a pena aplicável é a anterior — detenção de 3 meses a 3 anos. Após essa data, aplica-se a nova pena de reclusão de 2 a 5 anos. A data do fato define a pena.</p>
+      <p class="art-p">③ <strong>Pena do art. 24-A (descumprimento de medida protetiva):</strong> antes da Lei 14.994/2024, a pena era de detenção de 3 meses a 2 anos. Após 10/10/2024, passou a ser reclusão de 6 meses a 2 anos. Fatos anteriores recebem a pena antiga — novatio legis in pejus não retroage.</p>
+      <div class="alerta-verde"><strong>Fundamentos:</strong> CF/88, art. 5º, XL — irretroatividade da lei penal mais grave. CP, art. 2º — lei posterior mais grave não se aplica a fatos anteriores. CP, art. 2º, parágrafo único — lei posterior mais benéfica retroage sempre. CADH, art. 9º — irretroatividade como garantia convencional. <strong>Denomina-se novatio legis in pejus</strong> a lei que agrava a situação do réu — vedada sua aplicação retroativa. <strong>Novatio legis in mellius</strong> é a lei que beneficia — retroage sempre, mesmo após o trânsito em julgado.</div>
+    </div>
+
+    <div class="nav">
+      <button class="btn btn-s" onclick="ir(1)">← Voltar</button>
+      <button class="btn btn-p" onclick="ir(3)">Próximo: Fluxo de competência →</button>
+    </div>
+  </div>
+
+  <!-- TELA 3: FLUXO -->
+  <div class="tela" id="t3">
+    <div class="badge">Etapa 4 de 5</div>
+    <h1 class="titulo">Fluxo de <em>competência</em></h1>
+    <p class="desc">Qual foro para cada situação? Clique em cada item para ver a resposta e o fundamento legal.</p>
+
+    <div class="fluxo" id="fluxo-container"></div>
+
+    <div class="nav">
+      <button class="btn btn-s" onclick="ir(2)">← Voltar</button>
+      <button class="btn btn-p" onclick="ir(4)">Próximo: Quiz e Resumo →</button>
+    </div>
+  </div>
+
+  <!-- TELA 4: QUIZ + RESUMO -->
+  <div class="tela" id="t4">
+    <div class="badge">Etapa 5 de 5 — Fixação</div>
+    <h1 class="titulo">Teste seu <em>domínio</em></h1>
+    <p class="desc">Quatro questões sobre competência em violência doméstica — com feedback imediato e explicação completa.</p>
+
+    <div id="quiz"></div>
+
+    <div style="margin-top:52px;padding-top:40px;border-top:1px solid var(--borda);">
+      <div style="text-align:center;margin-bottom:32px;">
+        <div style="font-family:'Playfair Display',serif;font-size:30px;font-weight:900;color:var(--texto);">O que fixar desta aula</div>
+        <div style="font-size:17px;color:var(--muted);margin-top:8px;">Os pontos que aparecem em provas, audiências e peças</div>
+      </div>
+      <div class="rgrid" id="rgrid"></div>
+
+      <div class="conclusao">
+        <div class="c-ic">✓</div>
+        <div class="c-tit">Aula 5 concluída</div>
+        <div class="c-txt">Você domina a competência em violência doméstica.<br>Continue para a <strong>Aula 6: Vedações da Lei Maria da Penha — o que não pode ser feito.</strong></div>
+      </div>
+
+      <div style="text-align:center;margin-top:28px;">
+        <button class="btn-dl" onclick="baixarPDF()">↓ Baixar resumo desta aula (PDF)</button>
+      </div>
+    </div>
+
+    <div class="nav">
+      <button class="btn btn-s" onclick="ir(3)">← Revisitar fluxo</button>
+      <button class="btn btn-p" onclick="ir(0)">↺ Rever do início</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const ETAPAS = ['Introdução','Limites do Juizado de Violência Doméstica','Vicaricídio','Fluxo','Quiz'];
+let cur = 0;
+const respostas = {};
+
+function buildSteps() {
+  const el = document.getElementById('stps');
+  el.innerHTML = '';
+  ETAPAS.forEach((n, i) => {
+    if (i > 0) {
+      const l = document.createElement('div');
+      l.className = 'sline' + (i <= cur ? ' d' : '');
+      el.appendChild(l);
+    }
+    const btn = document.createElement('button');
+    btn.className = 'step';
+    btn.onclick = () => ir(i);
+    const dot = document.createElement('div');
+    dot.className = 'dot' + (i === cur ? ' a' : i < cur ? ' d' : '');
+    dot.textContent = i < cur ? '✓' : i + 1;
+    const lbl = document.createElement('div');
+    lbl.className = 'slbl' + (i === cur ? ' a' : i < cur ? ' d' : '');
+    lbl.textContent = n;
+    btn.appendChild(dot); btn.appendChild(lbl);
+    el.appendChild(btn);
+  });
+}
+
+function ir(n) {
+  document.querySelectorAll('.tela').forEach(t => t.classList.remove('on'));
+  document.getElementById('t' + n).classList.add('on');
+  cur = n; buildSteps();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// FLUXO
+const FLUXOS = [
+  {
+    n: '1', titulo: 'Lesão corporal doméstica (art. 129, §9º CP)',
+    desc: 'Foro: Juizado de Violência Doméstica (ou vara criminal se não houver Juizado de Violência Doméstica estruturado). Fundamentos: art. 14 da Lei Maria da Penha (competência do Juizado) e art. 41 da Lei Maria da Penha (afastamento da Lei 9.099/95, independentemente da pena). Ação penal pública incondicionada (Súmula 542 STJ). Não é crime doloso contra a vida — não vai ao Júri. ⚠️ Atenção à irretroatividade: pena atual de reclusão de 2 a 5 anos (Lei 14.994/2024, vigor 10/10/2024) — para fatos anteriores a essa data, a pena era de detenção de 3 meses a 3 anos.'
+  },
+  {
+    n: '2', titulo: 'Ameaça em contexto doméstico (art. 147 CP)',
+    desc: 'Foro: Juizado de Violência Doméstica (ou vara criminal). Ação penal pública incondicionada quando por razões de gênero (Lei 14.994/2024). Não é crime doloso contra a vida. Pena dobrada quando por razões da condição do sexo feminino.'
+  },
+  {
+    n: '3', titulo: 'Feminicídio (art. 121-A CP)',
+    desc: 'Foro: Tribunal do Júri. O Juizado de Violência Doméstica não tem competência para crimes dolosos contra a vida — garantia constitucional (CF, art. 5º, XXXVIII, "d"). A instrução ocorre perante o juiz singular da vara do Júri. Pena: reclusão de 20 a 40 anos. Crime hediondo.'
+  },
+  {
+    n: '4', titulo: 'Vicaricídio (art. 121-B CP — Lei 15.384/2026)',
+    desc: 'Foro: Tribunal do Júri. Crime doloso contra a vida — competência constitucional do Júri. O vicaricídio é a morte de descendente, ascendente, dependente, enteado ou pessoa sob guarda da mulher, com fim específico de causar-lhe sofrimento. Pena: reclusão de 20 a 40 anos. Crime hediondo. ⚠️ Irretroatividade: aplica-se apenas a fatos praticados a partir de 10/04/2026.'
+  },
+  {
+    n: '5', titulo: 'Descumprimento de medida protetiva (art. 24-A Lei Maria da Penha)',
+    desc: 'Foro: Juizado de Violência Doméstica (ou vara criminal). Não é crime doloso contra a vida. O crime se configura independentemente de a medida ter sido deferida por juiz cível ou criminal. ⚠️ Atenção à data da conduta: após a Lei 14.994/2024 (vigor 10/10/2024), a pena passou de detenção de 3 meses a 2 anos para reclusão de 6 meses a 2 anos. Se o descumprimento ocorreu antes de 10/10/2024, aplica-se a pena anterior (detenção de 3 meses a 2 anos) — a lei mais grave não retroage (CF, art. 5º, XL).'
+  },
+  {
+    n: '6', titulo: 'Divórcio litigioso com violência doméstica',
+    desc: 'Foro: Juizado de Violência Doméstica, por opção da ofendida (art. 14-A Lei Maria da Penha). Atenção: a partilha de bens está excluída da competência do Juizado de Violência Doméstica (art. 14-A, §1º Lei Maria da Penha) — deve ser processada separadamente na vara de família ou cível. O Juizado de Violência Doméstica julga apenas o divórcio em si.'
+  },
+  {
+    n: '7', titulo: 'Violência psicológica autônoma (art. 147-B CP)',
+    desc: 'Foro: Juizado de Violência Doméstica (ou vara criminal). Crime autônomo criado pela Lei 14.188/2021. Ação penal pública incondicionada. Não é crime doloso contra a vida. Pena: reclusão de 6 meses a 2 anos e multa; de 2 a 5 anos se causar dano à saúde.'
+  },
+  {
+    n: '8', titulo: 'Feminicídio praticado por militar (autor e/ou vítima militar)',
+    desc: 'Foro: Tribunal do Júri — não a Justiça Militar. STJ — CC 218.865 — 3ª Seção, rel. Min. Ribeiro Dantas, julgado em 08/04/2026 (por 4 votos a 3): o feminicídio tem como núcleo a proteção da vida da mulher em contexto de desigualdade de gênero, o que afasta a competência da Justiça Militar na ausência de nexo funcional com a atividade castrense. Outros crimes militares conexos (dano ao patrimônio militar, furto de arma de serviço) vão à Justiça Militar separadamente. <a href="https://www.stj.jus.br/sites/portalp/Paginas/Comunicacao/Noticias/2026/08042026-Terceira-Secao-desmembra-processo--e-ex-soldado-do-Exercito-acusado-de-feminicidio-vai-ao-tribunal-do-juri.aspx" target="_blank" style="color:#85B7EB;">→ Notícia no portal do STJ (CC 218.865)</a>'
+  },
+];
+
+function buildFluxo() {
+  const el = document.getElementById('fluxo-container');
+  FLUXOS.forEach((f, i) => {
+    const item = document.createElement('div');
+    item.className = 'fluxo-item';
+    item.innerHTML = `<div class="fluxo-num">${f.n}</div>
+      <div class="fluxo-corpo">
+        <div class="fluxo-titulo">${f.titulo}</div>
+        <div class="fluxo-desc" id="fd${i}">${f.desc}</div>
+      </div>`;
+    item.onclick = () => {
+      const desc = document.getElementById('fd' + i);
+      const isOn = desc.classList.contains('on');
+      document.querySelectorAll('.fluxo-desc').forEach(d => d.classList.remove('on'));
+      document.querySelectorAll('.fluxo-item').forEach(d => d.classList.remove('on'));
+      if (!isOn) { desc.classList.add('on'); item.classList.add('on'); }
+    };
+    el.appendChild(item);
+  });
+}
+
+// QUIZ
+const QS = [
+  {
+    p: 'Um caso de lesão corporal doméstica (art. 129, §9º CP) é distribuído a um Juizado de Violência Doméstica estruturado. A defesa argumenta que o Juizado de Violência Doméstica não tem competência pois o crime possui pena máxima superior a 2 anos. Está correto?',
+    ops: [
+      'Sim — crimes com pena superior a 2 anos devem ir ao juízo criminal comum, não ao Juizado de Violência Doméstica',
+      'Não — o Juizado de Violência Doméstica tem competência para processar e julgar causas decorrentes de violência doméstica, independentemente da pena cominada, com exceção dos crimes dolosos contra a vida',
+      'Sim — apenas contravenções penais e crimes com pena até 2 anos são julgados pelo Juizado de Violência Doméstica',
+      'Depende — a competência do Juizado de Violência Doméstica é definida caso a caso pelo juiz plantonista'
+    ],
+    c: 1,
+    fb: 'O argumento da defesa está errado. O art. 14 da Lei Maria da Penha atribui ao Juizado de Violência Doméstica competência cível e criminal para julgar causas decorrentes de violência doméstica — sem limitação pela pena cominada. A única exceção são os crimes dolosos contra a vida (feminicídio, vicaricídio, etc.), que vão ao Tribunal do Júri por força da CF, art. 5º, XXXVIII, "d".'
+  },
+  {
+    p: 'Um agressor mata o filho de 4 anos da vítima para puni-la por ter se separado. Qual o crime e qual o foro competente para julgamento?',
+    ops: [
+      'Homicídio qualificado — julgado pelo Juizado de Violência Doméstica com competência ampliada',
+      'Vicaricídio (art. 121-B CP, Lei 15.384/2026) — julgado pelo Tribunal do Júri, pois é crime doloso contra a vida',
+      'Feminicídio (art. 121-A CP) — julgado pelo Tribunal do Júri',
+      'Lesão corporal seguida de morte — julgado pelo Juizado de Violência Doméstica'
+    ],
+    c: 1,
+    fb: 'O crime é o vicaricídio (art. 121-B do CP), criado pela Lei 15.384/2026 (em vigor desde 10/04/2026, data de publicação no Diário Oficial). Elementos: matar descendente da mulher (filho), com fim específico de causar-lhe sofrimento, punição ou controle, em contexto de violência doméstica. Pena: reclusão de 20 a 40 anos. Como é crime doloso contra a vida, a competência é do Tribunal do Júri — não do Juizado de Violência Doméstica.'
+  },
+  {
+    p: 'Uma mulher vítima de violência doméstica quer propor divórcio no Juizado de Violência Doméstica. Ela e o marido têm apartamento e três contas bancárias a partilhar. O Juizado de Violência Doméstica pode julgar tudo — divórcio e partilha?',
+    ops: [
+      'Sim — o Juizado de Violência Doméstica tem competência cível ampla, incluindo partilha de bens em casos de violência doméstica',
+      'Não — o Juizado de Violência Doméstica pode julgar o divórcio (art. 14-A Lei Maria da Penha), mas a partilha de bens está expressamente excluída da sua competência (art. 14-A, §1º Lei Maria da Penha)',
+      'Sim, mas apenas se o valor dos bens for inferior a 40 salários mínimos',
+      'Depende — o Juizado de Violência Doméstica decide se tem ou não competência para a partilha no caso concreto'
+    ],
+    c: 1,
+    fb: 'O art. 14-A, §1º da Lei Maria da Penha é expresso: "Exclui-se da competência dos Juizados de Violência Doméstica e Familiar contra a Mulher a pretensão relacionada à partilha de bens." O Juizado de Violência Doméstica pode julgar o divórcio em si — mas a partilha deve ser ajuizada separadamente na vara de família ou cível competente.'
+  },
+  {
+    p: 'Um militar da ativa mata sua companheira, também militar, dentro de uma base militar, em contexto de violência de gênero. Qual é o foro competente para o feminicídio?',
+    ops: [
+      'Justiça Militar — pois ambos são militares da ativa e o crime ocorreu em área militar',
+      'Tribunal do Júri — pois o feminicídio tem como núcleo a proteção da vida da mulher em razão de gênero, afastando a competência da Justiça Militar',
+      'Juizado de Violência Doméstica — pois se trata de violência doméstica e familiar',
+      'Depende: se a Justiça Militar tiver Juizado de Violência Doméstica estruturado, a competência é da Justiça Militar especializada'
+    ],
+    c: 1,
+    fb: 'O STJ (3ª Seção, 2026) fixou que o feminicídio vai ao Tribunal do Júri, ainda que autor e vítima sejam militares e o crime tenha ocorrido em área militar. O fundamento é que o feminicídio protege a vida da mulher em razão de gênero — não há nexo funcional com a atividade castrense. Outros crimes militares conexos (crimes contra o patrimônio da administração militar, etc.) podem ir à Justiça Militar separadamente.'
+  }
+];
+
+function buildQuiz() {
+  const el = document.getElementById('quiz');
+  QS.forEach((q, qi) => {
+    const c = document.createElement('div');
+    c.className = 'qcard';
+    c.innerHTML = `<div class="qnum">Questão ${qi+1} de ${QS.length}</div>
+      <div class="qp">${q.p}</div>
+      ${q.ops.map((op,oi) => `<div class="qop" id="qo${qi}_${oi}" onclick="ans(${qi},${oi})">${String.fromCharCode(65+oi)}) ${op}</div>`).join('')}
+      <div class="qfb" id="qf${qi}"></div>`;
+    el.appendChild(c);
+  });
+}
+
+function ans(qi, oi) {
+  if (respostas[qi] !== undefined) return;
+  respostas[qi] = oi;
+  const q = QS[qi];
+  for (let j = 0; j < q.ops.length; j++) {
+    const e = document.getElementById(`qo${qi}_${j}`);
+    e.classList.add('bl');
+    if (j === q.c) e.classList.add('ok');
+    else if (j === oi) e.classList.add('er');
+  }
+  const fb = document.getElementById('qf' + qi);
+  const ok = oi === q.c;
+  fb.className = 'qfb on ' + (ok ? 'ok' : 'er');
+  fb.innerHTML = `<strong>${ok ? '✓ Correto!' : '✗ Atenção.'}</strong> ${q.fb}`;
+}
+
+// RESUMO
+const RES = [
+  { ic:'⚖️', tit:'Art. 14 Lei Maria da Penha — Competência do Juizado de Violência Doméstica', txt:'O Juizado de Violência Doméstica tem competência cível e criminal cumuladas. Julga todos os crimes de violência doméstica, exceto os dolosos contra a vida. Pode funcionar em horário noturno.' },
+  { ic:'🏛️', tit:'Art. 33 Lei Maria da Penha — Vara criminal subsidiária', txt:'Onde não houver Juizado de Violência Doméstica estruturado, a vara criminal acumula as competências cível e criminal, com preferência para as causas de violência doméstica.' },
+  { ic:'⚖️', tit:'Art. 15 Lei Maria da Penha — Competência cível pela ofendida', txt:'Nos processos cíveis, a ofendida escolhe o foro: seu domicílio ou residência, lugar do fato, ou domicílio do agressor.' },
+  { ic:'👨‍⚖️', tit:'Tribunal do Júri — crimes dolosos contra a vida', txt:'Feminicídio (art. 121-A) e vicaricídio (art. 121-B) vão ao Júri — garantia constitucional (CF, art. 5º, XXXVIII, "d"). O Juizado de Violência Doméstica não tem essa competência.' },
+  { ic:'🆕', tit:'Vicaricídio — art. 121-B CP (Lei 15.384/2026)', txt:'Matar descendente, ascendente, dependente, enteado ou pessoa sob guarda da mulher, com fim de causar-lhe sofrimento. Pena: 20 a 40 anos. Crime hediondo. Majorantes: presença da mulher, vítima vulnerável, descumprimento de medida protetiva.' },
+  { ic:'🆕', tit:'Violência vicária — art. 7º, VI Lei Maria da Penha (Lei 15.383/2026)', txt:'6ª espécie de violência doméstica: qualquer violência contra pessoas da rede da mulher para atingi-la. O vicaricídio é sua forma mais grave.' },
+  { ic:'🚫', tit:'Partilha de bens fora do Juizado de Violência Doméstica', txt:'Art. 14-A, §1º Lei Maria da Penha: a partilha de bens está expressamente excluída da competência do Juizado de Violência Doméstica. O divórcio pode ser proposto no Juizado de Violência Doméstica — a partilha, não.' },
+  { ic:'🪖', tit:'Feminicídio de militar — Tribunal do Júri', txt:'STJ (3ª Seção, 2026): o feminicídio vai ao Júri mesmo quando autor e vítima são militares e o crime ocorreu em área militar. Ausência de nexo funcional afasta a Justiça Militar.' },
+];
+
+function buildRes() {
+  const el = document.getElementById('rgrid');
+  RES.forEach(r => {
+    const d = document.createElement('div');
+    d.className = 'rcard';
+    d.innerHTML = `<div class="ric">${r.ic}</div><div class="rtit">${r.tit}</div><div class="rtxt">${r.txt}</div>`;
+    el.appendChild(d);
+  });
+}
+
+// PDF
+function baixarPDF() {
+  const btn = document.querySelector('.btn-dl');
+  const orig = btn.innerHTML;
+  btn.innerHTML = '⏳ Gerando PDF...';
+  btn.disabled = true;
+  if (window.jspdf && window.jspdf.jsPDF) { gerarPDF(btn, orig); return; }
+  const s = document.createElement('script');
+  s.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
+  s.onload = () => gerarPDF(btn, orig);
+  s.onerror = () => { btn.innerHTML = '✗ Erro ao carregar. Verifique sua conexão.'; btn.disabled = false; };
+  document.head.appendChild(s);
+}
+
+function gerarPDF(btn, orig) {
+  try {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ unit: 'mm', format: 'a4' });
+    const R=[212,83,126], G=[29,158,117], D=[201,150,58], E=[26,18,40], M=[100,90,130];
+    const W=210, MG=18, LW=174;
+    let y=0;
+    const np=()=>{ doc.addPage(); y=18; };
+    const ck=h=>{ if(y+h>272) np(); };
+    const tx=t=>t.normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[\u2014\u2013]/g,'-').replace(/[\u2018\u2019]/g,"'").replace(/[\u201C\u201D]/g,'"').replace(/[^\x00-\x7F]/g,'?');
+
+    doc.setFillColor(...R); doc.rect(0,0,W,18,'F');
+    doc.setTextColor(255,255,255); doc.setFontSize(11); doc.setFont('helvetica','bold');
+    doc.text('PENHA em Cena',MG,11);
+    doc.setFont('helvetica','normal'); doc.setFontSize(9);
+    doc.text('Modulo 01 - Aula 5 - Resumo',W-MG,11,{align:'right'});
+    y=26;
+    doc.setTextColor(...E); doc.setFontSize(16); doc.setFont('helvetica','bold');
+    doc.text('Competencia: Juizado de Violência Doméstica, Justica Comum, Juri e Vicaricidio',MG,y); y+=8;
+    doc.setFontSize(10); doc.setFont('helvetica','normal'); doc.setTextColor(...M);
+    doc.text('Arts. 14, 14-A, 15 e 33 Lei Maria da Penha - art. 121-B CP - Leis 15.383 e 15.384/2026',MG,y); y+=7;
+    doc.setDrawColor(...R); doc.setLineWidth(0.5); doc.line(MG,y,W-MG,y); y+=8;
+
+    const sec=t=>{ ck(12); doc.setFillColor(...R); doc.roundedRect(MG,y,LW,8,1,1,'F'); doc.setTextColor(255,255,255); doc.setFontSize(9); doc.setFont('helvetica','bold'); doc.text(tx(t),MG+4,y+5.5); y+=12; doc.setTextColor(...E); };
+    const secD=t=>{ ck(12); doc.setFillColor(...D); doc.roundedRect(MG,y,LW,8,1,1,'F'); doc.setTextColor(255,255,255); doc.setFontSize(9); doc.setFont('helvetica','bold'); doc.text(tx(t),MG+4,y+5.5); y+=12; doc.setTextColor(...E); };
+    const par=t=>{ const ls=doc.splitTextToSize(tx(t),LW); ck(ls.length*5+2); doc.setFontSize(9); doc.setFont('helvetica','normal'); doc.setTextColor(...E); doc.text(ls,MG,y); y+=ls.length*5+2; };
+    const bull=t=>{ ck(7); doc.setFillColor(...R); doc.circle(MG+2,y-1,1,'F'); const ls=doc.splitTextToSize(tx(t),LW-7); doc.setFontSize(9); doc.setFont('helvetica','normal'); doc.setTextColor(...E); doc.text(ls,MG+6,y); y+=ls.length*5+2; };
+    const bullD=t=>{ ck(7); doc.setFillColor(...D); doc.circle(MG+2,y-1,1,'F'); const ls=doc.splitTextToSize(tx(t),LW-7); doc.setFontSize(9); doc.setFont('helvetica','normal'); doc.setTextColor(...E); doc.text(ls,MG+6,y); y+=ls.length*5+2; };
+    const dest=(t,cor)=>{ const c=cor||R; const ls=doc.splitTextToSize(tx(t),LW-8); const h=ls.length*5+8; ck(h+4); doc.setDrawColor(...c); doc.setLineWidth(2); doc.line(MG,y,MG,y+h); doc.setLineWidth(0.3); doc.setDrawColor(...c); doc.roundedRect(MG,y,LW,h,2,2,'S'); doc.setTextColor(...E); doc.setFontSize(9); doc.setFont('helvetica','bolditalic'); doc.text(ls,MG+5,y+5); y+=h+5; doc.setFont('helvetica','normal'); };
+
+    sec('1. A competencia do Juizado de Violência Doméstica (art. 14 da Lei Maria da Penha)');
+    par('O Juizado de Violência Doméstica tem competencia civel e criminal cumuladas. Julga todos os crimes de violencia domestica, exceto crimes dolosos contra a vida.');
+    bull('Pode funcionar em horario noturno (art. 14, par. unico Lei Maria da Penha).');
+    bull('Art. 33 Lei Maria da Penha: onde nao houver Juizado de Violência Doméstica, a vara criminal acumula as competencias com preferencia para as causas de violencia domestica.');
+    bull('Art. 15 Lei Maria da Penha: nos processos civeis, a ofendida escolhe o foro — seu domicilio, lugar do fato ou domicilio do agressor.');
+    y+=3;
+
+    sec('2. Limites do Juizado de Violência Doméstica — Tribunal do Juri');
+    par('Crimes dolosos contra a vida vao ao Tribunal do Juri (CF, art. 5, XXXVIII, "d") — clausula petrea.');
+    bull('Feminicidio (art. 121-A CP, Lei 14.994/2024): Juizado de Violência Doméstica NAO tem competencia. Vai ao Tribunal do Juri.');
+    bull('Vicaricidio (art. 121-B CP, Lei 15.384/2026): Juizado de Violência Doméstica NAO tem competencia. Vai ao Tribunal do Juri.');
+    bull('STJ (3a Secao, 2026): feminicidio de militar vai ao Juri — ausencia de nexo funcional com atividade castrense afasta a Justica Militar.');
+    y+=3;
+
+    sec('3. Art. 14-A Lei Maria da Penha — Divorcio e partilha de bens');
+    par('A ofendida pode propor acao de divorcio ou dissolucao de uniao estavel no Juizado de Violência Doméstica (art. 14-A, caput Lei Maria da Penha).');
+    dest('ATENCAO: a partilha de bens esta expressamente EXCLUIDA da competencia do Juizado de Violência Doméstica (art. 14-A, §1 Lei Maria da Penha). Deve ser processada na vara de familia ou civel.', R);
+    y+=3;
+
+    secD('4. Vicaricidio — art. 121-B do CP (Lei 15.384/2026 — em vigor desde 10/04/2026, data de publicação no Diário Oficial)');
+    par('Tipo penal: matar descendente, ascendente, dependente, enteado ou pessoa sob guarda ou responsabilidade direta da mulher, com fim especifico de causar-lhe sofrimento, punicao ou controle, no contexto de violencia domestica e familiar.');
+    par('Pena: reclusao de 20 a 40 anos. Crime hediondo (inc. I-C do art. 1 da Lei 8.072/90).');
+    bullD('Majorantes (pena aumentada de 1/3 ate a metade): I - na presenca da mulher; II - contra crianca, adolescente, idoso ou pessoa com deficiencia; III - em descumprimento de medida protetiva.');
+    bullD('Competencia: Tribunal do Juri (crime doloso contra a vida). Nao e competencia do Juizado de Violência Doméstica.');
+    y+=3;
+
+    secD('5. Violencia vicaria — art. 7, VI da Lei Maria da Penha (Lei 15.383/2026 — em vigor desde 10/04/2026, data de publicação no Diário Oficial)');
+    par('6a especie de violencia domestica: qualquer forma de violencia praticada contra descendente, ascendente, dependente, enteado, parente, pessoa sob guarda ou responsabilidade direta da mulher ou pessoa de sua rede de apoio, com vistas a atingi-la.');
+    bullD('Duas leis distintas do mesmo dia: Lei 15.383 alterou a Lei Maria da Penha (art. 7, VI). Lei 15.384 criou o art. 121-B do CP (vicaricidio) e o incluiu nos crimes hediondos.');
+    y+=3;
+
+    sec('6. Jurisprudencia essencial sobre competencia');
+    bull('STF — CF, art. 5, XXXVIII, "d": competencia do Tribunal do Juri para crimes dolosos contra a vida — clausula petrea.');
+    bull('STJ — 3a Secao (2026): feminicidio vai ao Juri mesmo em contexto militar — ausencia de nexo funcional afasta a Justica Militar.');
+    bull('STJ — HC 280.788: contraventcoes penais no contexto de violencia domestica nao admitem institutos despenalizadores da Lei 9.099/95.');
+
+    const tot=doc.getNumberOfPages();
+    for(let i=1;i<=tot;i++){ doc.setPage(i); doc.setFontSize(8); doc.setTextColor(...M); doc.text('Penha em Cena - Modulo 01 - Aula 5 - Material de apoio exclusivo do aluno',MG,290); doc.text(i+' / '+tot,W-MG,290,{align:'right'}); }
+
+    doc.save('PenhaEmCena_M01_A05_Resumo.pdf');
+    btn.innerHTML='✓ PDF baixado!';
+    btn.style.background='rgba(29,158,117,0.25)';
+    setTimeout(()=>{ btn.innerHTML=orig; btn.style.background=''; btn.disabled=false; },3000);
+  } catch(e) {
+    console.error('Erro PDF:',e);
+    btn.innerHTML='✗ Erro ao gerar. Tente novamente.';
+    btn.disabled=false;
+  }
+}
+
+buildSteps();
+buildFluxo();
+buildQuiz();
+buildRes();
+</script>
+</body>
+</html>

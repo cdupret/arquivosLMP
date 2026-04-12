@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Módulo 01 · Aula 4 — LMP, CP, CPP e LEP · Penha em Cena</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --rosa: #D4537E;
+  --rosa2: #A33360;
+  --fundo: #0E0B14;
+  --fundo2: #17122A;
+  --fundo3: #211A38;
+  --roxo: #7F77DD;
+  --texto: #F0EAF8;
+  --muted: #9B8FBC;
+  --borda: rgba(212,83,126,0.2);
+  --verde: #1D9E75;
+  --dourado: #C9963A;
+  --azul: #3A8ADC;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--fundo);
+  color: var(--texto);
+  min-height: 100vh;
+  overflow-x: hidden;
+  font-size: 18px;
+  line-height: 1.75;
+}
+.bg-p { position:fixed;inset:0;pointer-events:none;z-index:0;
+  background: radial-gradient(ellipse 60% 40% at 20% 20%, rgba(127,119,221,0.07) 0%, transparent 60%),
+              radial-gradient(ellipse 40% 60% at 80% 80%, rgba(212,83,126,0.06) 0%, transparent 60%); }
+
+/* HEADER */
+.header { position:sticky;top:0;z-index:100;background:rgba(14,11,20,0.95);border-bottom:1px solid var(--borda);padding:16px 32px;display:flex;align-items:center;gap:14px;backdrop-filter:blur(16px); }
+.logo { font-family:'Playfair Display',serif;font-size:20px;color:var(--rosa);font-weight:700; }
+.sep { color:var(--muted); }
+.info { font-size:15px;color:var(--muted); }
+
+/* PROGRESSO */
+.prog { background:var(--fundo2);border-bottom:1px solid var(--borda);padding:16px 32px;position:sticky;top:61px;z-index:99; }
+.steps { max-width:780px;margin:0 auto;display:flex;align-items:center; }
+.step { display:flex;flex-direction:column;align-items:center;gap:6px;flex:1;cursor:pointer;border:none;background:none; }
+.dot { width:36px;height:36px;border-radius:50%;border:2px solid rgba(155,143,188,0.3);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:500;color:var(--muted);transition:all .3s; }
+.dot.a { background:var(--rosa);border-color:var(--rosa);color:#fff;box-shadow:0 0 24px rgba(212,83,126,0.5); }
+.dot.d { background:var(--verde);border-color:var(--verde);color:#fff; }
+.slbl { font-size:11px;color:var(--muted);white-space:nowrap; }
+.slbl.a { color:var(--rosa); }
+.slbl.d { color:var(--verde); }
+.sline { flex:1;height:2px;background:rgba(155,143,188,0.15);margin-bottom:18px;transition:background .4s; }
+.sline.d { background:var(--verde); }
+
+/* MAIN */
+.main { max-width:840px;margin:0 auto;padding:44px 32px 120px;position:relative;z-index:1; }
+.tela { display:none;animation:up .4s ease; }
+.tela.on { display:block; }
+@keyframes up { from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);} }
+
+/* HERO */
+.badge { display:inline-flex;align-items:center;gap:6px;background:rgba(212,83,126,0.12);border:1px solid rgba(212,83,126,0.3);border-radius:20px;padding:6px 16px;font-size:13px;font-weight:500;color:var(--rosa);letter-spacing:.06em;text-transform:uppercase;margin-bottom:20px; }
+.titulo { font-family:'Playfair Display',serif;font-size:clamp(28px,5vw,44px);font-weight:900;line-height:1.15;color:var(--texto);margin-bottom:16px; }
+.titulo em { color:var(--rosa);font-style:italic; }
+.desc { font-size:18px;color:var(--muted);line-height:1.9;margin-bottom:36px; }
+
+/* ARTIGO */
+.art { background:var(--fundo2);border:1px solid var(--borda);border-radius:18px;padding:30px 34px;margin-bottom:22px; }
+.art.dest { border-color:rgba(212,83,126,0.5);background:rgba(212,83,126,0.04); }
+.art-num { font-size:13px;font-weight:600;color:var(--rosa);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px; }
+.art-h { font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:var(--texto);margin-bottom:18px; }
+.art-lei { font-size:17px;color:var(--muted);border-left:3px solid var(--rosa);padding-left:20px;margin-bottom:20px;font-style:italic;line-height:1.85; }
+.art-p { font-size:17px;color:var(--muted);line-height:1.85;margin-bottom:14px; }
+.art-p strong { color:var(--texto); }
+
+/* ALERTA */
+.alerta { background:rgba(212,83,126,0.07);border:1px solid rgba(212,83,126,0.25);border-radius:12px;padding:18px 24px;font-size:16px;color:rgba(240,234,248,0.85);line-height:1.8;margin-top:18px; }
+.alerta strong { color:var(--rosa); }
+
+/* TABS */
+.tabs { display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px; }
+.tab { padding:12px 22px;border-radius:10px;border:1px solid rgba(155,143,188,0.2);background:transparent;color:var(--muted);font-size:16px;font-weight:500;cursor:pointer;transition:all .2s;font-family:'DM Sans',sans-serif; }
+.tab:hover { border-color:var(--rosa);color:var(--texto); }
+.tab.on { background:var(--rosa);border-color:var(--rosa);color:#fff; }
+.painel { background:var(--fundo2);border:1px solid var(--borda);border-radius:14px;padding:30px 32px; }
+.painel h3 { font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:var(--texto);margin-bottom:26px; }
+.item { display:flex;gap:18px;margin-bottom:28px;align-items:flex-start;padding-bottom:28px;border-bottom:1px solid rgba(155,143,188,0.1); }
+.item:last-of-type { border-bottom:none;margin-bottom:0;padding-bottom:0; }
+.item-ic { font-size:24px;flex-shrink:0;margin-top:2px; }
+.item-b { flex:1; }
+.item-b strong { color:var(--texto);font-size:18px;display:block;margin-bottom:8px; }
+.item-b p { font-size:17px;color:var(--muted);line-height:1.85; }
+
+/* VEDAÇÕES */
+.vgrid { display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;margin-bottom:22px; }
+.vcard { background:var(--fundo2);border:1px solid var(--borda);border-radius:14px;padding:24px 26px;cursor:pointer;transition:all .2s; }
+.vcard:hover { border-color:rgba(212,83,126,0.4);transform:translateY(-2px); }
+.vcard.on { border-color:var(--rosa);background:rgba(212,83,126,0.05); }
+.vic { font-size:30px;margin-bottom:12px; }
+.vtit { font-size:18px;font-weight:500;color:var(--texto);margin-bottom:6px; }
+.vsub { font-size:15px;color:var(--muted); }
+.vdet { display:none;background:var(--fundo2);border:1px solid var(--borda);border-radius:14px;padding:28px 30px;margin-top:8px; }
+.vdet.on { display:block; }
+.vdet h4 { font-family:'Playfair Display',serif;font-size:22px;font-weight:700;margin-bottom:16px; }
+.vdet p { font-size:17px;color:var(--muted);line-height:1.9;margin-bottom:14px; }
+.vjuri { font-size:16px;color:#85B7EB;line-height:1.8;padding:16px 20px;background:rgba(58,138,220,0.08);border-left:3px solid var(--azul);border-radius:0 10px 10px 0;margin-top:12px; }
+
+/* QUIZ */
+.qcard { background:var(--fundo2);border:1px solid var(--borda);border-radius:18px;padding:32px 30px;margin-bottom:22px; }
+.qnum { font-size:13px;font-weight:600;color:var(--rosa);letter-spacing:.07em;text-transform:uppercase;margin-bottom:12px; }
+.qp { font-family:'Playfair Display',serif;font-size:21px;font-weight:700;line-height:1.5;color:var(--texto);margin-bottom:24px; }
+.qop { background:rgba(255,255,255,0.03);border:1px solid rgba(155,143,188,0.2);border-radius:10px;padding:16px 20px;margin-bottom:12px;cursor:pointer;font-size:17px;color:var(--muted);transition:all .2s;line-height:1.65; }
+.qop:hover:not(.bl) { border-color:var(--rosa);color:var(--texto);background:rgba(212,83,126,0.07); }
+.qop.ok { background:rgba(29,158,117,0.12);border-color:var(--verde);color:#9FE1CB; }
+.qop.er { background:rgba(212,83,126,0.1);border-color:var(--rosa);color:#EDB0C5; }
+.qop.bl { cursor:default; }
+.qfb { display:none;margin-top:14px;padding:18px 22px;border-radius:10px;font-size:17px;line-height:1.8; }
+.qfb.on { display:block; }
+.qfb.ok { background:rgba(29,158,117,0.1);border:1px solid rgba(29,158,117,0.25);color:#9FE1CB; }
+.qfb.er { background:rgba(212,83,126,0.08);border:1px solid rgba(212,83,126,0.2);color:#EDB0C5; }
+
+/* RESUMO */
+.rgrid { display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;margin-bottom:30px; }
+.rcard { background:var(--fundo2);border:1px solid var(--borda);border-radius:14px;padding:24px 26px;transition:border-color .2s; }
+.rcard:hover { border-color:rgba(212,83,126,0.35); }
+.ric { font-size:26px;margin-bottom:12px; }
+.rtit { font-size:18px;font-weight:500;color:var(--texto);margin-bottom:8px; }
+.rtxt { font-size:16px;color:var(--muted);line-height:1.8; }
+
+.conclusao { background:linear-gradient(135deg,rgba(212,83,126,0.08),rgba(127,119,221,0.05));border:1px solid rgba(212,83,126,0.2);border-radius:18px;padding:40px;text-align:center;margin-top:28px; }
+.c-ic { font-size:48px;margin-bottom:14px; }
+.c-tit { font-family:'Playfair Display',serif;font-size:28px;font-weight:900;color:var(--verde);margin-bottom:10px; }
+.c-txt { font-size:18px;color:var(--muted);line-height:1.85; }
+
+/* NAV */
+.nav { display:flex;align-items:center;justify-content:space-between;margin-top:48px;padding-top:30px;border-top:1px solid var(--borda); }
+.btn { display:inline-flex;align-items:center;gap:8px;padding:14px 28px;border-radius:10px;font-size:17px;font-weight:500;cursor:pointer;transition:all .2s;border:none;font-family:'DM Sans',sans-serif; }
+.btn-s { background:rgba(255,255,255,0.05);color:var(--muted);border:1px solid rgba(155,143,188,0.2); }
+.btn-s:hover { background:rgba(255,255,255,0.09);color:var(--texto); }
+.btn-p { background:var(--rosa);color:#fff;box-shadow:0 4px 18px rgba(212,83,126,0.3); }
+.btn-p:hover { background:var(--rosa2);transform:translateY(-1px);box-shadow:0 6px 24px rgba(212,83,126,0.4); }
+.btn-dl { display:inline-flex;align-items:center;gap:10px;margin-top:18px;padding:15px 26px;border-radius:10px;background:rgba(29,158,117,0.15);border:1px solid rgba(29,158,117,0.4);color:#5DCAA5;font-size:17px;font-weight:500;cursor:pointer;transition:all .2s;font-family:'DM Sans',sans-serif; }
+.btn-dl:hover { background:rgba(29,158,117,0.25); }
+</style>
+</head>
+<body>
+<div class="bg-p"></div>
+
+<header class="header">
+  <span class="logo">PENHA em Cena</span>
+  <span class="sep">/</span>
+  <span class="info">Módulo 01 · Aula 4</span>
+</header>
+
+<div class="prog">
+  <div class="steps" id="stps"></div>
+</div>
+
+<div class="main">
+
+  <!-- TELA 0 -->
+  <div class="tela on" id="t0">
+    <div class="badge">Módulo 01 · Aula 4</div>
+    <h1 class="titulo">A LMP não existe<br><em>sozinha</em></h1>
+    <p class="desc">A Lei Maria da Penha protege, veda e define competências — mas os crimes estão no CP, o processo no CPP e a execução na LEP. Entender como essas leis dialogam é indispensável para qualquer peça em violência doméstica.</p>
+
+    <div class="art dest">
+      <div class="art-num">Art. 13 da LMP — Ponto de partida</div>
+      <div class="art-h">A cláusula de aplicação subsidiária</div>
+      <div class="art-lei">"Ao processo, ao julgamento e à execução das causas cíveis e criminais decorrentes da prática de violência doméstica e familiar contra a mulher aplicar-se-ão as normas dos Códigos de Processo Penal e de Processo Civil e da legislação específica relativa à criança, ao adolescente e ao idoso que não conflitarem com o estabelecido nesta Lei."</div>
+      <p class="art-p">O art. 13 define a <strong>lógica do sistema:</strong> onde a LMP é silente, aplicam-se subsidiariamente o CPP, o CPC e a legislação especial. Mas onde a LMP fala — ela prevalece, inclusive afastando completamente a Lei 9.099/95 pelo art. 41.</p>
+    </div>
+
+    <div class="art dest">
+      <div class="art-num">Art. 41 da LMP — A vedação mais importante</div>
+      <div class="art-h">A Lei 9.099/95 está completamente afastada</div>
+      <div class="art-lei">"Aos crimes praticados com violência doméstica e familiar contra a mulher, independentemente da pena prevista, não se aplica a Lei nº 9.099, de 26 de setembro de 1995."</div>
+      <p class="art-p">Três palavras mudam tudo: <strong>"independentemente da pena prevista".</strong> Mesmo crimes de pena mínima não admitem os institutos da Lei 9.099/95 em contexto de violência doméstica.</p>
+      <p class="art-p"><strong>Vedados pelo afastamento da Lei 9.099/95:</strong> transação penal · suspensão condicional do processo (sursis processual) · composição civil dos danos · Termo Circunstanciado de Ocorrência (TCO).</p>
+      <div class="alerta">
+        <strong>STF — ADC 19 (2012):</strong> art. 41 é constitucional. <strong>STJ — Súmula 536:</strong> transação penal e sursis processual não se aplicam. <strong>STJ — HC 280.788:</strong> a vedação alcança também contravenções penais por interpretação teleológica — os fins sociais da LMP impedem qualquer resultado diferente.
+      </div>
+    </div>
+
+    <div class="nav">
+      <span></span>
+      <button class="btn btn-p" onclick="ir(1)">Próximo: Alterações no CP →</button>
+    </div>
+  </div>
+
+  <!-- TELA 1 -->
+  <div class="tela" id="t1">
+    <div class="badge">Etapa 2 de 5</div>
+    <h1 class="titulo">O que a LMP alterou no<br><em>Código Penal</em></h1>
+    <p class="desc">A LMP não apenas criou um sistema protetivo — ela modificou diretamente o Código Penal: inseriu agravantes, elevou penas e, com leis posteriores, criou novos tipos penais autônomos.</p>
+
+    <div class="art">
+      <div class="art-num">Art. 61, II, "f" do CP</div>
+      <div class="art-h">Agravante genérica — relações domésticas</div>
+      <p class="art-p">A LMP acrescentou ao Código Penal a alínea "f" ao art. 61, II: é circunstância agravante cometer o crime <strong>"com abuso de autoridade ou prevalecendo-se de relações domésticas, de coabitação ou de hospitalidade."</strong></p>
+      <p class="art-p">Essa agravante se aplica a <strong>qualquer crime</strong> praticado nesse contexto — não apenas os típicos da LMP. Pode ser aplicada cumulativamente com qualificadoras sem configurar bis in idem.</p>
+      <div class="alerta"><strong>STJ — Temas Ed. 231/2024:</strong> a qualificadora do feminicídio tem natureza objetiva — dispensa análise do animus do agente. O art. 61, II, "f" pode ser aplicado junto ao feminicídio sem bis in idem.</div>
+    </div>
+
+    <div class="art">
+      <div class="art-num">Art. 129, §9º, §10 e §11 do CP</div>
+      <div class="art-h">Lesão corporal doméstica — pena atualizada pela Lei 14.994/2024</div>
+      <p class="art-p">O <strong>§9º</strong> pune quem pratica lesão contra ascendente, descendente, irmão, cônjuge, companheiro ou com quem conviva ou tenha convivido, ou prevalecendo-se das relações domésticas, de coabitação ou de hospitalidade. A pena, que era de 3 meses a 3 anos, foi elevada pela <strong>Lei 14.994/2024</strong> para <strong>reclusão de 2 a 5 anos.</strong></p>
+      <p class="art-p">O <strong>§10</strong> determina que a pena seja aumentada de <strong>1/3</strong> se o crime resultar em lesão grave, gravíssima ou morte.</p>
+      <p class="art-p">O <strong>§11</strong> determina que a pena seja aumentada de <strong>1/3</strong> se o crime for cometido contra <strong>pessoa portadora de deficiência.</strong></p>
+      <div class="alerta"><strong>Ação penal pública incondicionada:</strong> confirmada pelo STF na ADI 4424 e consolidada na Súmula 542 do STJ. O Ministério Público age independentemente da vontade da vítima.<br><br>
+      <strong>Ponto prático — Jurisprudência em Teses Ed. 231/2024 (STJ):</strong> a edição traz 14 teses sobre julgamentos com perspectiva de gênero — leitura obrigatória para a prática. Acesse: <a href="https://www.stj.jus.br/docs_internet/jurisprudencia/jurisprudenciaemteses/Jurisprudencia%20em%20Teses%20231%20-%20Julgamentos%20Com%20Perspectiva%20de%20Genero%20IV.pdf" target="_blank" style="color:#85B7EB;">STJ — Jurisprudência em Teses, Ed. 231/2024 (PDF)</a></div>
+    </div>
+
+    <div class="art">
+      <div class="art-num">Art. 121-A do CP — Lei 14.994/2024</div>
+      <div class="art-h">Feminicídio: tipo penal autônomo</div>
+      <p class="art-p">A Lei 14.994/2024 criou o feminicídio como <strong>tipo penal autônomo</strong> — deixou de ser qualificadora do homicídio (art. 121, §2º) e passou a ter artigo próprio: <strong>art. 121-A</strong>, com pena de <strong>20 a 40 anos</strong> de reclusão.</p>
+      <p class="art-p">A mesma lei <strong>elevou a pena do crime de ameaça</strong> (art. 147 CP) por razões de gênero e tornou a ação <strong>pública incondicionada</strong> nesses casos — antes era condicionada à representação da vítima.</p>
+    </div>
+
+    <div class="art">
+      <div class="art-num">Art. 147-B do CP — Lei 14.188/2021</div>
+      <div class="art-h">Violência psicológica — tipo próprio</div>
+      <p class="art-p">A Lei 14.188/2021 criou o crime autônomo de <strong>violência psicológica contra a mulher</strong> — pena de <strong>6 meses a 2 anos</strong> e multa para a forma simples; de <strong>2 a 5 anos</strong> se a conduta causar dano à saúde física ou psíquica.</p>
+      <p class="art-p">Antes dessa lei, a violência psicológica era reconhecida como espécie de violência (art. 7º, II da LMP), mas não havia tipo penal próprio no CP — a advocacia dependia de enquadramentos analógicos.</p>
+    </div>
+
+    <div class="nav">
+      <button class="btn btn-s" onclick="ir(0)">← Voltar</button>
+      <button class="btn btn-p" onclick="ir(2)">Próximo: Alterações no CPP e LEP →</button>
+    </div>
+  </div>
+
+  <!-- TELA 2 -->
+  <div class="tela" id="t2">
+    <div class="badge">Etapa 3 de 5</div>
+    <h1 class="titulo">Alterações no<br><em>CPP e na LEP</em></h1>
+    <p class="desc">A LMP também modificou o processo penal e a execução da pena — vedou a fiança policial, criou nova hipótese de preventiva, barrou o ANPP e endureceu a LEP para condenados por crimes contra a mulher.</p>
+
+    <div class="tabs">
+      <button class="tab on" onclick="showT('cpp',this)">📋 Código de Processo Penal</button>
+      <button class="tab" onclick="showT('lep',this)">🏛️ Lei de Execução Penal</button>
+    </div>
+
+    <div class="painel" id="p-cpp">
+      <h3>Alterações no CPP</h3>
+      <div class="item">
+        <span class="item-ic">🔵</span>
+        <div class="item-b">
+          <strong>Art. 313, III CPP — Nova hipótese de prisão preventiva</strong>
+          <p>A redação do art. 313, III, dada pela Lei nº 12.403/2011, prevê expressamente a prisão preventiva:</p>
+          <p style="margin-top:12px;font-style:italic;border-left:3px solid var(--azul);padding-left:14px;color:var(--muted);">"III — se o crime envolver violência doméstica e familiar contra a mulher, criança, adolescente, idoso, enfermo ou pessoa com deficiência, para garantir a execução das medidas protetivas de urgência."</p>
+          <p style="margin-top:12px;">Note que a hipótese não se limita à mulher — abrange também criança, adolescente, idoso, enfermo e pessoa com deficiência. Não exige os requisitos clássicos de pena mínima ou reincidência.</p>
+        </div>
+      </div>
+      <div class="item">
+        <span class="item-ic">🔵</span>
+        <div class="item-b">
+          <strong>Art. 28-A, §2º, IV CPP — ANPP vedado (Pacote Anticrime)</strong>
+          <p>O Acordo de Não Persecução Penal <strong>não se aplica</strong> aos crimes praticados em âmbito de violência doméstica ou familiar, ou praticados contra a mulher por razões da condição do sexo feminino. Vedação expressa introduzida pela Lei 13.964/2019.</p>
+          <p style="margin-top:12px;font-size:16px;color:var(--rosa);">⚠️ Se o MP oferecer ANPP em caso de violência doméstica, argua nulidade imediatamente — a vedação é expressa.</p>
+        </div>
+      </div>
+      <div class="item">
+        <span class="item-ic">🔵</span>
+        <div class="item-b">
+          <strong>Art. 20 LMP c/c Art. 311 CPP — Preventiva e o Pacote Anticrime</strong>
+          <p>O art. 20 da LMP autoriza a prisão preventiva em qualquer fase. Após o Pacote Anticrime (Lei 13.964/2019), deve ser lido com o art. 311 do CPP: o juiz <strong>não pode mais decretá-la de ofício</strong> — é necessário requerimento do MP ou representação da autoridade policial.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="painel" id="p-lep" style="display:none;">
+      <h3>Alterações na LEP — Lei 14.994/2024</h3>
+      <div class="item">
+        <span class="item-ic">🟤</span>
+        <div class="item-b">
+          <strong>Art. 41 LEP — Proibição de visita íntima</strong>
+          <p>Condenados por crimes contra a mulher ficam impedidos de receber visita íntima durante todo o cumprimento da pena. A proteção da vítima se estende ao ambiente carcerário.</p>
+        </div>
+      </div>
+      <div class="item">
+        <span class="item-ic">🟤</span>
+        <div class="item-b">
+          <strong>Art. 86 LEP — Vedação de transferência</strong>
+          <p>É vedada a transferência do condenado para estabelecimento penal <strong>distante do local de residência da vítima.</strong> O objetivo é preservar a efetividade das medidas protetivas mesmo durante a execução da pena.</p>
+        </div>
+      </div>
+      <div class="item">
+        <span class="item-ic">🟤</span>
+        <div class="item-b">
+          <strong>Progressão de regime — 55% da pena</strong>
+          <p>Para condenados primários por crimes contra a mulher: progressão exige cumprimento de <strong>55% da pena,</strong> sem direito a livramento condicional nas hipóteses previstas. Requisito substancialmente mais rígido que o regime geral do CP.</p>
+        </div>
+      </div>
+      <div class="item">
+        <span class="item-ic">🟤</span>
+        <div class="item-b">
+          <strong>Art. 146-E LEP — Monitoramento eletrônico obrigatório</strong>
+          <p>Condenados por crimes contra a mulher que saiam do estabelecimento penal em gozo de qualquer benefício — saída temporária, progressão, etc. — são obrigados a usar <strong>monitoramento eletrônico.</strong></p>
+        </div>
+      </div>
+      <div class="alerta"><strong>Ponto prático na execução penal:</strong> ao peticionar em recursos de progressão ou livramento condicional, verifique sempre se o crime se enquadra em violência doméstica — os requisitos são substancialmente mais rígidos após a Lei 14.994/2024.</div>
+    </div>
+
+    <div class="nav">
+      <button class="btn btn-s" onclick="ir(1)">← Voltar</button>
+      <button class="btn btn-p" onclick="ir(3)">Próximo: Vedações e o que permanece →</button>
+    </div>
+  </div>
+
+  <!-- TELA 3 -->
+  <div class="tela" id="t3">
+    <div class="badge">Etapa 4 de 5</div>
+    <h1 class="titulo">O que é vedado e o que<br><em style="color:var(--verde)">permanece</em></h1>
+    <p class="desc">A LMP veda institutos do direito penal comum — mas nem tudo está proibido. Há benefícios que ainda se aplicam, e confundir os dois grupos gera nulidades. Clique em cada card para ver o detalhe e a jurisprudência.</p>
+
+    <div class="vgrid" id="vgrid"></div>
+    <div id="vdet"></div>
+
+    <div class="nav">
+      <button class="btn btn-s" onclick="ir(2)">← Voltar</button>
+      <button class="btn btn-p" onclick="ir(4)">Próximo: Quiz e Resumo →</button>
+    </div>
+  </div>
+
+  <!-- TELA 4 -->
+  <div class="tela" id="t4">
+    <div class="badge">Etapa 5 de 5 — Fixação</div>
+    <h1 class="titulo">Teste seu<br><em>domínio</em></h1>
+    <p class="desc">Quatro questões sobre os pontos críticos desta aula. Feedback imediato com explicação jurídica completa após cada resposta.</p>
+
+    <div id="quiz"></div>
+
+    <div style="margin-top:52px;padding-top:40px;border-top:1px solid var(--borda);">
+      <div style="text-align:center;margin-bottom:32px;">
+        <div style="font-family:'Playfair Display',serif;font-size:30px;font-weight:900;color:var(--texto);">O que fixar desta aula</div>
+        <div style="font-size:17px;color:var(--muted);margin-top:8px;">Os pontos que aparecem em provas, audiências e peças</div>
+      </div>
+      <div class="rgrid" id="rgrid"></div>
+
+      <div class="conclusao">
+        <div class="c-ic">✓</div>
+        <div class="c-tit">Aula 4 concluída</div>
+        <div class="c-txt">Você domina a relação da LMP com o CP, CPP e LEP.<br>Continue para a <strong>Aula 5: Competência — JVD, Justiça Comum e Júri.</strong></div>
+      </div>
+
+      <div style="text-align:center;margin-top:28px;">
+        <button class="btn-dl" onclick="baixarPDF()">↓ Baixar resumo desta aula (PDF)</button>
+      </div>
+    </div>
+
+    <div class="nav">
+      <button class="btn btn-s" onclick="ir(3)">← Revisitar vedações</button>
+      <button class="btn btn-p" onclick="ir(0)">↺ Rever do início</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const ETAPAS = ['Introdução','Código Penal','CPP e LEP','Vedações','Quiz'];
+let cur = 0;
+const resp = {};
+
+function buildSteps() {
+  const el = document.getElementById('stps');
+  el.innerHTML = '';
+  ETAPAS.forEach((n, i) => {
+    if (i > 0) {
+      const l = document.createElement('div');
+      l.className = 'sline' + (i <= cur ? ' d' : '');
+      el.appendChild(l);
+    }
+    const btn = document.createElement('button');
+    btn.className = 'step';
+    btn.onclick = () => ir(i);
+    const dot = document.createElement('div');
+    dot.className = 'dot' + (i === cur ? ' a' : i < cur ? ' d' : '');
+    dot.textContent = i < cur ? '✓' : i + 1;
+    const lbl = document.createElement('div');
+    lbl.className = 'slbl' + (i === cur ? ' a' : i < cur ? ' d' : '');
+    lbl.textContent = n;
+    btn.appendChild(dot); btn.appendChild(lbl);
+    el.appendChild(btn);
+  });
+}
+
+function ir(n) {
+  document.querySelectorAll('.tela').forEach(t => t.classList.remove('on'));
+  document.getElementById('t' + n).classList.add('on');
+  cur = n; buildSteps();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function showT(id, btn) {
+  document.getElementById('p-cpp').style.display = id === 'cpp' ? 'block' : 'none';
+  document.getElementById('p-lep').style.display = id === 'lep' ? 'block' : 'none';
+  document.querySelectorAll('.tab').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+}
+
+// VEDAÇÕES
+const VEDS = [
+  { ic:'🚫', tit:'Transação penal', sub:'Art. 76 Lei 9.099/95 — Vedada', cor:'var(--rosa)',
+    h4:'Transação penal — completamente vedada',
+    txt:'A transação penal é o acordo pelo qual o MP propõe pena alternativa imediata sem reconhecimento de culpa. Em violência doméstica é vedada pelo art. 41 da LMP — não importa a pena do crime.',
+    juri:'STF — ADC 19 (2012): constitucionalidade do art. 41. STJ — Súmula 536: "A suspensão condicional do processo e a transação penal não se aplicam na hipótese de delitos sujeitos ao rito da Lei Maria da Penha."' },
+  { ic:'🚫', tit:'Sursis processual', sub:'Art. 89 Lei 9.099/95 — Vedado', cor:'var(--rosa)',
+    h4:'Suspensão condicional do processo — vedada',
+    txt:'O sursis processual — suspensão do processo por 2 a 4 anos mediante condições — está vedado pelo art. 41. Se o MP propuser ou o juiz homologar, cabe arguição de nulidade imediata. É um dos erros mais comuns na prática forense.',
+    juri:'STJ — Súmula 536 (2015). STJ — HC 280.788 (rel. Min. Rogerio Schietti): vedação alcança também as contravenções penais — "os fins sociais da lei impedem essa conclusão" mesmo com leitura literal do art. 41.' },
+  { ic:'🚫', tit:'ANPP', sub:'Art. 28-A, §2º, IV CPP — Vedado', cor:'var(--rosa)',
+    h4:'Acordo de Não Persecução Penal — vedado',
+    txt:'O ANPP (Pacote Anticrime — Lei 13.964/2019) é expressamente vedado nos crimes praticados em âmbito de violência doméstica ou familiar, ou praticados contra a mulher por razões da condição do sexo feminino.',
+    juri:'Art. 28-A, §2º, IV do CPP — norma expressa do Pacote Anticrime. A vedação existe tanto pela LMP quanto pelo próprio CPP após a Lei 13.964/2019.' },
+  { ic:'🚫', tit:'Pena de multa isolada', sub:'Art. 17 LMP — Vedada', cor:'var(--rosa)',
+    h4:'Pena de multa isolada — expressamente vedada',
+    txt:'O art. 17 da LMP veda penas de cesta básica, prestação pecuniária e qualquer substituição que implique pagamento isolado de multa — mesmo que o tipo penal preveja multa de forma autônoma no preceito secundário.',
+    juri:'STJ — Tema Repetitivo 1.189: "A vedação constante do art. 17 da Lei nº 11.340/2006 obsta a imposição de pena de multa isoladamente, ainda que prevista de forma autônoma no preceito secundário do tipo penal imputado."' },
+  { ic:'⚠️', tit:'Substituição da pena (art. 44 CP)', sub:'Súmula 588 STJ — Vedada quando há violência', cor:'var(--dourado)',
+    h4:'Substituição por restritiva de direitos — vedada',
+    txt:'Mesmo que o réu preencha todos os requisitos do art. 44 do CP, a substituição da pena privativa por restritiva de direitos é vedada quando há violência ou grave ameaça em contexto doméstico.',
+    juri:'STJ — Súmula 588: "A prática de crime ou contravenção penal contra a mulher com violência ou grave ameaça no ambiente doméstico impossibilita a substituição da pena privativa de liberdade por restritiva de direitos."' },
+  { ic:'⚠️', tit:'Princípio da insignificância', sub:'Súmula 588 STJ — Inaplicável', cor:'var(--dourado)',
+    h4:'Insignificância — inaplicável em violência doméstica',
+    txt:'O princípio da bagatela não se aplica aos crimes e contravenções praticados contra a mulher no ambiente doméstico, ainda que o resultado concreto seja de menor lesividade. A violência doméstica nunca é insignificante em sua dimensão social.',
+    juri:'STJ — Súmula 588 (2017): "A tese de insignificância é inaplicável aos delitos ou contravenções penais praticados contra a mulher no ambiente doméstico." Tese pacífica nos dois Tribunais Superiores.' },
+  { ic:'✅', tit:'Sursis penal (art. 77 CP)', sub:'PERMITIDO — distinção crítica', cor:'var(--verde)',
+    h4:'Sursis penal — não está vedado pela LMP',
+    txt:'ATENÇÃO: o art. 41 afasta a Lei 9.099/95 — onde está o sursis PROCESSUAL (art. 89). O sursis PENAL (art. 77 do CP — suspensão condicional da pena) está no Código Penal, não na Lei 9.099/95. Por isso NÃO está vedado e pode ser aplicado se preenchidos os requisitos legais.',
+    juri:'Distinção doutrinária e jurisprudencial consolidada: sursis PROCESSUAL (art. 89 Lei 9.099/95) = vedado pela LMP. Sursis PENAL (art. 77 CP) = permitido. Confundir os dois é erro frequente em provas e peças.' },
+];
+
+function buildVeds() {
+  const g = document.getElementById('vgrid');
+  const d = document.getElementById('vdet');
+  VEDS.forEach((v, i) => {
+    const c = document.createElement('div');
+    c.className = 'vcard';
+    c.innerHTML = `<div class="vic">${v.ic}</div><div class="vtit" style="color:${v.cor}">${v.tit}</div><div class="vsub">${v.sub}</div>`;
+    c.onclick = () => {
+      document.querySelectorAll('.vcard').forEach(x => x.classList.remove('on'));
+      c.classList.add('on');
+      const bc = v.cor === 'var(--verde)' ? 'rgba(29,158,117,0.4)' : v.cor === 'var(--dourado)' ? 'rgba(201,150,58,0.4)' : 'rgba(212,83,126,0.4)';
+      d.innerHTML = `<div class="vdet on" style="border-color:${bc}">
+        <h4 style="color:${v.cor}">${v.h4}</h4>
+        <p>${v.txt}</p>
+        <div class="vjuri"><strong>Jurisprudência:</strong> ${v.juri}</div>
+      </div>`;
+    };
+    g.appendChild(c);
+  });
+}
+
+// QUIZ
+const QS = [
+  { p:'O art. 41 da LMP veda a aplicação da Lei 9.099/95. Segundo o STJ, essa vedação alcança as contravenções penais praticadas em contexto de violência doméstica?',
+    ops:['Não — o art. 41 menciona apenas "crimes", portanto contravenções seguem a Lei 9.099/95 normalmente','Sim — por interpretação teleológica, os fins sociais da LMP impedem a aplicação da Lei 9.099/95 também às contravenções','Apenas quando a contravenção for praticada com violência física','A questão é controvertida e o STJ ainda não definiu'], c:1,
+    fb:'O STJ (HC 280.788, rel. Min. Rogerio Schietti) adotou interpretação teleológica: embora o art. 41 mencione apenas "crimes", os fins sociais da LMP impedem que institutos despenalizadores da Lei 9.099/95 se apliquem às contravenções em contexto de violência doméstica. O Tema Repetitivo 1.333 (STJ, 07/08/2025) reforçou esse entendimento.' },
+  { p:'Um réu condenado por lesão corporal doméstica (art. 129, §9º, CP) preenche todos os requisitos do art. 44 do CP para substituição da pena por restritiva de direitos. O juiz pode realizar a substituição?',
+    ops:['Sim — preenchidos os requisitos do art. 44 do CP, a substituição é obrigatória','Não — a Súmula 588 do STJ veda a substituição quando há violência ou grave ameaça em contexto doméstico','Sim, mas apenas se a vítima concordar expressamente','Depende do grau das lesões: leves podem ser substituídas, graves não'], c:1,
+    fb:'A Súmula 588 do STJ é clara: "A prática de crime ou contravenção penal contra a mulher com violência ou grave ameaça no ambiente doméstico impossibilita a substituição da pena privativa de liberdade por restritiva de direitos." Os requisitos do art. 44 do CP são irrelevantes — a vedação é absoluta no sistema da LMP.' },
+  { p:'Qual é a diferença entre sursis processual e sursis penal no contexto da LMP?',
+    ops:['Ambos são vedados — a LMP proíbe qualquer forma de suspensão em violência doméstica','O sursis processual (art. 89 da Lei 9.099/95) é vedado; o sursis penal (art. 77 do CP) não está vedado e pode ser aplicado se preenchidos os requisitos','Ambos são permitidos — a vedação do art. 41 se refere apenas à transação penal','O sursis penal é vedado; o processual pode ser aplicado com autorização judicial'], c:1,
+    fb:'Distinção fundamental: o art. 41 afasta a Lei 9.099/95, que prevê o sursis PROCESSUAL (art. 89). O sursis PENAL (art. 77 do CP — suspensão da pena) está no Código Penal, não na Lei 9.099/95, e não é alcançado pelo art. 41. Confundir os dois institutos é erro frequente em provas e peças processuais.' },
+  { p:'Segundo o STJ (Tema Repetitivo 1.189), a vedação do art. 17 da LMP à pena de multa isolada se aplica mesmo quando a multa está prevista de forma autônoma no preceito secundário do tipo penal?',
+    ops:['Não — se a multa está prevista autonomamente no tipo, o juiz pode aplicá-la isoladamente','Sim — a vedação do art. 17 obsta a pena de multa isolada ainda que prevista autonomamente no preceito secundário do tipo imputado','Apenas nos crimes com pena de reclusão; nos de detenção a multa isolada é permitida','Somente veda a cesta básica; a pena de multa em espécie é admitida'], c:1,
+    fb:'O STJ fixou no Tema Repetitivo 1.189: "A vedação constante do art. 17 da Lei nº 11.340/2006 obsta a imposição de pena de multa isoladamente, ainda que prevista de forma autônoma no preceito secundário do tipo penal imputado." A vedação é ampla e não distingue a natureza da previsão da multa no tipo penal.' }
+];
+
+function buildQuiz() {
+  const el = document.getElementById('quiz');
+  QS.forEach((q, qi) => {
+    const c = document.createElement('div');
+    c.className = 'qcard';
+    c.innerHTML = `<div class="qnum">Questão ${qi+1} de ${QS.length}</div>
+      <div class="qp">${q.p}</div>
+      ${q.ops.map((op,oi) => `<div class="qop" id="qo${qi}_${oi}" onclick="ans(${qi},${oi})">${String.fromCharCode(65+oi)}) ${op}</div>`).join('')}
+      <div class="qfb" id="qf${qi}"></div>`;
+    el.appendChild(c);
+  });
+}
+
+function ans(qi, oi) {
+  if (resp[qi] !== undefined) return;
+  resp[qi] = oi;
+  const q = QS[qi];
+  for (let j = 0; j < q.ops.length; j++) {
+    const e = document.getElementById(`qo${qi}_${j}`);
+    e.classList.add('bl');
+    if (j === q.c) e.classList.add('ok');
+    else if (j === oi) e.classList.add('er');
+  }
+  const fb = document.getElementById('qf' + qi);
+  const ok = oi === q.c;
+  fb.className = 'qfb on ' + (ok ? 'ok' : 'er');
+  fb.innerHTML = `<strong>${ok ? '✓ Correto!' : '✗ Atenção.'}</strong> ${q.fb}`;
+}
+
+// RESUMO
+const RES = [
+  { ic:'📌', tit:'Art. 13 — Subsidiariedade', txt:'CPP, CPC e legislação especial aplicam-se onde a LMP for silente. Onde a LMP fala, prevalece — inclusive afastando a Lei 9.099/95 pelo art. 41.' },
+  { ic:'🚫', tit:'Art. 41 — Vedação da Lei 9.099/95', txt:'Independente da pena. Vedados: transação penal, sursis processual, composição civil, TCO. Alcança crimes E contravenções (STJ — HC 280.788).' },
+  { ic:'🚫', tit:'ANPP vedado', txt:'Art. 28-A, §2º, IV do CPP (Pacote Anticrime): ANPP expressamente vedado em violência doméstica ou crimes por razão de gênero.' },
+  { ic:'🚫', tit:'Súmula 588 STJ', txt:'Insignificância inaplicável. Substituição da pena privativa por restritiva vedada quando há violência ou grave ameaça em contexto doméstico.' },
+  { ic:'🚫', tit:'Tema 1.189 STJ', txt:'Art. 17 LMP: pena de multa isolada vedada, ainda que prevista autonomamente no preceito secundário do tipo penal.' },
+  { ic:'✅', tit:'Sursis PENAL é permitido', txt:'Art. 77 CP (sursis penal) não está na Lei 9.099/95 — não é vedado pela LMP. Distinção crítica: sursis processual (vedado) ≠ sursis penal (permitido).' },
+  { ic:'⚖️', tit:'CP — Agravante e qualificadoras', txt:'Art. 61, II, "f": agravante genérica. Art. 129, §9º: lesão doméstica — reclusão de 2 a 5 anos (Lei 14.994/2024). Art. 121-A: feminicídio autônomo 20 a 40 anos.' },
+  { ic:'🏛️', tit:'LEP — Lei 14.994/2024', txt:'Sem visita íntima, sem transferência distante da vítima, progressão em 55%, monitoramento eletrônico obrigatório em qualquer benefício de saída.' },
+];
+
+function buildRes() {
+  const el = document.getElementById('rgrid');
+  RES.forEach(r => {
+    const d = document.createElement('div');
+    d.className = 'rcard';
+    d.innerHTML = `<div class="ric">${r.ic}</div><div class="rtit">${r.tit}</div><div class="rtxt">${r.txt}</div>`;
+    el.appendChild(d);
+  });
+}
+
+// PDF
+function baixarPDF() {
+  const btn = document.querySelector('.btn-dl');
+  const orig = btn.innerHTML;
+  btn.innerHTML = '⏳ Gerando PDF...';
+  btn.disabled = true;
+
+  // Carregar jsPDF apenas se ainda não foi carregado
+  if (window.jspdf && window.jspdf.jsPDF) {
+    gerarPDF(btn, orig);
+    return;
+  }
+  const s = document.createElement('script');
+  s.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
+  s.onload = () => gerarPDF(btn, orig);
+  s.onerror = () => { btn.innerHTML = '✗ Erro ao carregar. Verifique sua conexão.'; btn.disabled = false; };
+  document.head.appendChild(s);
+}
+
+function gerarPDF(btn, orig) {
+  try {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ unit: 'mm', format: 'a4' });
+    const R = [212,83,126], G = [29,158,117], E = [26,18,40], M2 = [100,90,130];
+    const W = 210, MG = 18, LW = 174;
+    let y = 0;
+
+    const np = () => { doc.addPage(); y = 18; };
+    const ck = h => { if (y + h > 272) np(); };
+
+    const txt_seguro = t => t.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+      .replace(/\u2014/g,'--').replace(/\u2013/g,'-')
+      .replace(/[\u2018\u2019]/g,"'").replace(/[\u201C\u201D]/g,'"')
+      .replace(/[^\x00-\x7F]/g, '?');
+
+    // CABEÇALHO
+    doc.setFillColor(...R);
+    doc.rect(0, 0, W, 18, 'F');
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(11); doc.setFont('helvetica', 'bold');
+    doc.text('PENHA em Cena', MG, 11);
+    doc.setFont('helvetica', 'normal'); doc.setFontSize(9);
+    doc.text('Modulo 01 - Aula 4 - Resumo', W - MG, 11, { align: 'right' });
+    y = 26;
+
+    doc.setTextColor(...E); doc.setFontSize(16); doc.setFont('helvetica', 'bold');
+    doc.text('A LMP e sua relacao com o CP, CPP e LEP', MG, y); y += 8;
+    doc.setFontSize(10); doc.setFont('helvetica', 'normal'); doc.setTextColor(...M2);
+    doc.text('Arts. 13 e 41 - vedacoes - alteracoes nos Codigos - jurisprudencia essencial', MG, y); y += 7;
+    doc.setDrawColor(...R); doc.setLineWidth(0.5); doc.line(MG, y, W - MG, y); y += 8;
+
+    const sec = t => {
+      ck(12);
+      doc.setFillColor(...R);
+      doc.roundedRect(MG, y, LW, 8, 1, 1, 'F');
+      doc.setTextColor(255, 255, 255); doc.setFontSize(9); doc.setFont('helvetica', 'bold');
+      doc.text(txt_seguro(t), MG + 4, y + 5.5);
+      y += 12; doc.setTextColor(...E);
+    };
+
+    const par = t => {
+      const ls = doc.splitTextToSize(txt_seguro(t), LW);
+      ck(ls.length * 5 + 2);
+      doc.setFontSize(9); doc.setFont('helvetica', 'normal'); doc.setTextColor(...E);
+      doc.text(ls, MG, y); y += ls.length * 5 + 2;
+    };
+
+    const bull = t => {
+      ck(7);
+      doc.setFillColor(...R); doc.circle(MG + 2, y - 1, 1, 'F');
+      const ls = doc.splitTextToSize(txt_seguro(t), LW - 7);
+      doc.setFontSize(9); doc.setFont('helvetica', 'normal'); doc.setTextColor(...E);
+      doc.text(ls, MG + 6, y); y += ls.length * 5 + 2;
+    };
+
+    const dest = (t, cor) => {
+      const c = cor || R;
+      const ls = doc.splitTextToSize(txt_seguro(t), LW - 8);
+      const h = ls.length * 5 + 8;
+      ck(h + 4);
+      doc.setDrawColor(...c); doc.setLineWidth(2);
+      doc.line(MG, y, MG, y + h);
+      doc.setLineWidth(0.3); doc.setDrawColor(...c);
+      doc.roundedRect(MG, y, LW, h, 2, 2, 'S');
+      doc.setTextColor(...E); doc.setFontSize(9); doc.setFont('helvetica', 'bolditalic');
+      doc.text(ls, MG + 5, y + 5);
+      y += h + 5; doc.setFont('helvetica', 'normal');
+    };
+
+    // CONTEÚDO
+    sec('1. Arts. 13 e 41 — A logica do sistema');
+    par('Art. 13: onde a LMP e silente, aplicam-se subsidiariamente CPP, CPC e legislacao especial.');
+    par('Art. 41: a Lei 9.099/95 esta integralmente afastada — independentemente da pena do crime.');
+    bull('Vedados: transacao penal, sursis processual, composicao civil, TCO.');
+    bull('STF — ADC 19 (2012): constitucionalidade do art. 41 confirmada.');
+    bull('STJ — Sumula 536: transacao penal e sursis processual vedados.');
+    bull('STJ — HC 280.788: vedacao alcanca contraventcoes penais — interpretacao teleologica.');
+    y += 3;
+
+    sec('2. Alteracoes no Codigo Penal');
+    bull('Art. 61, II, "f" CP: agravante generica — relacoes domesticas, coabitacao, hospitalidade.');
+    bull('Art. 129, §9 CP: lesao domestica — reclusao de 2 a 5 anos (Lei 14.994/2024). Acao penal publica incondicionada (Sumula 542 STJ).');
+    bull('Art. 129, §10: pena aumentada de 1/3 se resultar em lesao grave, gravissima ou morte.');
+    bull('Art. 129, §11: pena aumentada de 1/3 se o crime for cometido contra pessoa portadora de deficiencia.');
+    bull('Art. 121-A CP (Lei 14.994/2024): feminicidio autonomo — 20 a 40 anos de reclusao.');
+    bull('Art. 147-B CP (Lei 14.188/2021): violencia psicologica autonoma — 6 meses a 2 anos; 2 a 5 anos se causar dano a saude.');
+    y += 3;
+
+    sec('3. Alteracoes no CPP');
+    bull('Art. 313, III CPP (Lei 12.403/2011): preventiva cabivel em crime com violencia domestica contra mulher, crianca, adolescente, idoso, enfermo ou pessoa com deficiencia, para garantir execucao das medidas protetivas.');
+    bull('Art. 28-A, §2, IV (Pacote Anticrime — Lei 13.964/2019): ANPP vedado em violencia domestica ou por razao de genero.');
+    bull('Art. 20 LMP c/c art. 311 CPP: preventiva exige requerimento do MP ou representacao policial — nao mais de oficio.');
+    y += 3;
+
+    sec('4. Alteracoes na LEP — Lei 14.994/2024');
+    bull('Art. 41 LEP: vedacao de visita intima para condenados por crimes contra a mulher.');
+    bull('Art. 86 LEP: vedada transferencia distante do local de residencia da vitima.');
+    bull('Progressao: primarios cumprem 55% da pena; sem livramento condicional nas hipoteses previstas.');
+    bull('Art. 146-E LEP: monitoramento eletronico obrigatorio em qualquer beneficio de saida.');
+    y += 3;
+
+    sec('5. Vedacoes e o que permanece');
+    bull('VEDADOS: transacao penal, sursis processual, ANPP, multa isolada (Tema 1.189 STJ), substituicao por restritiva (Sumula 588), insignificancia (Sumula 588).');
+    dest('SURSIS: processual (art. 89 Lei 9.099/95) = VEDADO. Sursis PENAL (art. 77 CP) = PERMITIDO. Distincao critica em provas e pecas.', G);
+    y += 3;
+
+    sec('6. Jurisprudencia essencial');
+    bull('STF — ADC 19 (2012): constitucionalidade do art. 41 da LMP.');
+    bull('STJ — Sumula 536: transacao penal e sursis processual vedados no rito da LMP.');
+    bull('STJ — Sumula 542: lesao corporal domestica e acao penal publica incondicionada.');
+    bull('STJ — Sumula 588: insignificancia inaplicavel; substituicao vedada com violencia ou grave ameaca.');
+    bull('STJ — Tema 1.189: multa isolada vedada ainda que prevista autonomamente no tipo penal.');
+    bull('STJ — Ed. 231/2024: 14 teses sobre julgamentos com perspectiva de genero.');
+
+    // RODAPÉ
+    const tot = doc.getNumberOfPages();
+    for (let i = 1; i <= tot; i++) {
+      doc.setPage(i);
+      doc.setFontSize(8); doc.setTextColor(...M2);
+      doc.text('Penha em Cena - Modulo 01 - Aula 4 - Material de apoio exclusivo do aluno', MG, 290);
+      doc.text(i + ' / ' + tot, W - MG, 290, { align: 'right' });
+    }
+
+    doc.save('PenhaEmCena_M01_A04_Resumo.pdf');
+    btn.innerHTML = '✓ PDF baixado!';
+    btn.style.background = 'rgba(29,158,117,0.25)';
+    setTimeout(() => {
+      btn.innerHTML = orig;
+      btn.style.background = '';
+      btn.disabled = false;
+    }, 3000);
+
+  } catch(e) {
+    console.error('Erro PDF:', e);
+    btn.innerHTML = '✗ Erro ao gerar. Tente novamente.';
+    btn.disabled = false;
+  }
+}
+
+buildSteps();
+buildVeds();
+buildQuiz();
+buildRes();
+</script>
+</body>
+</html>
