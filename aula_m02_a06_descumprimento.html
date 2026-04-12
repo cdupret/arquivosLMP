@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Módulo 02 · Aula 6 — Descumprimento e Prisão Preventiva · Penha em Cena</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --rosa: #D4537E; --rosa2: #A33360;
+  --fundo: #0E0B14; --fundo2: #17122A;
+  --roxo: #7F77DD; --texto: #F0EAF8; --muted: #9B8FBC;
+  --borda: rgba(212,83,126,0.2); --verde: #1D9E75;
+  --dourado: #C9963A; --azul: #3A8ADC;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'DM Sans', sans-serif; background: var(--fundo); color: var(--texto); min-height: 100vh; overflow-x: hidden; font-size: 18px; line-height: 1.75; }
+.bg-p { position:fixed;inset:0;pointer-events:none;z-index:0; background: radial-gradient(ellipse 60% 40% at 20% 20%, rgba(127,119,221,0.07) 0%, transparent 60%), radial-gradient(ellipse 40% 60% at 80% 80%, rgba(212,83,126,0.06) 0%, transparent 60%); }
+.header { position:sticky;top:0;z-index:100;background:rgba(14,11,20,0.95);border-bottom:1px solid var(--borda);padding:16px 32px;display:flex;align-items:center;gap:14px;backdrop-filter:blur(16px); }
+.logo { font-family:'Playfair Display',serif;font-size:20px;color:var(--rosa);font-weight:700; }
+.sep { color:var(--muted); } .info { font-size:15px;color:var(--muted); }
+.prog { background:var(--fundo2);border-bottom:1px solid var(--borda);padding:16px 32px;position:sticky;top:61px;z-index:99; }
+.steps { max-width:780px;margin:0 auto;display:flex;align-items:center; }
+.step { display:flex;flex-direction:column;align-items:center;gap:6px;flex:1;cursor:pointer;border:none;background:none; }
+.dot { width:36px;height:36px;border-radius:50%;border:2px solid rgba(155,143,188,0.3);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:500;color:var(--muted);transition:all .3s; }
+.dot.a { background:var(--rosa);border-color:var(--rosa);color:#fff;box-shadow:0 0 24px rgba(212,83,126,0.5); }
+.dot.d { background:var(--verde);border-color:var(--verde);color:#fff; }
+.slbl { font-size:11px;color:var(--muted);white-space:nowrap; }
+.slbl.a { color:var(--rosa); } .slbl.d { color:var(--verde); }
+.sline { flex:1;height:2px;background:rgba(155,143,188,0.15);margin-bottom:18px;transition:background .4s; }
+.sline.d { background:var(--verde); }
+.main { max-width:860px;margin:0 auto;padding:44px 32px 120px;position:relative;z-index:1; }
+.tela { display:none;animation:up .4s ease; }
+.tela.on { display:block; }
+@keyframes up { from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);} }
+.badge { display:inline-flex;align-items:center;gap:6px;background:rgba(212,83,126,0.12);border:1px solid rgba(212,83,126,0.3);border-radius:20px;padding:6px 16px;font-size:13px;font-weight:500;color:var(--rosa);letter-spacing:.06em;text-transform:uppercase;margin-bottom:20px; }
+.titulo { font-family:'Playfair Display',serif;font-size:clamp(28px,5vw,44px);font-weight:900;line-height:1.15;color:var(--texto);margin-bottom:16px; }
+.titulo em { color:var(--rosa);font-style:italic; }
+.desc { font-size:18px;color:var(--muted);line-height:1.9;margin-bottom:36px; }
+.art { background:var(--fundo2);border:1px solid var(--borda);border-radius:18px;padding:30px 34px;margin-bottom:22px; }
+.art.dest { border-color:rgba(212,83,126,0.5);background:rgba(212,83,126,0.04); }
+.art.verde { border-color:rgba(29,158,117,0.4);background:rgba(29,158,117,0.04); }
+.art.dourado { border-color:rgba(201,150,58,0.4);background:rgba(201,150,58,0.04); }
+.art-num { font-size:13px;font-weight:600;color:var(--rosa);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px; }
+.art-num.verde { color:#5DCAA5; } .art-num.dourado { color:var(--dourado); }
+.art-h { font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:var(--texto);margin-bottom:18px; }
+.art-lei { font-size:17px;color:var(--muted);border-left:3px solid var(--rosa);padding-left:20px;margin-bottom:20px;font-style:italic;line-height:1.85; }
+.art-p { font-size:17px;color:var(--muted);line-height:1.85;margin-bottom:14px; }
+.art-p strong { color:var(--texto); }
+.alerta { background:rgba(212,83,126,0.07);border:1px solid rgba(212,83,126,0.25);border-radius:12px;padding:18px 24px;font-size:16px;color:rgba(240,234,248,0.85);line-height:1.8;margin-top:18px; }
+.alerta strong { color:var(--rosa); }
+.alerta-verde { background:rgba(29,158,117,0.07);border:1px solid rgba(29,158,117,0.25);border-radius:12px;padding:18px 24px;font-size:16px;color:rgba(240,234,248,0.85);line-height:1.8;margin-top:18px; }
+.alerta-verde strong { color:#5DCAA5; }
+
+/* CASO CLÍNICO */
+.caso { background:linear-gradient(135deg,rgba(201,150,58,0.08),rgba(127,119,221,0.05));border:2px solid rgba(201,150,58,0.3);border-radius:18px;padding:30px 34px;margin-bottom:24px; }
+.caso-label { font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--dourado);margin-bottom:12px; }
+.caso-titulo { font-family:'Playfair Display',serif;font-size:24px;font-weight:700;color:var(--texto);margin-bottom:18px; }
+.caso-fatos { font-size:17px;color:var(--muted);line-height:1.9;background:rgba(255,255,255,0.03);border-radius:12px;padding:20px 24px;border:1px solid rgba(155,143,188,0.15); }
+.caso-pergunta { font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:var(--dourado);margin-top:20px;margin-bottom:16px; }
+
+.decisao-btn { display:flex;flex-direction:column;gap:10px;margin-bottom:20px; }
+.d-btn { background:rgba(255,255,255,0.03);border:1px solid rgba(155,143,188,0.2);border-radius:12px;padding:18px 22px;cursor:pointer;font-size:17px;color:var(--muted);transition:all .2s;line-height:1.65;text-align:left;font-family:'DM Sans',sans-serif; }
+.d-btn:hover:not(.bl) { border-color:var(--dourado);color:var(--texto);background:rgba(201,150,58,0.07); }
+.d-btn.ok { background:rgba(29,158,117,0.12);border-color:var(--verde);color:#9FE1CB; }
+.d-btn.er { background:rgba(212,83,126,0.1);border-color:var(--rosa);color:#EDB0C5; }
+.d-btn.bl { cursor:default; }
+.d-feedback { display:none;margin-top:14px;padding:20px 24px;border-radius:12px;font-size:17px;line-height:1.8; }
+.d-feedback.on { display:block; }
+.d-feedback.ok { background:rgba(29,158,117,0.1);border:1px solid rgba(29,158,117,0.25);color:#9FE1CB; }
+.d-feedback.er { background:rgba(212,83,126,0.08);border:1px solid rgba(212,83,126,0.2);color:#EDB0C5; }
+
+/* PREVENTIVA GRID */
+.prev-grid { display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;margin-bottom:24px; }
+.prev-card { background:var(--fundo2);border:1px solid var(--borda);border-radius:14px;padding:22px 24px; }
+.prev-card:hover { border-color:rgba(212,83,126,0.35); }
+.prev-icon { font-size:28px;margin-bottom:10px; }
+.prev-titulo { font-size:18px;font-weight:500;color:var(--texto);margin-bottom:8px; }
+.prev-desc { font-size:16px;color:var(--muted);line-height:1.8; }
+
+/* QUIZ */
+.qcard { background:var(--fundo2);border:1px solid var(--borda);border-radius:18px;padding:32px 30px;margin-bottom:22px; }
+.qnum { font-size:13px;font-weight:600;color:var(--rosa);letter-spacing:.07em;text-transform:uppercase;margin-bottom:12px; }
+.qp { font-family:'Playfair Display',serif;font-size:21px;font-weight:700;line-height:1.5;color:var(--texto);margin-bottom:24px; }
+.qop { background:rgba(255,255,255,0.03);border:1px solid rgba(155,143,188,0.2);border-radius:10px;padding:16px 20px;margin-bottom:12px;cursor:pointer;font-size:17px;color:var(--muted);transition:all .2s;line-height:1.65; }
+.qop:hover:not(.bl) { border-color:var(--rosa);color:var(--texto);background:rgba(212,83,126,0.07); }
+.qop.ok { background:rgba(29,158,117,0.12);border-color:var(--verde);color:#9FE1CB; }
+.qop.er { background:rgba(212,83,126,0.1);border-color:var(--rosa);color:#EDB0C5; }
+.qop.bl { cursor:default; }
+.qfb { display:none;margin-top:14px;padding:18px 22px;border-radius:10px;font-size:17px;line-height:1.8; }
+.qfb.on { display:block; }
+.qfb.ok { background:rgba(29,158,117,0.1);border:1px solid rgba(29,158,117,0.25);color:#9FE1CB; }
+.qfb.er { background:rgba(212,83,126,0.08);border:1px solid rgba(212,83,126,0.2);color:#EDB0C5; }
+
+.rgrid { display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;margin-bottom:30px; }
+.rcard { background:var(--fundo2);border:1px solid var(--borda);border-radius:14px;padding:24px 26px;transition:border-color .2s; }
+.rcard:hover { border-color:rgba(212,83,126,0.35); }
+.ric { font-size:26px;margin-bottom:12px; }
+.rtit { font-size:18px;font-weight:500;color:var(--texto);margin-bottom:8px; }
+.rtxt { font-size:16px;color:var(--muted);line-height:1.8; }
+.conclusao { background:linear-gradient(135deg,rgba(212,83,126,0.08),rgba(127,119,221,0.05));border:1px solid rgba(212,83,126,0.2);border-radius:18px;padding:40px;text-align:center;margin-top:28px; }
+.c-ic { font-size:48px;margin-bottom:14px; }
+.c-tit { font-family:'Playfair Display',serif;font-size:28px;font-weight:900;color:var(--verde);margin-bottom:10px; }
+.c-txt { font-size:18px;color:var(--muted);line-height:1.85; }
+.nav { display:flex;align-items:center;justify-content:space-between;margin-top:48px;padding-top:30px;border-top:1px solid var(--borda); }
+.btn { display:inline-flex;align-items:center;gap:8px;padding:14px 28px;border-radius:10px;font-size:17px;font-weight:500;cursor:pointer;transition:all .2s;border:none;font-family:'DM Sans',sans-serif; }
+.btn-s { background:rgba(255,255,255,0.05);color:var(--muted);border:1px solid rgba(155,143,188,0.2); }
+.btn-s:hover { background:rgba(255,255,255,0.09);color:var(--texto); }
+.btn-p { background:var(--rosa);color:#fff;box-shadow:0 4px 18px rgba(212,83,126,0.3); }
+.btn-p:hover { background:var(--rosa2);transform:translateY(-1px); }
+.btn-dl { display:inline-flex;align-items:center;gap:10px;margin-top:18px;padding:15px 26px;border-radius:10px;background:rgba(29,158,117,0.15);border:1px solid rgba(29,158,117,0.4);color:#5DCAA5;font-size:17px;font-weight:500;cursor:pointer;transition:all .2s;font-family:'DM Sans',sans-serif; }
+.btn-dl:hover { background:rgba(29,158,117,0.25); }
+</style>
+</head>
+<body>
+<div class="bg-p"></div>
+<header class="header">
+  <span class="logo">PENHA em Cena</span>
+  <span class="sep">/</span>
+  <span class="info">Módulo 02 · Aula 6</span>
+</header>
+<div class="prog"><div class="steps" id="stps"></div></div>
+<div class="main">
+
+  <!-- TELA 0 -->
+  <div class="tela on" id="t0">
+    <div class="badge">Módulo 02 · Aula 6</div>
+    <h1 class="titulo">Descumprimento e<br><em>prisão preventiva</em></h1>
+    <p class="desc">Quando o agressor descumpre a medida protetiva, o advogado precisa agir imediatamente. Esta aula combina a teoria do art. 313, III do CPP com um caso clínico real — você toma as decisões.</p>
+
+    <div class="art dest">
+      <div class="art-num">O vínculo entre descumprimento e prisão preventiva</div>
+      <div class="art-h">Art. 313, III do CPP — Fundamento específico da Lei Maria da Penha</div>
+      <div class="art-lei">"Art. 313. Nos termos do art. 312 deste Código, será admitida a decretação da prisão preventiva:
+III — se o crime envolver violência doméstica e familiar contra a mulher, criança, adolescente, idoso, enfermo ou pessoa com deficiência, para garantir a execução das medidas protetivas de urgência."
+(Redação dada pela Lei nº 12.403, de 2011)</div>
+      <p class="art-p">O art. 313 do CPP traz as <strong>hipóteses de admissibilidade da prisão preventiva</strong>. Os requisitos de pena mínima superior a 4 anos e de reincidência em crime doloso estão nos <strong>incisos I e II</strong> do art. 313 — não no caput. O inciso III, específico para violência doméstica, não exige esses requisitos dos incisos I e II: basta que o crime envolva violência doméstica e que a preventiva seja necessária para garantir a execução das medidas protetivas.</p>
+      <p class="art-p"><strong>Atenção fundamental:</strong> o art. 313 estabelece apenas as hipóteses de admissibilidade — ele não é suficiente, por si só, para fundamentar a decretação da preventiva. É sempre necessária a presença cumulativa dos pressupostos do <strong>art. 312</strong> (fumus comissi delicti + periculum libertatis). A equação obrigatória é: <strong>art. 312 + art. 313</strong>. A preventiva decretada apenas com base no art. 313, III, sem análise do art. 312, é ilegal.</p>
+      <p class="art-p">Importante: após o Pacote Anticrime (Lei 13.964/2019), o juiz <strong>não pode mais decretar a preventiva de ofício</strong> — é necessário requerimento do MP ou representação da autoridade policial (art. 311 do CPP).</p>
+      <div class="alerta"><strong>A preventiva não é automática:</strong> o descumprimento da medida protetiva autoriza a preventiva (art. 313, III), mas não a torna obrigatória nem dispensa o art. 312. O juiz analisa a proporcionalidade e a necessidade no caso concreto. O advogado deve construir os argumentos corretos — seja para pedir (assistente/MP) seja para evitar (defesa).</div>
+    </div>
+
+    <div class="art">
+      <div class="art-num">Pressupostos cumulativos da prisão preventiva</div>
+      <div class="art-h">O que precisa estar presente para a preventiva ser legal</div>
+      <div class="prev-grid" id="prev-grid"></div>
+    </div>
+
+    <div class="nav">
+      <span></span>
+      <button class="btn btn-p" onclick="ir(1)">Próximo: Caso clínico — Situação 1 →</button>
+    </div>
+  </div>
+
+  <!-- TELA 1: CASO CLÍNICO 1 -->
+  <div class="tela" id="t1">
+    <div class="badge">Etapa 2 de 5 — Caso Clínico</div>
+    <h1 class="titulo">Caso clínico:<br><em>Primeira decisão</em></h1>
+
+    <div class="caso">
+      <div class="caso-label">📋 Caso — Situação 1</div>
+      <div class="caso-titulo">O retorno proibido</div>
+      <div class="caso-fatos">
+        <strong style="color:var(--dourado);">Fatos:</strong> Ana Beatriz registrou boletim de ocorrência por lesão corporal doméstica praticada pelo marido, Rogério. O juiz deferiu medida protetiva afastando Rogério do lar conjugal (art. 22, II da Lei Maria da Penha) e proibindo qualquer contato com Ana Beatriz (art. 22, III, "b"). Rogério foi devidamente intimado. Quinze dias depois, a vizinha de Ana Beatriz liga para a Delegacia informando que viu Rogério entrar na casa pela madrugada. A delegada desloca uma viatura. Os policiais encontram Rogério dentro da casa, com Ana Beatriz, que diz que o deixou entrar "porque queria conversar".
+      </div>
+      <div class="caso-pergunta">Você é a advogada de Ana Beatriz. O que deve ser feito IMEDIATAMENTE?</div>
+    </div>
+
+    <div class="decisao-btn" id="dec1"></div>
+    <div class="d-feedback" id="fb1"></div>
+
+    <div class="nav">
+      <button class="btn btn-s" onclick="ir(0)">← Voltar</button>
+      <button class="btn btn-p" id="prox1" onclick="ir(2)" style="display:none">Próximo: Situação 2 →</button>
+    </div>
+  </div>
+
+  <!-- TELA 2: CASO CLÍNICO 2 -->
+  <div class="tela" id="t2">
+    <div class="badge">Etapa 3 de 5 — Caso Clínico</div>
+    <h1 class="titulo">Caso clínico:<br><em>Segunda decisão</em></h1>
+
+    <div class="caso">
+      <div class="caso-label">📋 Caso — Situação 2 (continuação)</div>
+      <div class="caso-titulo">A defesa entra em campo</div>
+      <div class="caso-fatos">
+        <strong style="color:var(--dourado);">Continuação:</strong> Rogério foi preso em flagrante pelo art. 24-A. O delegado lavrou o auto. A autoridade policial tentou conceder fiança, mas alguém na delegacia lembrou que há vedação legal. O MP pediu a conversão em prisão preventiva. O juiz plantonista decretou a preventiva invocando o art. 313, III do CPP, sem analisar os pressupostos do art. 312 do CPP (garantia da ordem pública, instrução criminal, etc.).<br><br>
+        <strong style="color:var(--dourado);">Você agora representa Rogério.</strong> Rogério é primário, tem emprego fixo, mora com a mãe idosa, é a única renda da família e nunca teve passagem pela polícia. A medida protetiva foi descumprida pela primeira vez.
+      </div>
+      <div class="caso-pergunta">O juiz pode decretar a preventiva apenas com base no art. 313, III, sem analisar o art. 312? O que fazer como advogado de defesa?</div>
+    </div>
+
+    <div class="decisao-btn" id="dec2"></div>
+    <div class="d-feedback" id="fb2"></div>
+
+    <div class="nav">
+      <button class="btn btn-s" onclick="ir(1)">← Voltar</button>
+      <button class="btn btn-p" id="prox2" onclick="ir(3)" style="display:none">Próximo: Situação 3 →</button>
+    </div>
+  </div>
+
+  <!-- TELA 3: CASO CLÍNICO 3 -->
+  <div class="tela" id="t3">
+    <div class="badge">Etapa 4 de 5 — Caso Clínico</div>
+    <h1 class="titulo">Caso clínico:<br><em>Terceira decisão</em></h1>
+
+    <div class="caso">
+      <div class="caso-label">📋 Caso — Situação 3 (desdobramento)</div>
+      <div class="caso-titulo">Ana Beatriz pede a soltura</div>
+      <div class="caso-fatos">
+        <strong style="color:var(--dourado);">Desdobramento:</strong> Rogério está preso preventivamente há 20 dias. Ana Beatriz procura você (agora você é advogada de Ana Beatriz novamente) em prantos. Ela diz que perdoou Rogério, que a situação financeira da família está péssima, que os filhos estão sofrendo sem o pai em casa, e que quer que ele seja solto. Ela quer assinar uma declaração dizendo que perdoou o marido e que não quer mais que ele seja processado. Pergunta se você pode levar essa declaração ao juiz para obter a soltura.
+      </div>
+      <div class="caso-pergunta">Como advogada de Ana Beatriz, o que você deve explicar a ela sobre os efeitos jurídicos do seu pedido de soltura?</div>
+    </div>
+
+    <div class="decisao-btn" id="dec3"></div>
+    <div class="d-feedback" id="fb3"></div>
+
+    <div class="nav">
+      <button class="btn btn-s" onclick="ir(2)">← Voltar</button>
+      <button class="btn btn-p" id="prox3" onclick="ir(4)" style="display:none">Próximo: Quiz e Resumo →</button>
+    </div>
+  </div>
+
+  <!-- TELA 4: QUIZ + RESUMO -->
+  <div class="tela" id="t4">
+    <div class="badge">Etapa 5 de 5 — Fixação</div>
+    <h1 class="titulo">Teste seu <em>domínio</em></h1>
+    <p class="desc">Quatro questões sobre descumprimento e prisão preventiva. Feedback completo.</p>
+    <div id="quiz"></div>
+    <div style="margin-top:52px;padding-top:40px;border-top:1px solid var(--borda);">
+      <div style="text-align:center;margin-bottom:32px;">
+        <div style="font-family:'Playfair Display',serif;font-size:30px;font-weight:900;color:var(--texto);">O que fixar desta aula</div>
+      </div>
+      <div class="rgrid" id="rgrid"></div>
+      <div class="conclusao">
+        <div class="c-ic">✓</div>
+        <div class="c-tit">Aula 6 do Módulo 2 concluída</div>
+        <div class="c-txt">Você domina o descumprimento de medidas protetivas e a prisão preventiva.<br>Continue para a <strong>Aula 7: Renovação, revisão e revogação das medidas.</strong></div>
+      </div>
+      <div style="text-align:center;margin-top:28px;">
+        <button class="btn-dl" onclick="baixarPDF()">↓ Baixar resumo desta aula (PDF)</button>
+      </div>
+    </div>
+    <div class="nav">
+      <button class="btn btn-s" onclick="ir(3)">← Voltar</button>
+      <button class="btn btn-p" onclick="ir(0)">↺ Rever do início</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const ETAPAS = ['Introdução','Caso 1','Caso 2','Caso 3','Quiz'];
+let cur = 0;
+const respostas = {};
+
+function buildSteps() {
+  const el = document.getElementById('stps'); el.innerHTML = '';
+  ETAPAS.forEach((n, i) => {
+    if (i > 0) { const l = document.createElement('div'); l.className = 'sline' + (i <= cur ? ' d' : ''); el.appendChild(l); }
+    const btn = document.createElement('button'); btn.className = 'step'; btn.onclick = () => ir(i);
+    const dot = document.createElement('div'); dot.className = 'dot' + (i === cur ? ' a' : i < cur ? ' d' : ''); dot.textContent = i < cur ? '✓' : i + 1;
+    const lbl = document.createElement('div'); lbl.className = 'slbl' + (i === cur ? ' a' : i < cur ? ' d' : ''); lbl.textContent = n;
+    btn.appendChild(dot); btn.appendChild(lbl); el.appendChild(btn);
+  });
+}
+
+function ir(n) {
+  document.querySelectorAll('.tela').forEach(t => t.classList.remove('on'));
+  document.getElementById('t' + n).classList.add('on');
+  cur = n; buildSteps(); window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// PREVENTIVA PRESSUPOSTOS
+const PREV = [
+  { ic:'⚖️', titulo:'Fumus comissi delicti', desc:'Prova da existência do crime + indícios suficientes de autoria. No descumprimento: o BO e o relato policial do flagrante já satisfazem.' },
+  { ic:'⚠️', titulo:'Periculum libertatis (art. 312 CPP)', desc:'Um dos fundamentos do art. 312: garantia da ordem pública, conveniência da instrução criminal ou garantia de aplicação da lei penal. É pressuposto autônomo — não se confunde com a hipótese de admissibilidade do art. 313.' },
+  { ic:'🔒', titulo:'Art. 313, III CPP — hipótese de admissibilidade', desc:'Para crimes de violência doméstica: admite a preventiva para garantir as medidas protetivas. Não exige pena mínima dos incisos I e II. Mas é apenas a porta de entrada — ainda exige fumus comissi delicti e periculum libertatis do art. 312.' },
+  { ic:'📋', titulo:'Requerimento — não mais de ofício', desc:'Após Pacote Anticrime (Lei 13.964/2019): juiz não pode decretar preventiva de ofício. Necessário requerimento do MP ou representação policial (art. 311 CPP).' },
+  { ic:'⚡', titulo:'Proporcionalidade', desc:'A preventiva é medida extrema. Deve ser proporcional à gravidade do caso. Primários, sem histórico de violência grave, com residência fixa: ponderar medidas alternativas.' },
+  { ic:'🔄', titulo:'Revisão periódica (art. 316 CPP)', desc:'O juiz deve revisar a necessidade da preventiva de ofício a cada 90 dias. O advogado pode pedir revisão a qualquer tempo demonstrando mudança de circunstâncias.' },
+];
+
+function buildPrev() {
+  const el = document.getElementById('prev-grid');
+  PREV.forEach(p => {
+    const d = document.createElement('div'); d.className = 'prev-card';
+    d.innerHTML = `<div class="prev-icon">${p.ic}</div><div class="prev-titulo">${p.titulo}</div><div class="prev-desc">${p.desc}</div>`;
+    el.appendChild(d);
+  });
+}
+
+// CASOS CLÍNICOS
+const CASOS = [
+  {
+    id: 'dec1', prox: 'prox1',
+    opcoes: [
+      { txt: 'Orientar Ana Beatriz a dizer à polícia que ela mesma abriu a porta e que foi uma decisão dela — afinal, ela é maior e capaz', ok: false, fb: '✗ Atenção. Esta orientação é equivocada e pode configurar orientação a cliente para obstruir a justiça. O descumprimento da medida protetiva é crime autônomo (art. 24-A da LMP) que independe da vontade da vítima. O fato de Ana Beatriz ter "deixado entrar" não exclui o crime — o agressor sabia da proibição e a violou. O advogado não pode orientar a vítima a falsear os fatos.' },
+      { txt: 'Registrar novo boletim de ocorrência pelo descumprimento, preservar evidências (prints do celular, depoimento da vizinha), e peticionar imediatamente ao juiz pedindo prisão preventiva com base no art. 313, III CPP e reforço da medida protetiva', ok: true, fb: '✓ Correto! Esta é a conduta adequada. O descumprimento configura o crime do art. 24-A da LMP. O BO documenta o fato e compõe o requerimento de preventiva. A vizinha é testemunha crucial — colha os dados de contato imediatamente. Peticione ao juiz com: (1) cópia do BO, (2) relato da vizinha, (3) pedido de preventiva fundado no art. 313, III CPP e art. 312, fundamento "garantia da ordem pública" (reiteração do descumprimento). Oriente Ana Beatriz: a declaração dela de que "deixou entrar" não exclui o crime de Rogério — ele sabia da proibição judicial.' },
+      { txt: 'Não fazer nada por enquanto — é a primeira vez e Ana Beatriz aparentemente está bem', ok: false, fb: '✗ Atenção. A omissão pode custar a vida da cliente. O descumprimento de medida protetiva é um sinal grave de escalada da violência. Pesquisas mostram que a violência doméstica tende a se agravar progressivamente. Cada descumprimento não documentado enfraquece o pedido futuro de preventiva. Agir imediatamente é obrigação da advogada comprometida com a segurança da cliente.' },
+    ]
+  },
+  {
+    id: 'dec2', prox: 'prox2',
+    opcoes: [
+      { txt: 'O juiz pode sim decretar a preventiva só com o art. 313, III CPP — a situação de violência doméstica é suficiente. Não há nada a fazer', ok: false, fb: '✗ Atenção. O art. 313 do CPP é um fundamento adicional de admissibilidade, mas não dispensa os pressupostos do art. 312. O STJ reafirmou que a preventiva exige a demonstração de ao menos um dos fundamentos do art. 312 (garantia da ordem pública, instrução criminal ou aplicação da lei penal). Apenas invocar o art. 313, III sem analisar o art. 312 é fundamentação insuficiente — cabível habeas corpus.' },
+      { txt: 'Impetrar Habeas Corpus demonstrando que: (1) o art. 313, III exige os pressupostos do art. 312 cumulativamente; (2) Rogério é primário, tem residência fixa e emprego — ausentes os fundamentos do art. 312; (3) pedir substituição por medidas cautelares alternativas (art. 319 CPP)', ok: true, fb: '✓ Correto! O art. 313 do CPP apenas amplia as hipóteses de admissibilidade da preventiva em violência doméstica — mas não dispensa os pressupostos do art. 312 (fumus comissi delicti + periculum libertatis). A preventiva sem análise do art. 312 é ilegal. O Habeas Corpus é o instrumento certo para liberar Rogério. Argumentos: (1) primário, residência e emprego fixos = ausência de risco de fuga; (2) descumprimento pela primeira vez = proporcionalidade; (3) propor medidas alternativas: tornozeleira eletrônica, proibição de se aproximar da vítima com reforço de monitoramento. Isso protege Ana Beatriz sem privar Rogério da liberdade.' },
+      { txt: 'Aguardar a audiência de custódia e lá apresentar os argumentos oralmente', ok: false, fb: '✗ Atenção. A audiência de custódia é importante, mas o Habeas Corpus pode ser impetrado imediatamente e tem tramitação mais célere. No caso concreto, a preventiva foi fundamentada apenas no art. 313, III — há ilegalidade manifesta que justifica HC urgente. Aguardar apenas a audiência de custódia pode significar dias a mais de prisão desnecessária.' },
+    ]
+  },
+  {
+    id: 'dec3', prox: 'prox3',
+    opcoes: [
+      { txt: 'Levar a declaração ao juiz imediatamente — é o direito de Ana Beatriz dispor da proteção que ela mesma pediu', ok: false, fb: '✗ Atenção. A declaração de Ana Beatriz não terá o efeito jurídico que ela espera. A ação penal pelo art. 24-A é pública incondicionada — não depende de representação ou vontade da vítima. A prisão preventiva foi decretada no interesse público. O STJ (Ed. 231/2024, Tese 9) é expresso: as manifestações da vítima sobre a revogação das medidas protetivas são irrelevantes para a manutenção da preventiva.' },
+      { txt: 'Explicar com clareza que: (1) o art. 24-A é crime de ação pública incondicionada — ela não pode "retirar a queixa"; (2) a preventiva não está no âmbito de sua disponibilidade (STJ Tese 9 Ed. 231/2024); (3) a declaração de perdão não produz o efeito desejado; (4) se ela genuinamente quer ajudá-lo, o caminho é contratar advogado para ele pedir HC ou substituição por cautelar alternativa', ok: true, fb: '✓ Correto! Esta é a orientação técnica e ética adequada. Ana Beatriz precisa entender que: (1) a ação penal pelo descumprimento não é dela — é do Estado; (2) a preventiva protege não apenas ela, mas o próprio processo penal; (3) o perdão pessoal não extingue a ação penal nem revoga a prisão; (4) se Rogério quiser sair, ele precisa de advogado para impetrar HC mostrando ausência dos pressupostos do art. 312. A advogada de Ana Beatriz não pode e não deve tentar reverter a preventiva — isso conflitaria com o interesse da própria cliente.' },
+      { txt: 'Comunicar imediatamente ao MP que Ana Beatriz está sendo coagida por Rogério a pedir a soltura', ok: false, fb: '✗ Atenção. Não há indício de coação no caso — Ana Beatriz parece estar agindo genuinamente por sentimentos. Acusar coação sem evidência seria inventar algo que pode prejudicar a relação com a cliente e é antiético. O correto é explicar os efeitos jurídicos e respeitar a autonomia de Ana Beatriz, orientando-a tecnicamente.' },
+    ]
+  },
+];
+
+function buildCaso(caso) {
+  const el = document.getElementById(caso.id);
+  const btnProx = document.getElementById(caso.prox);
+  caso.opcoes.forEach((op, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'd-btn';
+    btn.textContent = String.fromCharCode(65 + i) + ') ' + op.txt;
+    btn.onclick = () => {
+      if (el.querySelector('.ok')) return; // bloqueia só após acertar
+      document.querySelectorAll(`#${caso.id} .d-btn`).forEach(b => { b.classList.add('bl'); });
+      btn.classList.add(op.ok ? 'ok' : 'er');
+      const fb = document.getElementById('fb' + caso.id.slice(-1));
+      fb.className = 'd-feedback on ' + (op.ok ? 'ok' : 'er');
+      fb.innerHTML = `<strong>${op.ok ? '✓ Correto!' : '✗ Atenção.'}</strong> ${op.fb}`;
+      if (op.ok) {
+        setTimeout(() => { if (btnProx) btnProx.style.display = 'inline-flex'; }, 800);
+      } else {
+        // se errou, desbloqueia os botões para nova tentativa após 1.5s
+        setTimeout(() => {
+          document.querySelectorAll(`#${caso.id} .d-btn`).forEach(b => {
+            b.classList.remove('bl', 'er');
+          });
+          fb.className = 'd-feedback';
+          fb.innerHTML = '';
+        }, 1500);
+      }
+    };
+    el.appendChild(btn);
+  });
+}
+
+// QUIZ
+const QS = [
+  {
+    p: 'O agressor descumpriu a medida protetiva pela segunda vez. O Ministério Público pediu a prisão preventiva. O juiz pode decretá-la invocando apenas o art. 313, III do CPP, sem analisar os fundamentos do art. 312?',
+    ops: ['Sim — em violência doméstica o art. 313, III é suficiente por si só para a preventiva', 'Não — o art. 313 apenas amplia a admissibilidade, mas os pressupostos do art. 312 são sempre exigidos cumulativamente', 'Sim, mas apenas se for o segundo descumprimento ou mais', 'Depende — o STJ ainda não definiu a questão'],
+    c: 1, fb: 'O art. 313 do CPP amplia as hipóteses de admissibilidade da preventiva em violência doméstica — mas não substitui os pressupostos do art. 312. A preventiva sempre exige: (1) fumus comissi delicti + (2) pelo menos um fundamento do art. 312: garantia da ordem pública, conveniência da instrução criminal ou garantia de aplicação da lei penal. Preventiva apenas com o art. 313, III sem análise do art. 312 é ilegal — cabe habeas corpus.'
+  },
+  {
+    p: 'A vítima, após reconciliação com o agressor, solicita ao juiz a revogação da prisão preventiva do companheiro, alegando que perdoou tudo. O juiz é vinculado ao pedido?',
+    ops: ['Sim — a vítima é titular do bem jurídico protegido e tem autonomia para dispor dele', 'Não — as manifestações da vítima sobre a revogação das medidas protetivas são irrelevantes para a manutenção da prisão preventiva, que não está no âmbito de disponibilidade da ofendida (STJ, Ed. 231/2024, Tese 9)', 'Sim, mas o MP pode recorrer da revogação', 'Depende — se a medida protetiva for de natureza cível, a vítima pode dispor dela'],
+    c: 1, fb: 'O STJ (Ed. 231/2024, Tese 9) é expresso: "As manifestações da vítima sobre a revogação de medidas protetivas de urgência são irrelevantes para a manutenção da prisão preventiva do acusado, porquanto a custódia cautelar não está no âmbito de disponibilidade da ofendida." A preventiva é decretada no interesse público — não pode ser revogada a pedido da vítima.'
+  },
+  {
+    p: 'Em caso de flagrante por descumprimento de medida protetiva (art. 24-A da LMP), a autoridade policial pode conceder fiança?',
+    ops: ['Sim — se a pena máxima for inferior a 4 anos, a autoridade policial pode conceder fiança', 'Não — o §2º do art. 24-A da LMP veda expressamente a concessão de fiança pela autoridade policial: apenas o juiz pode concedê-la', 'Sim — desde que o agressor assine termo de compromisso de não se aproximar da vítima', 'Depende da natureza da medida descumprida'],
+    c: 1, fb: 'O §2º do art. 24-A é expresso: "Na hipótese de prisão em flagrante, apenas a autoridade judicial poderá conceder fiança." A autoridade policial está impedida de conceder fiança em crimes de descumprimento de medida protetiva — mesmo que a pena do delito, em tese, permitisse a concessão policial. Esta é uma das vedações específicas da LMP.'
+  },
+  {
+    p: 'Rogério foi preso preventivamente há 90 dias por descumprimento de medida protetiva. Nenhuma revisão da preventiva foi feita pelo juiz. O que pode fazer a defesa?',
+    ops: ['Nada — não há prazo máximo para a preventiva', 'Impetrar habeas corpus por excesso de prazo, pois o art. 316 do CPP determina que o juiz deve revisar a necessidade da preventiva de ofício a cada 90 dias', 'Aguardar a sentença — a preventiva se encerra automaticamente com a condenação', 'Pedir relaxamento de flagrante — o prazo de 90 dias configura excesso de prisão em flagrante'],
+    c: 1, fb: 'O art. 316, parágrafo único do CPP (Pacote Anticrime) determina que o juiz deve revisar de ofício a necessidade da preventiva a cada 90 dias, sob pena de relaxamento da prisão. Se a revisão não foi feita no prazo, a defesa pode impetrar habeas corpus por excesso de prazo ou pedir expressamente ao juiz a revisão da preventiva. Este é um argumento importante para libertar clientes presos por longo período sem revisão da custódia.'
+  }
+];
+
+function buildQuiz() {
+  const el = document.getElementById('quiz');
+  QS.forEach((q, qi) => {
+    const c = document.createElement('div'); c.className = 'qcard';
+    c.innerHTML = `<div class="qnum">Questão ${qi+1} de ${QS.length}</div>
+      <div class="qp">${q.p}</div>
+      ${q.ops.map((op,oi)=>`<div class="qop" id="qo${qi}_${oi}" onclick="ans(${qi},${oi})">${String.fromCharCode(65+oi)}) ${op}</div>`).join('')}
+      <div class="qfb" id="qf${qi}"></div>`;
+    el.appendChild(c);
+  });
+}
+
+function ans(qi, oi) {
+  if (respostas[qi] !== undefined) return;
+  respostas[qi] = oi;
+  const q = QS[qi];
+  for (let j = 0; j < q.ops.length; j++) {
+    const e = document.getElementById(`qo${qi}_${j}`); e.classList.add('bl');
+    if (j === q.c) e.classList.add('ok'); else if (j === oi) e.classList.add('er');
+  }
+  const fb = document.getElementById('qf' + qi); const ok = oi === q.c;
+  fb.className = 'qfb on ' + (ok ? 'ok' : 'er');
+  fb.innerHTML = `<strong>${ok ? '✓ Correto!' : '✗ Atenção.'}</strong> ${q.fb}`;
+}
+
+// RESUMO
+const RES = [
+  { ic:'⚖️', tit:'Art. 313, III CPP', txt:'Preventiva admissível para garantir medidas protetivas em violência doméstica. Não exige pena mínima ou reincidência. Mas exige os pressupostos do art. 312 cumulativamente.' },
+  { ic:'📋', tit:'Art. 312 CPP — pressupostos obrigatórios', txt:'Fumus comissi delicti + um dos fundamentos: garantia da ordem pública, instrução criminal ou aplicação da lei penal. Art. 313 não substitui — apenas complementa.' },
+  { ic:'🚫', tit:'Não mais de ofício (Pacote Anticrime)', txt:'Após Lei 13.964/2019: juiz não pode decretar preventiva de ofício. Necessário requerimento do MP ou representação policial (art. 311 CPP).' },
+  { ic:'🔒', tit:'Art. 24-A, §2º — Fiança vedada à polícia', txt:'No flagrante por descumprimento de medida protetiva, apenas o juiz pode conceder fiança. Autoridade policial está impedida expressamente.' },
+  { ic:'📌', tit:'STJ Tese 9 Ed. 231/2024', txt:'Pedido de revogação da preventiva pela vítima é irrelevante. A custódia cautelar não está no âmbito de disponibilidade da ofendida.' },
+  { ic:'🔄', tit:'Art. 316 CPP — Revisão a cada 90 dias', txt:'O juiz deve revisar a necessidade da preventiva de ofício a cada 90 dias. Sem revisão no prazo: cabe habeas corpus por excesso de prazo.' },
+  { ic:'⚡', tit:'Protocolo de atuação no descumprimento', txt:'1. BO imediato. 2. Colher provas. 3. Peticionar preventiva (MP ou delegado representa). 4. Pedir reforço da medida (monitoramento). 5. STJ Tese 9: perdão da vítima não libera.' },
+  { ic:'🛡️', tit:'Defesa do agressor no descumprimento', txt:'Verificar intimação válida da medida. Analisar pressupostos do art. 312. Propor medidas alternativas (art. 319 CPP). Se preventiva ilegal: HC imediato.' },
+];
+
+function buildRes() {
+  const el = document.getElementById('rgrid');
+  RES.forEach(r => {
+    const d = document.createElement('div'); d.className = 'rcard';
+    d.innerHTML = `<div class="ric">${r.ic}</div><div class="rtit">${r.tit}</div><div class="rtxt">${r.txt}</div>`;
+    el.appendChild(d);
+  });
+}
+
+function baixarPDF() {
+  const btn = document.querySelector('.btn-dl');
+  const orig = btn.innerHTML;
+  btn.innerHTML = '⏳ Gerando PDF...'; btn.disabled = true;
+  if (window.jspdf && window.jspdf.jsPDF) { gerarPDF(btn, orig); return; }
+  const s = document.createElement('script');
+  s.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
+  s.onload = () => gerarPDF(btn, orig);
+  s.onerror = () => { btn.innerHTML = '✗ Erro.'; btn.disabled = false; };
+  document.head.appendChild(s);
+}
+
+function gerarPDF(btn, orig) {
+  try {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ unit: 'mm', format: 'a4' });
+    const R=[212,83,126], G=[29,158,117], E=[26,18,40], M=[100,90,130];
+    const W=210, MG=18, LW=174; let y=0;
+    const np=()=>{ doc.addPage(); y=18; };
+    const ck=h=>{ if(y+h>272) np(); };
+    const tx=t=>t.normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[\u2014\u2013]/g,'-').replace(/[\u2018\u2019]/g,"'").replace(/[\u201C\u201D]/g,'"').replace(/[^\x00-\x7F]/g,'?');
+    doc.setFillColor(...R); doc.rect(0,0,W,18,'F');
+    doc.setTextColor(255,255,255); doc.setFontSize(11); doc.setFont('helvetica','bold');
+    doc.text('PENHA em Cena',MG,11); doc.setFont('helvetica','normal'); doc.setFontSize(9);
+    doc.text('Modulo 02 - Aula 6 - Resumo',W-MG,11,{align:'right'}); y=26;
+    doc.setTextColor(...E); doc.setFontSize(16); doc.setFont('helvetica','bold');
+    doc.text('Descumprimento de Medidas Protetivas e Prisao Preventiva',MG,y); y+=8;
+    doc.setFontSize(10); doc.setFont('helvetica','normal'); doc.setTextColor(...M);
+    doc.text('Art. 313, III CPP + Art. 24-A LMP + Protocolo de atuacao para advogados',MG,y); y+=7;
+    doc.setDrawColor(...R); doc.setLineWidth(0.5); doc.line(MG,y,W-MG,y); y+=8;
+    const sec=t=>{ ck(12); doc.setFillColor(...R); doc.roundedRect(MG,y,LW,8,1,1,'F'); doc.setTextColor(255,255,255); doc.setFontSize(9); doc.setFont('helvetica','bold'); doc.text(tx(t),MG+4,y+5.5); y+=12; doc.setTextColor(...E); };
+    const bull=t=>{ ck(7); doc.setFillColor(...R); doc.circle(MG+2,y-1,1,'F'); const ls=doc.splitTextToSize(tx(t),LW-7); doc.setFontSize(9); doc.setFont('helvetica','normal'); doc.setTextColor(...E); doc.text(ls,MG+6,y); y+=ls.length*5+2; };
+    const par=t=>{ const ls=doc.splitTextToSize(tx(t),LW); ck(ls.length*5+2); doc.setFontSize(9); doc.setFont('helvetica','normal'); doc.setTextColor(...E); doc.text(ls,MG,y); y+=ls.length*5+2; };
+    const dest=(t,c)=>{ const ls=doc.splitTextToSize(tx(t),LW-8); const h=ls.length*5+8; ck(h+4); const cc=c||R; doc.setDrawColor(...cc); doc.setLineWidth(2); doc.line(MG,y,MG,y+h); doc.setLineWidth(0.3); doc.setDrawColor(...cc); doc.roundedRect(MG,y,LW,h,2,2,'S'); doc.setTextColor(...E); doc.setFontSize(9); doc.setFont('helvetica','bolditalic'); doc.text(ls,MG+5,y+5); y+=h+5; doc.setFont('helvetica','normal'); };
+
+    sec('1. Prisao preventiva e descumprimento — fundamentos');
+    par('Art. 313, III CPP: admite preventiva para garantir medidas protetivas em violencia domestica, sem exigir pena minima ou reincidencia.');
+    dest('ATENCAO: o art. 313, III e fundamento de admissibilidade — nao dispensa os pressupostos do art. 312 (fumus + periculum). Preventiva sem art. 312 e ilegal — cabe HC.', R);
+    bull('Art. 311 CPP (Pacote Anticrime): juiz nao pode decretar preventiva de oficio. Necessario requerimento do MP ou representacao policial.');
+    bull('Art. 316 CPP: juiz deve revisar a necessidade da preventiva de oficio a cada 90 dias. Sem revisao: cabe HC por excesso de prazo.');
+    y+=3;
+
+    sec('2. Art. 24-A — Descumprimento de medida protetiva');
+    bull('Pena: reclusao de 2 a 5 anos + multa (Lei 14.994/2024, vigor 10/10/2024). Para fatos anteriores: detencao de 3 meses a 2 anos.');
+    bull('§1: configuracao independe da competencia (civel ou criminal) do juiz que deferiu a medida.');
+    bull('§2: APENAS O JUIZ pode conceder fianca — autoridade policial VEDADA expressamente.');
+    bull('Acao penal publica incondicionada — MP age de oficio, independente da vontade da vitima.');
+    y+=3;
+
+    sec('3. STJ — Jurisprudencia essencial');
+    bull('Ed. 231/2024, Tese 9: manifestacoes da vitima sobre revogacao das medidas sao IRRELEVANTES para manutencao da preventiva. A custodia nao esta no ambito de disponibilidade da ofendida.');
+    y+=3;
+
+    sec('4. Protocolo de atuacao — advogado da vitima');
+    bull('1. Registrar BO de imediato a cada descumprimento — documenta para HC e preventiva.');
+    bull('2. Preservar evidencias: prints de mensagens, relatos de testemunhas, fotos, logs de chamadas.');
+    bull('3. Peticionar ao juiz: requerimento de prisao preventiva (art. 313, III + art. 312 CPP).');
+    bull('4. Pedir reforco da medida protetiva: monitoramento eletronico (art. 22, §5 LMP).');
+    bull('5. Orientar a vitima: perdao pessoal nao extingue acao penal nem revoga preventiva (STJ Tese 9).');
+    y+=3;
+
+    sec('5. Protocolo de atuacao — advogado da defesa');
+    bull('1. Verificar intimacao valida da medida antes do descumprimento — sem ela, nao ha dolo.');
+    bull('2. Analisar os pressupostos do art. 312: ha risco real de fuga, obstrucao ou reiteracao?');
+    bull('3. Propor medidas cautelares alternativas (art. 319 CPP): tornozeleira, proibicao de contato monitorada.');
+    bull('4. Se preventiva ilegal (so com art. 313 sem art. 312): HC imediato no Tribunal.');
+    bull('5. Revisar a preventiva apos 90 dias — solicitar revisao ao juiz ou impetrar HC por excesso de prazo.');
+
+    const tot=doc.getNumberOfPages();
+    for(let i=1;i<=tot;i++){ doc.setPage(i); doc.setFontSize(8); doc.setTextColor(...M); doc.text('Penha em Cena - Modulo 02 - Aula 6 - Material de apoio exclusivo do aluno',MG,290); doc.text(i+' / '+tot,W-MG,290,{align:'right'}); }
+    doc.save('PenhaEmCena_M02_A06_Resumo.pdf');
+    btn.innerHTML='✓ PDF baixado!'; btn.style.background='rgba(29,158,117,0.25)';
+    setTimeout(()=>{ btn.innerHTML=orig; btn.style.background=''; btn.disabled=false; },3000);
+  } catch(e) { console.error('Erro PDF:',e); btn.innerHTML='✗ Erro.'; btn.disabled=false; }
+}
+
+buildSteps(); buildPrev();
+CASOS.forEach(buildCaso);
+buildQuiz(); buildRes();
+</script>
+</body>
+</html>

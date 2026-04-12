@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Módulo 02 · Aula 5 — Recursos: Agravo e Mandado de Segurança · Penha em Cena</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --rosa: #D4537E; --rosa2: #A33360;
+  --fundo: #0E0B14; --fundo2: #17122A;
+  --roxo: #7F77DD; --texto: #F0EAF8; --muted: #9B8FBC;
+  --borda: rgba(212,83,126,0.2); --verde: #1D9E75;
+  --dourado: #C9963A; --azul: #3A8ADC;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'DM Sans', sans-serif; background: var(--fundo); color: var(--texto); min-height: 100vh; overflow-x: hidden; font-size: 18px; line-height: 1.75; }
+.bg-p { position:fixed;inset:0;pointer-events:none;z-index:0; background: radial-gradient(ellipse 60% 40% at 20% 20%, rgba(127,119,221,0.07) 0%, transparent 60%), radial-gradient(ellipse 40% 60% at 80% 80%, rgba(212,83,126,0.06) 0%, transparent 60%); }
+.header { position:sticky;top:0;z-index:100;background:rgba(14,11,20,0.95);border-bottom:1px solid var(--borda);padding:16px 32px;display:flex;align-items:center;gap:14px;backdrop-filter:blur(16px); }
+.logo { font-family:'Playfair Display',serif;font-size:20px;color:var(--rosa);font-weight:700; }
+.sep { color:var(--muted); }
+.info { font-size:15px;color:var(--muted); }
+.prog { background:var(--fundo2);border-bottom:1px solid var(--borda);padding:16px 32px;position:sticky;top:61px;z-index:99; }
+.steps { max-width:780px;margin:0 auto;display:flex;align-items:center; }
+.step { display:flex;flex-direction:column;align-items:center;gap:6px;flex:1;cursor:pointer;border:none;background:none; }
+.dot { width:36px;height:36px;border-radius:50%;border:2px solid rgba(155,143,188,0.3);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:500;color:var(--muted);transition:all .3s; }
+.dot.a { background:var(--rosa);border-color:var(--rosa);color:#fff;box-shadow:0 0 24px rgba(212,83,126,0.5); }
+.dot.d { background:var(--verde);border-color:var(--verde);color:#fff; }
+.slbl { font-size:11px;color:var(--muted);white-space:nowrap; }
+.slbl.a { color:var(--rosa); } .slbl.d { color:var(--verde); }
+.sline { flex:1;height:2px;background:rgba(155,143,188,0.15);margin-bottom:18px;transition:background .4s; }
+.sline.d { background:var(--verde); }
+.main { max-width:860px;margin:0 auto;padding:44px 32px 120px;position:relative;z-index:1; }
+.tela { display:none;animation:up .4s ease; }
+.tela.on { display:block; }
+@keyframes up { from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);} }
+.badge { display:inline-flex;align-items:center;gap:6px;background:rgba(212,83,126,0.12);border:1px solid rgba(212,83,126,0.3);border-radius:20px;padding:6px 16px;font-size:13px;font-weight:500;color:var(--rosa);letter-spacing:.06em;text-transform:uppercase;margin-bottom:20px; }
+.titulo { font-family:'Playfair Display',serif;font-size:clamp(28px,5vw,44px);font-weight:900;line-height:1.15;color:var(--texto);margin-bottom:16px; }
+.titulo em { color:var(--rosa);font-style:italic; }
+.desc { font-size:18px;color:var(--muted);line-height:1.9;margin-bottom:36px; }
+.art { background:var(--fundo2);border:1px solid var(--borda);border-radius:18px;padding:30px 34px;margin-bottom:22px; }
+.art.dest { border-color:rgba(212,83,126,0.5);background:rgba(212,83,126,0.04); }
+.art.roxo { border-color:rgba(127,119,221,0.4);background:rgba(127,119,221,0.04); }
+.art.verde { border-color:rgba(29,158,117,0.4);background:rgba(29,158,117,0.04); }
+.art-num { font-size:13px;font-weight:600;color:var(--rosa);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px; }
+.art-num.roxo { color:var(--roxo); }
+.art-num.verde { color:#5DCAA5; }
+.art-h { font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:var(--texto);margin-bottom:18px; }
+.art-lei { font-size:17px;color:var(--muted);border-left:3px solid var(--rosa);padding-left:20px;margin-bottom:20px;font-style:italic;line-height:1.85; }
+.art-lei.roxo { border-left-color:var(--roxo); }
+.art-lei.verde { border-left-color:var(--verde); }
+.art-p { font-size:17px;color:var(--muted);line-height:1.85;margin-bottom:14px; }
+.art-p strong { color:var(--texto); }
+.alerta { background:rgba(212,83,126,0.07);border:1px solid rgba(212,83,126,0.25);border-radius:12px;padding:18px 24px;font-size:16px;color:rgba(240,234,248,0.85);line-height:1.8;margin-top:18px; }
+.alerta strong { color:var(--rosa); }
+.alerta-roxo { background:rgba(127,119,221,0.07);border:1px solid rgba(127,119,221,0.25);border-radius:12px;padding:18px 24px;font-size:16px;color:rgba(240,234,248,0.85);line-height:1.8;margin-top:18px; }
+.alerta-roxo strong { color:#AFA9EC; }
+.alerta-verde { background:rgba(29,158,117,0.07);border:1px solid rgba(29,158,117,0.25);border-radius:12px;padding:18px 24px;font-size:16px;color:rgba(240,234,248,0.85);line-height:1.8;margin-top:18px; }
+.alerta-verde strong { color:#5DCAA5; }
+
+/* COMPARATIVO */
+.comp { display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px; }
+@media(max-width:600px) { .comp { grid-template-columns:1fr; } }
+.comp-col { background:var(--fundo2);border:1px solid var(--borda);border-radius:14px;padding:24px; }
+.comp-col.rosa { border-color:rgba(212,83,126,0.4); }
+.comp-col.roxo { border-color:rgba(127,119,221,0.4); }
+.comp-titulo { font-family:'Playfair Display',serif;font-size:19px;font-weight:700;margin-bottom:16px; }
+.comp-item { display:flex;gap:10px;margin-bottom:12px;font-size:16px;color:var(--muted);line-height:1.75; }
+.comp-item strong { color:var(--texto);display:block;margin-bottom:2px; }
+.comp-icon { font-size:18px;flex-shrink:0;margin-top:2px; }
+
+/* FLUXO */
+.fluxo-v { display:flex;flex-direction:column;gap:0;margin-bottom:24px; }
+.fluxo-step { display:flex;gap:20px;align-items:flex-start;margin-bottom:0; }
+.fluxo-ic { display:flex;flex-direction:column;align-items:center;width:48px;flex-shrink:0; }
+.fluxo-num { width:44px;height:44px;border-radius:50%;background:var(--rosa);color:#fff;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;flex-shrink:0; }
+.fluxo-fio { width:2px;flex:1;min-height:20px;background:rgba(212,83,126,0.3);margin:4px auto; }
+.fluxo-step:last-child .fluxo-fio { display:none; }
+.fluxo-box { flex:1;background:var(--fundo2);border:1px solid var(--borda);border-radius:14px;padding:20px 24px;margin-bottom:12px; }
+.fluxo-box-titulo { font-size:18px;font-weight:500;color:var(--texto);margin-bottom:8px; }
+.fluxo-box-desc { font-size:16px;color:var(--muted);line-height:1.8; }
+
+/* QUIZ */
+.qcard { background:var(--fundo2);border:1px solid var(--borda);border-radius:18px;padding:32px 30px;margin-bottom:22px; }
+.qnum { font-size:13px;font-weight:600;color:var(--rosa);letter-spacing:.07em;text-transform:uppercase;margin-bottom:12px; }
+.qp { font-family:'Playfair Display',serif;font-size:21px;font-weight:700;line-height:1.5;color:var(--texto);margin-bottom:24px; }
+.qop { background:rgba(255,255,255,0.03);border:1px solid rgba(155,143,188,0.2);border-radius:10px;padding:16px 20px;margin-bottom:12px;cursor:pointer;font-size:17px;color:var(--muted);transition:all .2s;line-height:1.65; }
+.qop:hover:not(.bl) { border-color:var(--rosa);color:var(--texto);background:rgba(212,83,126,0.07); }
+.qop.ok { background:rgba(29,158,117,0.12);border-color:var(--verde);color:#9FE1CB; }
+.qop.er { background:rgba(212,83,126,0.1);border-color:var(--rosa);color:#EDB0C5; }
+.qop.bl { cursor:default; }
+.qfb { display:none;margin-top:14px;padding:18px 22px;border-radius:10px;font-size:17px;line-height:1.8; }
+.qfb.on { display:block; }
+.qfb.ok { background:rgba(29,158,117,0.1);border:1px solid rgba(29,158,117,0.25);color:#9FE1CB; }
+.qfb.er { background:rgba(212,83,126,0.08);border:1px solid rgba(212,83,126,0.2);color:#EDB0C5; }
+
+/* RESUMO */
+.rgrid { display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;margin-bottom:30px; }
+.rcard { background:var(--fundo2);border:1px solid var(--borda);border-radius:14px;padding:24px 26px;transition:border-color .2s; }
+.rcard:hover { border-color:rgba(212,83,126,0.35); }
+.ric { font-size:26px;margin-bottom:12px; }
+.rtit { font-size:18px;font-weight:500;color:var(--texto);margin-bottom:8px; }
+.rtxt { font-size:16px;color:var(--muted);line-height:1.8; }
+.conclusao { background:linear-gradient(135deg,rgba(212,83,126,0.08),rgba(127,119,221,0.05));border:1px solid rgba(212,83,126,0.2);border-radius:18px;padding:40px;text-align:center;margin-top:28px; }
+.c-ic { font-size:48px;margin-bottom:14px; }
+.c-tit { font-family:'Playfair Display',serif;font-size:28px;font-weight:900;color:var(--verde);margin-bottom:10px; }
+.c-txt { font-size:18px;color:var(--muted);line-height:1.85; }
+.nav { display:flex;align-items:center;justify-content:space-between;margin-top:48px;padding-top:30px;border-top:1px solid var(--borda); }
+.btn { display:inline-flex;align-items:center;gap:8px;padding:14px 28px;border-radius:10px;font-size:17px;font-weight:500;cursor:pointer;transition:all .2s;border:none;font-family:'DM Sans',sans-serif; }
+.btn-s { background:rgba(255,255,255,0.05);color:var(--muted);border:1px solid rgba(155,143,188,0.2); }
+.btn-s:hover { background:rgba(255,255,255,0.09);color:var(--texto); }
+.btn-p { background:var(--rosa);color:#fff;box-shadow:0 4px 18px rgba(212,83,126,0.3); }
+.btn-p:hover { background:var(--rosa2);transform:translateY(-1px); }
+.btn-dl { display:inline-flex;align-items:center;gap:10px;margin-top:18px;padding:15px 26px;border-radius:10px;background:rgba(29,158,117,0.15);border:1px solid rgba(29,158,117,0.4);color:#5DCAA5;font-size:17px;font-weight:500;cursor:pointer;transition:all .2s;font-family:'DM Sans',sans-serif; }
+.btn-dl:hover { background:rgba(29,158,117,0.25); }
+</style>
+</head>
+<body>
+<div class="bg-p"></div>
+<header class="header">
+  <span class="logo">PENHA em Cena</span>
+  <span class="sep">/</span>
+  <span class="info">Módulo 02 · Aula 5</span>
+</header>
+<div class="prog"><div class="steps" id="stps"></div></div>
+<div class="main">
+
+  <!-- TELA 0 -->
+  <div class="tela on" id="t0">
+    <div class="badge">Módulo 02 · Aula 5</div>
+    <h1 class="titulo">Recursos em medidas<br><em>protetivas de urgência</em></h1>
+    <p class="desc">As decisões sobre medidas protetivas são atacáveis — mas por qual recurso? A resposta depende do tipo de decisão, de quem está recorrendo e do que se quer obter. Esta aula mapeia os recursos cabíveis e quando usar cada um.</p>
+
+    <div class="art dest">
+      <div class="art-num">O problema central — a lacuna recursal da LMP</div>
+      <div class="art-h">A Lei Maria da Penha não prevê recurso específico contra medidas protetivas</div>
+      <p class="art-p">A Lei Maria da Penha criou as medidas protetivas (arts. 18-24) mas <strong>não disciplinou expressamente o recurso cabível</strong> contra as decisões que as concedem, negam ou revogam. Isso gerou intensa controvérsia doutrinária e jurisprudencial que persiste até hoje.</p>
+      <p class="art-p"><strong>Predomina o entendimento de que cabe Agravo de Instrumento</strong> contra decisões sobre medidas protetivas, tendo em vista a natureza híbrida da Lei Maria da Penha (cível e criminal) e o caráter interlocutório da decisão — que pode ser modificada ou substituída a qualquer tempo, não se enquadrando como definitiva. O STJ consolidou esse entendimento no <strong>REsp 2.214.127</strong> (Rel. Min. Joel Ilan Paciornik, julgado em outubro de 2025), em que reconheceu o cabimento do agravo de instrumento contra decisão sobre medida protetiva e determinou sua aplicação, com fundamento no princípio da fungibilidade recursal. Segundo o ministro: <em>"Diante da divergência doutrinária em relação ao recurso cabível em face do deferimento de medidas protetivas constantes na Lei Maria da Penha, razão pela qual deve ser aplicado o princípio da fungibilidade, entendimento este assente nesta Corte Superior."</em> (Fonte: <a href="https://ibdfam.org.br/noticias/13338" target="_blank" style="color:var(--rosa);">IBDFAM / Migalhas, 17/10/2025</a>)</p>
+      <p class="art-p">Contudo, há relevante corrente — especialmente nos tribunais que entendem a medida protetiva como de natureza predominantemente criminal — que admite o <strong>Recurso em Sentido Estrito (RESE)</strong>, mesmo que por via de interpretação extensiva do art. 581 do CPP. O principal fundamento dos julgados que <em>não</em> aceitam o RESE é que o rol do art. 581 é taxativo, não permitindo elasticidade ou interpretação analógica — e a decisão sobre medida protetiva não se enquadra em nenhuma das hipóteses expressas do dispositivo.</p>
+      <div class="alerta"><strong>Princípio da fungibilidade recursal:</strong> diante da controvérsia estabelecida, os tribunais têm aplicado amplamente o princípio da fungibilidade (art. 579 CPP), recebendo o recurso interposto por outro, desde que ausente má-fé e observado o prazo do recurso correto. O TJMG, por exemplo, ao julgar recursos em sentido estrito interpostos contra decisões sobre medidas protetivas, conhece do recurso como agravo de instrumento e julga o mérito (TJMG - Rec. em Sentido Estrito 1.0024.16.043049-2/001, Rel. Des. Jaubert Carneiro Jaques, 6ª Câmara Criminal, j. 21/03/2017). <strong>Dica prática:</strong> na dúvida, sempre respeite o prazo mais curto — o do RESE (5 dias para interposição + 2 dias para razões).</div>
+    </div>
+
+    <div class="art">
+      <div class="art-num">Recurso x pedido de revogação — distinção fundamental</div>
+      <div class="art-h">Não confunda: recurso é para impugnar a decisão; pedido de revogação é para quando o prazo já passou</div>
+      <p class="art-p">É essencial distinguir duas situações completamente diferentes na prática:</p>
+      <p class="art-p"><strong>① Recurso contra a decisão:</strong> interposto dentro do prazo recursal (5 dias para RESE ou 15 dias para agravo de instrumento), com o objetivo de reformar a decisão que concedeu ou negou a medida. É o instrumento adequado quando a decisão é recente e o prazo recursal está aberto.</p>
+      <p class="art-p"><strong>② Pedido de revogação da medida protetiva:</strong> pode ser formulado <em>a qualquer tempo</em>, independentemente de prazo recursal. É o instrumento adequado quando a decisão já transitou em julgado ou o prazo recursal já se esgotou, mas as circunstâncias do caso mudaram. O agressor pode pedir a revogação alegando, por exemplo, que a situação de risco que justificou a medida não mais existe, que houve reconciliação (embora isso não vincule o juiz) ou que a medida se tornou desnecessária pelo decurso do tempo. O juiz avaliará com base nas circunstâncias atuais.</p>
+      <p class="art-p"><strong>Exemplo prático:</strong> a medida protetiva foi concedida há seis meses. O prazo para recorrer da decisão concessiva já se encerrou há muito. A medida não é mais necessária porque a situação de risco desapareceu. O instrumento adequado não é um recurso — é um pedido de revogação da medida protetiva, fundamentado na superação da situação de perigo que justificou sua concessão (art. 19 da LMP).</p>
+      <p class="art-p">Da mesma forma, <strong>novo pedido de medida protetiva</strong> pode ser formulado a qualquer tempo se surgirem novos fatos ou agravamento da situação de risco — inclusive se uma medida anterior já foi revogada.</p>
+    </div>
+
+    <div class="art roxo">
+      <div class="art-num roxo">Mandado de Segurança — ação autônoma de impugnação em casos específicos</div>
+      <div class="art-h">O MS não é recurso: é ação para garantir direito líquido e certo violado por ato do magistrado</div>
+      <p class="art-p">O Mandado de Segurança não se confunde com o recurso contra a decisão sobre medida protetiva. Trata-se de <strong>ação autônoma de impugnação</strong> cabível quando há ato ilegal ou abusivo de magistrado que viola direito líquido e certo da parte.</p>
+      <p class="art-p">Um exemplo emblemático de uso adequado do MS é o do <strong>juiz que, ao receber o pedido de medida protetiva, em vez de decidi-lo no prazo de 48 horas (art. 18 da LMP), designa audiência prévia com o agressor</strong> antes de analisar o pedido. Essa conduta ofende diretamente o objetivo protetivo da Lei Maria da Penha e o art. 18, que determina a análise imediata — sem audiência prévia das partes. O MPGO obteve decisão do TJGO acatando exatamente esse argumento: o MS foi impetrado para compelir o juiz a analisar o pedido de medida protetiva antes da audiência com o agressor, garantindo o direito líquido e certo da vítima ao procedimento correto da Lei Maria da Penha. (Fonte: <a href="https://www.mpgo.mp.br/portal/noticia/mandado-de-seguranca-impetrado-pelo-mpgo-e-acatado-pelo-tj-que-determina-analisar-eventual-aplicacao-de-medida-protetiva-antes-de-audiencia-com-agressor" target="_blank" style="color:var(--roxo);">MPGO</a>)</p>
+      <p class="art-p">O MS, portanto, não é a via para simplesmente discordar do mérito de uma decisão sobre medida protetiva — para isso existe o recurso. O MS é o remédio quando o próprio procedimento adotado pelo magistrado viola a lei ou o direito da parte.</p>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:24px;">
+      <div style="background:rgba(212,83,126,0.08);border:1px solid rgba(212,83,126,0.3);border-radius:12px;padding:18px 20px;text-align:center;">
+        <div style="font-family:'Playfair Display',serif;font-size:22px;font-weight:900;color:var(--rosa);">Agravo de Instrumento</div>
+        <div style="font-size:15px;color:var(--muted);margin-top:4px;">Entendimento predominante no STJ (REsp 2.214.127)</div>
+      </div>
+      <div style="background:rgba(127,119,221,0.08);border:1px solid rgba(127,119,221,0.3);border-radius:12px;padding:18px 20px;text-align:center;">
+        <div style="font-family:'Playfair Display',serif;font-size:22px;font-weight:900;color:var(--roxo);">RESE + fungibilidade</div>
+        <div style="font-size:15px;color:var(--muted);margin-top:4px;">Corrente minoritária — aceito com fungibilidade pelos tribunais</div>
+      </div>
+    </div>
+
+    <div class="nav">
+      <span></span>
+      <button class="btn btn-p" onclick="ir(1)">Próximo: Agravo e RESE — detalhamento →</button>
+    </div>
+  </div>
+
+  <!-- TELA 1: AGRAVO -->
+  <div class="tela" id="t1">
+    <div class="badge">Etapa 2 de 5</div>
+    <h1 class="titulo">O <em>Agravo</em> nas<br>medidas protetivas</h1>
+    <p class="desc">O agravo é o recurso típico contra decisões interlocutórias. Em violência doméstica, o tipo de agravo varia conforme a fase processual e a natureza cível ou criminal da decisão.</p>
+
+    <div class="art dest">
+      <div class="art-num">Recurso em Sentido Estrito (RESE) — Art. 581 do CPP — corrente minoritária mas admitida</div>
+      <div class="art-h">Quando o RESE é invocado em medidas protetivas</div>
+      <p class="art-p">Uma corrente doutrinária e jurisprudencial — minoritária — sustenta o cabimento do <strong>Recurso em Sentido Estrito (RESE)</strong> contra decisões sobre medidas protetivas, quando de natureza criminal, com fundamento no art. 581, V do CPP (negativa de prisão preventiva) por interpretação extensiva.</p>
+      <p class="art-p">O RESE tem prazo de <strong>5 dias para interposição</strong> e <strong>2 dias para apresentação das razões</strong> (art. 586 do CPP). Não tem efeito suspensivo automático.</p>
+      <p class="art-p"><strong>O principal obstáculo do RESE:</strong> o rol do art. 581 do CPP é <em>taxativo</em> — não comporta interpretação analógica. A decisão que concede ou revoga medida protetiva não se encaixa literalmente em nenhuma de suas hipóteses. Tribunais como o TJMG e o TJES têm aplicado o princípio da fungibilidade ao receber o RESE como agravo de instrumento, julgando o mérito sem prejudicar a parte. Já alguns tribunais — como o TJCE — consideram o erro grosseiro e não conhecem do RESE, afastando a fungibilidade.</p>
+      <div class="alerta"><strong>Atenção ao prazo na dúvida:</strong> como há controvérsia sobre o recurso cabível, o mais seguro é respeitar sempre o prazo mais curto — o do RESE: <strong>5 dias para interpor + 2 dias para razões</strong>. Se você interpuser o agravo de instrumento dentro desse prazo, estará dentro do prazo do RESE também. Assim, qualquer que seja o recurso considerado correto, ele será tempestivo.</div>
+    </div>
+
+    <div class="art roxo">
+      <div class="art-num roxo">Agravo Regimental / Agravo Interno — Tribunal</div>
+      <div class="art-h">Quando a decisão é do relator no Tribunal</div>
+      <p class="art-p">Se a decisão que concede ou nega a medida protetiva for proferida por <strong>desembargador relator</strong> no Tribunal (em grau recursal), o recurso cabível é o <strong>Agravo Regimental</strong> (também chamado Agravo Interno), previsto nos regimentos internos dos tribunais.</p>
+      <p class="art-p">Prazo: geralmente <strong>15 dias</strong>, conforme o regimento do tribunal respectivo. Julgado pela turma ou câmara do desembargador.</p>
+    </div>
+
+    <div class="art verde">
+      <div class="art-num verde">Agravo de Instrumento (APC) — Medidas de natureza cível</div>
+      <div class="art-h">Nas medidas do art. 23 e art. 24 com natureza cível</div>
+      <p class="art-p">As medidas protetivas de natureza eminentemente <strong>cível</strong> — como alimentos provisionais (art. 22, V), separação de corpos (art. 23, IV), restituição de bens (art. 24, I) e proibição de alienação (art. 24, II) — seguem o regime do <strong>Código de Processo Civil</strong>.</p>
+      <p class="art-p">O recurso cabível é o <strong>Agravo de Instrumento</strong> (art. 1.015 do CPC/2015), no prazo de <strong>15 dias</strong>. Pode ter efeito suspensivo se preenchidos os requisitos do art. 1.019 do CPC.</p>
+      <div class="alerta-verde"><strong>Ponto prático — defesa do agressor:</strong> se o agressor pretende recorrer de medida patrimonial (ex: suspensão de procuração, proibição de alienação de imóvel), o Agravo de Instrumento é o caminho. Mas cuidado: o tribunal pode manter a medida com efeito imediato até o julgamento do recurso.</div>
+    </div>
+
+    <div class="nav">
+      <button class="btn btn-s" onclick="ir(0)">← Voltar</button>
+      <button class="btn btn-p" onclick="ir(2)">Próximo: Mandado de Segurança →</button>
+    </div>
+  </div>
+
+  <!-- TELA 2: MS -->
+  <div class="tela" id="t2">
+    <div class="badge">Etapa 3 de 5</div>
+    <h1 class="titulo">Mandado de Segurança<br>em medidas <em>protetivas</em></h1>
+    <p class="desc">O Mandado de Segurança é a ferramenta mais versátil para atacar decisões sobre medidas protetivas — mas exige direito líquido e certo e ato ilegal ou abusivo da autoridade. Entenda quando e como usar.</p>
+
+    <div class="art dest">
+      <div class="art-num">Fundamento constitucional — art. 5º, LXIX, CF/88</div>
+      <div class="art-h">Quando o MS é cabível em medidas protetivas</div>
+      <p class="art-p">O Mandado de Segurança (MS) cabe quando há <strong>direito líquido e certo</strong> ameaçado ou violado por <strong>ato ilegal ou com abuso de poder</strong> de autoridade pública — incluindo o juiz. Em medidas protetivas, o MS é admissível quando:</p>
+      <p class="art-p"><strong>① Não há recurso adequado disponível:</strong> quando a decisão interlocutória não se enquadra perfeitamente em nenhum recurso típico do CPP ou do CPC, o MS supre a lacuna recursal.</p>
+      <p class="art-p"><strong>② Para a vítima, quando há denegação ilegal:</strong> o juiz nega a medida protetiva sem fundamentação adequada ou em contrariedade à jurisprudência consolidada do STJ. A vítima (ou o MP) impetram MS para compelir o juiz a conceder a medida.</p>
+      <p class="art-p"><strong>③ Para o agressor, quando há excesso ou ilegalidade:</strong> a medida foi concedida sem os pressupostos legais, com violação ao contraditório ou ao devido processo legal.</p>
+      <div class="alerta"><strong>STJ — Jurisprudência em Teses Ed. 231/2024, Tese 2 e 3:</strong> "A medida protetiva de urgência, que busca resguardar interesse individual da vítima de violência doméstica e familiar contra a mulher, tem natureza indisponível e poderá ser requerida pelo Ministério Público." — "O STJ tem admitido o manejo do mandado de segurança para impugnar a decisão que homologa o arquivamento de investigações nos casos em que há flagrante violação a direito líquido e certo das mulheres em situação de violência doméstica e familiar."</div>
+    </div>
+
+    <div class="art roxo">
+      <div class="art-num roxo">Competência para o MS em medidas protetivas</div>
+      <div class="art-h">Onde impetrar o Mandado de Segurança</div>
+      <p class="art-p">O MS é impetrado <strong>no Tribunal competente para rever a decisão do juiz</strong> que proferiu o ato atacado:</p>
+      <p class="art-p">• Decisão de juiz do JVD ou vara criminal estadual → <strong>Tribunal de Justiça</strong> (câmara/turma competente para matéria de violência doméstica)</p>
+      <p class="art-p">• Decisão de juiz federal → <strong>Tribunal Regional Federal</strong></p>
+      <p class="art-p">• Decisão de desembargador → <strong>STJ</strong> (art. 105, I, "b", CF/88)</p>
+      <p class="art-p">• Decisão de ministro do STJ → <strong>STJ (Corte Especial ou Seção)</strong></p>
+      <div class="alerta-roxo"><strong>Prazo:</strong> o MS deve ser impetrado no prazo de <strong>120 dias</strong> contados do ato coator (art. 23 da Lei 12.016/2009). Fora do prazo, a ação não é conhecida. Atenção: não confunda com prazo recursal — o MS não é recurso, é ação autônoma.</div>
+    </div>
+
+    <div class="art verde">
+      <div class="art-num verde">Como estruturar o Mandado de Segurança em medida protetiva</div>
+      <div class="art-h">Elementos essenciais da petição inicial de MS</div>
+      <p class="art-p"><strong>Impetrante:</strong> a vítima (assistida por advogado), o MP, ou o agressor — conforme o polo que está impugnando a decisão.</p>
+      <p class="art-p"><strong>Impetrado:</strong> a autoridade coatora — o juiz que proferiu a decisão atacada. Indicar nome completo e vara.</p>
+      <p class="art-p"><strong>Direito líquido e certo:</strong> demonstrar com documentos (não há dilação probatória no MS). Juntar a decisão atacada, a fundamentação legal e a jurisprudência aplicável.</p>
+      <p class="art-p"><strong>Liminar:</strong> pedir liminar para suspender imediatamente a decisão (se vítima: para compelir o juiz a conceder a medida; se agressor: para suspender a medida concedida). A liminar no MS exige fumus boni iuris e periculum in mora.</p>
+      <p class="art-p"><strong>Pedido final:</strong> concessão definitiva da segurança, determinando à autoridade coatora que (i) conceda a medida protetiva ou (ii) revogue a medida ilegal.</p>
+      <div class="alerta-verde"><strong>Ponto prático para a vítima:</strong> se o juiz negou a medida protetiva sem fundamentação ou com fundamento flagrantemente equivocado, o MS é mais rápido e eficaz que aguardar recurso. Peça liminar. O Tribunal costuma conceder quando há ilegalidade manifesta.</div>
+    </div>
+
+    <div class="nav">
+      <button class="btn btn-s" onclick="ir(1)">← Voltar</button>
+      <button class="btn btn-p" onclick="ir(3)">Próximo: Comparativo prático →</button>
+    </div>
+  </div>
+
+  <!-- TELA 3: COMPARATIVO -->
+  <div class="tela" id="t3">
+    <div class="badge">Etapa 4 de 5</div>
+    <h1 class="titulo">Quando usar <em>cada instrumento</em></h1>
+    <p class="desc">Na prática, a escolha entre recurso e MS depende da urgência, do tipo de decisão e do que se quer alcançar. Aqui o mapa de decisão.</p>
+
+    <div class="comp">
+      <div class="comp-col rosa">
+        <div class="comp-titulo" style="color:var(--rosa)">📋 Recurso (RESE / Agravo)</div>
+        <div class="comp-item"><span class="comp-icon">📅</span><div><strong>Prazo</strong>RESE: 5 dias (interposição) + 2 dias (razões) · Agravo (CPC): 15 dias · Agravo Regimental: 15 dias</div></div>
+        <div class="comp-item"><span class="comp-icon">🎯</span><div><strong>Melhor quando</strong>Há recurso típico claramente cabível para a decisão</div></div>
+        <div class="comp-item"><span class="comp-icon">⚡</span><div><strong>Efeito suspensivo</strong>Não automático no RESE; possível no Agravo de Instrumento (CPC)</div></div>
+        <div class="comp-item"><span class="comp-icon">📂</span><div><strong>Onde julga</strong>Câmara/turma do Tribunal</div></div>
+        <div class="comp-item"><span class="comp-icon">⚠️</span><div><strong>Risco</strong>Inadequação do recurso pode levar ao não conhecimento</div></div>
+      </div>
+      <div class="comp-col roxo">
+        <div class="comp-titulo" style="color:var(--roxo)">🛡️ Mandado de Segurança</div>
+        <div class="comp-item"><span class="comp-icon">📅</span><div><strong>Prazo</strong>120 dias do ato coator (art. 23 Lei 12.016/2009)</div></div>
+        <div class="comp-item"><span class="comp-icon">🎯</span><div><strong>Melhor quando</strong>Não há recurso adequado ou há ilegalidade/abuso de poder manifesto</div></div>
+        <div class="comp-item"><span class="comp-icon">⚡</span><div><strong>Efeito suspensivo</strong>Via liminar — concedida se houver fumus boni iuris + periculum</div></div>
+        <div class="comp-item"><span class="comp-icon">📂</span><div><strong>Onde julga</strong>Tribunal competente para rever atos do juiz de origem</div></div>
+        <div class="comp-item"><span class="comp-icon">⚠️</span><div><strong>Risco</strong>Exige prova documental imediata — sem dilação probatória</div></div>
+      </div>
+    </div>
+
+    <div class="art">
+      <div class="art-num">Mapa de decisão — qual instrumento usar em cada situação</div>
+      <div class="art-h">Escolha rápida por situação concreta</div>
+      <div class="fluxo-v" id="fluxo-map"></div>
+    </div>
+
+    <div class="art verde" style="margin-top:22px;">
+      <div class="art-num verde">Habeas Corpus — quando cabe em medidas protetivas</div>
+      <div class="art-h">HC para atacar medidas que restringem a liberdade de locomoção</div>
+      <p class="art-p">O Habeas Corpus pode ser usado quando a medida protetiva afeta diretamente a <strong>liberdade de locomoção</strong> — especialmente:</p>
+      <p class="art-p">• Para liberar agressor preso por descumprimento de medida protetiva (se a prisão for ilegal)</p>
+      <p class="art-p">• Para questionar prisão preventiva decretada com base no art. 313, III do CPP quando ausentes os pressupostos legais</p>
+      <p class="art-p">O HC tem prazo indefinido (pode ser impetrado a qualquer tempo) e tramita com prioridade. É a via mais rápida para liberar alguém preso ilegalmente.</p>
+      <div class="alerta-verde"><strong>Ponto prático para a defesa:</strong> se o agressor foi preso preventivamente com base em descumprimento de medida protetiva, analise: (1) a medida foi intimada? (2) o descumprimento foi comprovado? (3) há excesso de prazo? Se houver vício, o HC é o caminho mais rápido.</div>
+    </div>
+
+    <div class="nav">
+      <button class="btn btn-s" onclick="ir(2)">← Voltar</button>
+      <button class="btn btn-p" onclick="ir(4)">Próximo: Quiz e Resumo →</button>
+    </div>
+  </div>
+
+  <!-- TELA 4: QUIZ + RESUMO -->
+  <div class="tela" id="t4">
+    <div class="badge">Etapa 5 de 5 — Fixação</div>
+    <h1 class="titulo">Teste seu <em>domínio</em></h1>
+    <p class="desc">Quatro questões sobre recursos em medidas protetivas. Feedback imediato.</p>
+    <div id="quiz"></div>
+    <div style="margin-top:52px;padding-top:40px;border-top:1px solid var(--borda);">
+      <div style="text-align:center;margin-bottom:32px;">
+        <div style="font-family:'Playfair Display',serif;font-size:30px;font-weight:900;color:var(--texto);">O que fixar desta aula</div>
+        <div style="font-size:17px;color:var(--muted);margin-top:8px;">Recursos cabíveis: mapa de uso prático</div>
+      </div>
+      <div class="rgrid" id="rgrid"></div>
+      <div class="conclusao">
+        <div class="c-ic">✓</div>
+        <div class="c-tit">Aula 5 do Módulo 2 concluída</div>
+        <div class="c-txt">Você domina os recursos cabíveis em medidas protetivas.<br>Continue para a <strong>Aula 6: Descumprimento e prisão preventiva.</strong></div>
+      </div>
+      <div style="text-align:center;margin-top:28px;">
+        <button class="btn-dl" onclick="baixarPDF()">↓ Baixar resumo desta aula (PDF)</button>
+      </div>
+    </div>
+    <div class="nav">
+      <button class="btn btn-s" onclick="ir(3)">← Voltar</button>
+      <button class="btn btn-p" onclick="ir(0)">↺ Rever do início</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const ETAPAS = ['Introdução','Agravo / RESE','Mandado de Segurança','Comparativo','Quiz'];
+let cur = 0;
+const respostas = {};
+
+function buildSteps() {
+  const el = document.getElementById('stps'); el.innerHTML = '';
+  ETAPAS.forEach((n, i) => {
+    if (i > 0) { const l = document.createElement('div'); l.className = 'sline' + (i <= cur ? ' d' : ''); el.appendChild(l); }
+    const btn = document.createElement('button'); btn.className = 'step'; btn.onclick = () => ir(i);
+    const dot = document.createElement('div'); dot.className = 'dot' + (i === cur ? ' a' : i < cur ? ' d' : ''); dot.textContent = i < cur ? '✓' : i + 1;
+    const lbl = document.createElement('div'); lbl.className = 'slbl' + (i === cur ? ' a' : i < cur ? ' d' : ''); lbl.textContent = n;
+    btn.appendChild(dot); btn.appendChild(lbl); el.appendChild(btn);
+  });
+}
+
+function ir(n) {
+  document.querySelectorAll('.tela').forEach(t => t.classList.remove('on'));
+  document.getElementById('t' + n).classList.add('on');
+  cur = n; buildSteps(); window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// FLUXO
+const SITUACOES = [
+  { n:'1', titulo:'Juiz nega medida protetiva sem fundamentação — vítima quer recorrer', desc:'→ Agravo de Instrumento (entendimento predominante — STJ, REsp 2.214.127). Prazo: respeite os 5 dias do RESE para garantir tempestividade em qualquer corrente. Se o tribunal local entender pelo RESE, aplica-se a fungibilidade. Alternativamente, se o vício for procedimental (ex: juiz designou audiência antes de decidir), pode-se impetrar Mandado de Segurança para compelir o juiz a decidir corretamente.' },
+  { n:'2', titulo:'Juiz concede medida protetiva — agressor quer impugnar urgentemente', desc:'→ Agravo de Instrumento é o entendimento predominante (STJ, REsp 2.214.127; TJMG converte RESE em AI pela fungibilidade). Para medidas de natureza patrimonial (alimentos, bens — art. 24): Agravo de Instrumento pelo CPC (15 dias). Dica: interponha sempre no prazo mais curto (5 dias) para segurança em qualquer corrente.' },
+  { n:'3', titulo:'Juiz revoga medida protetiva sem ouvir a vítima', desc:'→ Mandado de Segurança pela vítima ou pelo MP. Fundamento: STJ — Ed. 231/2024, Tese 1 — a vítima deve ser ouvida antes da revogação. Ilegalidade manifesta. Peça liminar para restabelecer a medida.' },
+  { n:'4', titulo:'Agressor foi preso por descumprimento de medida protetiva e a prisão é ilegal', desc:'→ Habeas Corpus. Prazo indefinido — impetre imediatamente. Atacar: (a) ausência de intimação válida da medida, (b) ausência de prova do descumprimento, (c) excesso de prazo da prisão provisória.' },
+  { n:'5', titulo:'Desembargador relator no Tribunal nega liminar em MS', desc:'→ Agravo Regimental (Agravo Interno) perante a câmara/turma do desembargador. Prazo: conforme o regimento do tribunal (geralmente 15 dias). Demonstre que o relator errou na aplicação do direito ao negar a liminar.' },
+  { n:'6', titulo:'Juiz arquiva investigação sem devida diligência em caso de violência doméstica', desc:'→ Mandado de Segurança. STJ — Ed. 231/2024, Tese 3: o MS é cabível para impugnar a decisão que homologa o arquivamento quando há flagrante violação a direito líquido e certo da vítima.' },
+];
+
+function buildFluxo() {
+  const el = document.getElementById('fluxo-map');
+  SITUACOES.forEach(s => {
+    const st = document.createElement('div'); st.className = 'fluxo-step';
+    st.innerHTML = `<div class="fluxo-ic"><div class="fluxo-num">${s.n}</div><div class="fluxo-fio"></div></div>
+      <div class="fluxo-box"><div class="fluxo-box-titulo">${s.titulo}</div><div class="fluxo-box-desc">${s.desc}</div></div>`;
+    el.appendChild(st);
+  });
+}
+
+// QUIZ
+const QS = [
+  {
+    p: 'Uma vítima de violência doméstica teve sua medida protetiva negada pelo juiz sem qualquer fundamentação. Qual o instrumento mais adequado para impugnar a decisão?',
+    ops: ['Apelação criminal — por ser decisão definitiva que encerrou o processo', 'Recurso em Sentido Estrito — por se enquadrar no art. 581 do CPP', 'Mandado de Segurança — pela ausência de recurso típico adequado e pela ilegalidade manifesta da decisão não fundamentada', 'Reclamação constitucional ao STF — pela violação à Lei Maria da Penha'],
+    c: 2, fb: 'O Mandado de Segurança é o instrumento mais adequado. As decisões sobre medidas protetivas muitas vezes não se encaixam nas hipóteses taxativas do RESE (art. 581 CPP). O MS supre essa lacuna recursal quando há ilegalidade ou abuso de poder — como a negação sem fundamentação. O STJ admite o MS em violência doméstica quando há flagrante violação de direito líquido e certo (Ed. 231/2024, Tese 3).'
+  },
+  {
+    p: 'O agressor quer impugnar uma medida protetiva de natureza patrimonial (suspensão de procuração e proibição de alienação de imóvel). Qual o recurso mais adequado?',
+    ops: ['Recurso em Sentido Estrito — por ser decisão criminal', 'Agravo de Instrumento — por ser decisão interlocutória de natureza cível, sujeita ao CPC', 'Mandado de Segurança — único cabível em violência doméstica', 'Habeas Corpus — pela restrição patrimonial equiparada à restrição de liberdade'],
+    c: 1, fb: 'As medidas protetivas patrimoniais (art. 24 da LMP — suspensão de procuração, proibição de alienação, restituição de bens) têm natureza cível. Aplicam-se subsidiariamente as normas do CPC (art. 13 da LMP). O recurso cabível é o Agravo de Instrumento (art. 1.015 do CPC/2015), no prazo de 15 dias.'
+  },
+  {
+    p: 'Qual é o prazo para impetrar Mandado de Segurança contra decisão judicial que negou medida protetiva de urgência?',
+    ops: ['5 dias — igual ao RESE', '15 dias — igual ao Agravo de Instrumento', '30 dias — prazo geral de recursos', '120 dias contados do ato coator — conforme art. 23 da Lei 12.016/2009'],
+    c: 3, fb: 'O prazo para impetração do Mandado de Segurança é de 120 dias contados do ato coator (art. 23 da Lei 12.016/2009). Atenção: o MS é uma ação autônoma, não um recurso — portanto não segue os prazos recursais do CPP ou do CPC. Fora do prazo de 120 dias, o MS é extinto sem análise de mérito.'
+  },
+  {
+    p: 'O agressor foi preso preventivamente após descumprimento de medida protetiva. A defesa entende que a prisão é ilegal pois o agressor não foi regularmente intimado da medida antes do suposto descumprimento. Qual o instrumento cabível?',
+    ops: ['Mandado de Segurança — pela ilegalidade da decisão de preventiva', 'Agravo Regimental — contra a decisão do juiz de 1ª instância', 'Habeas Corpus — que tutela diretamente o direito de locomoção, sem prazo determinado', 'Recurso em Sentido Estrito — com efeito suspensivo automático que libertaria o preso'],
+    c: 2, fb: 'O Habeas Corpus é o instrumento adequado quando há restrição ilegal à liberdade de locomoção. Não tem prazo determinado — pode ser impetrado a qualquer momento. O fundamento aqui é a ausência de intimação válida da medida, que prejudica o elemento subjetivo do art. 24-A (o dolo exige ciência da proibição). O HC é mais célere e diretamente tutela o direito de ir e vir.'
+  }
+];
+
+function buildQuiz() {
+  const el = document.getElementById('quiz');
+  QS.forEach((q, qi) => {
+    const c = document.createElement('div'); c.className = 'qcard';
+    c.innerHTML = `<div class="qnum">Questão ${qi+1} de ${QS.length}</div>
+      <div class="qp">${q.p}</div>
+      ${q.ops.map((op,oi)=>`<div class="qop" id="qo${qi}_${oi}" onclick="ans(${qi},${oi})">${String.fromCharCode(65+oi)}) ${op}</div>`).join('')}
+      <div class="qfb" id="qf${qi}"></div>`;
+    el.appendChild(c);
+  });
+}
+
+function ans(qi, oi) {
+  if (respostas[qi] !== undefined) return;
+  respostas[qi] = oi;
+  const q = QS[qi];
+  for (let j = 0; j < q.ops.length; j++) {
+    const e = document.getElementById(`qo${qi}_${j}`); e.classList.add('bl');
+    if (j === q.c) e.classList.add('ok'); else if (j === oi) e.classList.add('er');
+  }
+  const fb = document.getElementById('qf' + qi); const ok = oi === q.c;
+  fb.className = 'qfb on ' + (ok ? 'ok' : 'er');
+  fb.innerHTML = `<strong>${ok ? '✓ Correto!' : '✗ Atenção.'}</strong> ${q.fb}`;
+}
+
+// RESUMO
+const RES = [
+  { ic:'⚖️', tit:'Lacuna recursal da LMP — controvérsia real', txt:'A LMP não prevê recurso específico. Predomina o Agravo de Instrumento (STJ, REsp 2.214.127, Min. Paciornik, out/2025). RESE é corrente minoritária admitida com fungibilidade pelos tribunais.' },
+  { ic:'📋', tit:'RESE (art. 581 CPP) — corrente minoritária', txt:'5 dias para interposição + 2 dias para razões. Rol taxativo do art. 581 é o principal obstáculo. Tribunais aplicam fungibilidade e convertem em AI. Respeitando o prazo do RESE, garante-se tempestividade em qualquer corrente.' },
+  { ic:'📊', tit:'Agravo de Instrumento — entendimento predominante', txt:'STJ, REsp 2.214.127: cabível contra decisão sobre medida protetiva. Para medidas cíveis (alimentos, bens, separação): AI pelo CPC (15 dias). Para medidas criminais: AI ou RESE com fungibilidade.' },
+  { ic:'🛡️', tit:'Mandado de Segurança — ação autônoma para vício procedimental', txt:'120 dias. Não é recurso contra o mérito da decisão. Cabe quando o próprio procedimento é ilegal — ex: juiz designa audiência antes de decidir medida protetiva (TJGO, via MPGO). Também para impugnar arquivamento ilegal (STJ, Ed. 231/2024, Tese 3).' },
+  { ic:'🔄', tit:'Recurso x Pedido de Revogação', txt:'São instrumentos distintos. Recurso: impugna a decisão dentro do prazo recursal. Pedido de revogação: cabe a qualquer tempo quando as circunstâncias mudaram e a medida se tornou desnecessária — não depende de prazo recursal.' },
+  { ic:'🔓', tit:'Habeas Corpus', txt:'Para liberar agressor preso ilegalmente (sem intimação válida, excesso de prazo). Sem prazo determinado. Tramita com prioridade. Mais célere para tutelar liberdade de locomoção.' },
+  { ic:'📌', tit:'STJ — Ed. 231/2024, Teses 2 e 3', txt:'Tese 2: medida protetiva tem natureza indisponível — MP pode requerer. Tese 3: MS cabe para impugnar arquivamento com flagrante violação de direito da vítima.' },
+  { ic:'📐', tit:'Agravo Regimental', txt:'Quando desembargador relator decide. 15 dias (conforme regimento). Julgado pela câmara/turma. Usado tanto pela vítima quanto pela defesa em recursos pendentes no Tribunal.' },
+];
+
+function buildRes() {
+  const el = document.getElementById('rgrid');
+  RES.forEach(r => {
+    const d = document.createElement('div'); d.className = 'rcard';
+    d.innerHTML = `<div class="ric">${r.ic}</div><div class="rtit">${r.tit}</div><div class="rtxt">${r.txt}</div>`;
+    el.appendChild(d);
+  });
+}
+
+function baixarPDF() {
+  const btn = document.querySelector('.btn-dl');
+  const orig = btn.innerHTML;
+  btn.innerHTML = '⏳ Gerando PDF...'; btn.disabled = true;
+  if (window.jspdf && window.jspdf.jsPDF) { gerarPDF(btn, orig); return; }
+  const s = document.createElement('script');
+  s.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
+  s.onload = () => gerarPDF(btn, orig);
+  s.onerror = () => { btn.innerHTML = '✗ Erro.'; btn.disabled = false; };
+  document.head.appendChild(s);
+}
+
+function gerarPDF(btn, orig) {
+  try {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ unit: 'mm', format: 'a4' });
+    const R=[212,83,126], G=[29,158,117], P=[127,119,221], E=[26,18,40], M=[100,90,130];
+    const W=210, MG=18, LW=174; let y=0;
+    const np=()=>{ doc.addPage(); y=18; };
+    const ck=h=>{ if(y+h>272) np(); };
+    const tx=t=>t.normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[\u2014\u2013]/g,'-').replace(/[\u2018\u2019]/g,"'").replace(/[\u201C\u201D]/g,'"').replace(/[^\x00-\x7F]/g,'?');
+    doc.setFillColor(...R); doc.rect(0,0,W,18,'F');
+    doc.setTextColor(255,255,255); doc.setFontSize(11); doc.setFont('helvetica','bold');
+    doc.text('PENHA em Cena',MG,11); doc.setFont('helvetica','normal'); doc.setFontSize(9);
+    doc.text('Modulo 02 - Aula 5 - Resumo',W-MG,11,{align:'right'}); y=26;
+    doc.setTextColor(...E); doc.setFontSize(16); doc.setFont('helvetica','bold');
+    doc.text('Recursos em Medidas Protetivas: Agravo, MS e HC',MG,y); y+=8;
+    doc.setFontSize(10); doc.setFont('helvetica','normal'); doc.setTextColor(...M);
+    doc.text('Instrumentos processuais para atacar decisoes sobre medidas protetivas de urgencia',MG,y); y+=7;
+    doc.setDrawColor(...R); doc.setLineWidth(0.5); doc.line(MG,y,W-MG,y); y+=8;
+    const sec=t=>{ ck(12); doc.setFillColor(...R); doc.roundedRect(MG,y,LW,8,1,1,'F'); doc.setTextColor(255,255,255); doc.setFontSize(9); doc.setFont('helvetica','bold'); doc.text(tx(t),MG+4,y+5.5); y+=12; doc.setTextColor(...E); };
+    const bull=t=>{ ck(7); doc.setFillColor(...R); doc.circle(MG+2,y-1,1,'F'); const ls=doc.splitTextToSize(tx(t),LW-7); doc.setFontSize(9); doc.setFont('helvetica','normal'); doc.setTextColor(...E); doc.text(ls,MG+6,y); y+=ls.length*5+2; };
+    const par=t=>{ const ls=doc.splitTextToSize(tx(t),LW); ck(ls.length*5+2); doc.setFontSize(9); doc.setFont('helvetica','normal'); doc.setTextColor(...E); doc.text(ls,MG,y); y+=ls.length*5+2; };
+    const dest=(t,c)=>{ const ls=doc.splitTextToSize(tx(t),LW-8); const h=ls.length*5+8; ck(h+4); const cc=c||R; doc.setDrawColor(...cc); doc.setLineWidth(2); doc.line(MG,y,MG,y+h); doc.setLineWidth(0.3); doc.setDrawColor(...cc); doc.roundedRect(MG,y,LW,h,2,2,'S'); doc.setTextColor(...E); doc.setFontSize(9); doc.setFont('helvetica','bolditalic'); doc.text(ls,MG+5,y+5); y+=h+5; doc.setFont('helvetica','normal'); };
+
+    sec('1. A lacuna recursal na Lei Maria da Penha — controversia real');
+    par('A LMP nao prevê recurso especifico contra medidas protetivas. Ha controversia sobre o recurso cabivel — predomina o Agravo de Instrumento.');
+    dest('STJ — REsp 2.214.127 (Min. Joel Paciornik, out/2025): reconheceu o cabimento do agravo de instrumento via fungibilidade. "Diante da divergencia doutrinaria em relacao ao recurso cabivel em face do deferimento de medidas protetivas da LMP, deve ser aplicado o principio da fungibilidade."', R);
+    bull('TJMG — Rec. em Sentido Estrito 1.0024.16.043049-2/001 (Des. Jaubert Carneiro Jaques, j. 21/03/2017): RESE convertido em AI pela fungibilidade — conhecido e julgado no merito.');
+    bull('Principal obstaculo do RESE: art. 581 CPP e taxativo — decisao sobre medida protetiva nao se enquadra literalmente em nenhum inciso.');
+    bull('DICA: respeitando o prazo mais curto (5 dias do RESE), garante-se tempestividade em qualquer corrente.');
+    y+=3;
+
+    sec('2. Recurso em Sentido Estrito — RESE (art. 581 CPP) — corrente minoritaria');
+    bull('Prazo: 5 dias para interposicao + 2 dias para apresentacao das razoes (art. 586 CPP).');
+    bull('Hipoteses taxativas do art. 581 CPP — nao comporta interpretacao analogica.');
+    bull('Corrente minoritaria: admitido por tribunais via fungibilidade, convertendo-o em AI para julgar o merito.');
+    bull('Corrente majoritaria: erro grosseiro impede a fungibilidade — o rol e taxativo e nao inclui medidas protetivas.');
+    y+=3;
+
+    sec('3. Agravo de Instrumento (CPC) — medidas civeis');
+    bull('Para medidas patrimoniais: alimentos provisionais (art. 22, V), bens (art. 24), separacao de corpos (art. 23, IV).');
+    bull('Prazo: 15 dias (art. 1.015 CPC/2015).');
+    bull('Efeito suspensivo possivel (art. 1.019 CPC) — mais util para a defesa do agressor.');
+    y+=3;
+
+    sec('4. Mandado de Seguranca — acao autonoma para vicio procedimental');
+    par('O MS nao e recurso contra o merito da decisao sobre medida protetiva. E acao autonoma para quando o proprio procedimento adotado pelo magistrado viola a lei.');
+    bull('Prazo: 120 dias do ato coator (art. 23 Lei 12.016/2009). Nao e recurso — e acao autonoma impetrada no Tribunal.');
+    bull('Exemplo emblematico: juiz que, ao receber pedido de medida protetiva, designa audiencia previa com o agressor antes de decidir — violacao do art. 18 da LMP (48h para decidir). O MPGO obteve decisao do TJGO acatando MS nesse caso.');
+    bull('Tambem cabivel para impugnar arquivamento ilegal de inquerito (STJ, Ed. 231/2024, Tese 3).');
+    dest('Peca liminar no MS: suspende imediatamente o ato impugnado enquanto aguarda julgamento de merito (fumus + periculum).', P);
+    y+=3;
+
+    sec('5. Recurso x Pedido de Revogacao de Medida Protetiva');
+    par('Sao instrumentos distintos — nao confundir:');
+    bull('Recurso: impugna a propria decisao dentro do prazo recursal (5 dias RESE / 15 dias AI). Objetivo: reformar a decisao.');
+    bull('Pedido de revogacao: pode ser feito a qualquer tempo, sem prazo. Cabivel quando as circunstancias mudaram e a medida se tornou desnecessaria. O juiz avalia com base na situacao atual, nao reforma a decisao anterior.');
+    bull('Exemplo: medida concedida ha 6 meses. Prazo recursal encerrado. Situacao de risco desapareceu. Instrumento adequado: pedido de revogacao — nao recurso.');
+    y+=3;
+
+    sec('6. Habeas Corpus — restricao ilegal a liberdade de locomocao');
+    bull('Para liberar agressor preso ilegalmente por descumprimento de medida protetiva.');
+    bull('Sem prazo determinado — impetre imediatamente. Tramita com prioridade.');
+    bull('Argumentos de defesa: ausencia de intimacao valida da medida, falta de prova do descumprimento, excesso de prazo.');
+    y+=3;
+
+    sec('7. Agravo Regimental — decisao do relator no Tribunal');
+    bull('Para atacar decisao de desembargador relator (ex: relator nega liminar em MS).');
+    bull('Prazo: conforme o regimento do tribunal (geralmente 15 dias).');
+    bull('Julgado pela camara/turma do desembargador.');
+    y+=3;
+
+    sec('8. Mapa de decisao rapida por situacao');
+    bull('Medida protetiva negada/concedida (recurso) → Agravo de Instrumento (entendimento predominante, STJ REsp 2.214.127). Prazo: respeite os 5 dias do RESE para garantir tempestividade.');
+    bull('Medida patrimonial (AI CPC, 15 dias) → Agravo de Instrumento pelo CPC.');
+    bull('Vicio procedimental do juiz (ex: audiencia previa indevida) → Mandado de Seguranca.');
+    bull('Agressor preso ilegalmente → Habeas Corpus (urgente, sem prazo).');
+    bull('Desembargador nega liminar em MS → Agravo Regimental (15 dias, camara/turma).');
+    bull('Medida desnecessaria apos prazo recursal esgotado → Pedido de revogacao (a qualquer tempo).');
+
+    const tot=doc.getNumberOfPages();
+    for(let i=1;i<=tot;i++){ doc.setPage(i); doc.setFontSize(8); doc.setTextColor(...M); doc.text('Penha em Cena - Modulo 02 - Aula 5 - Material de apoio exclusivo do aluno',MG,290); doc.text(i+' / '+tot,W-MG,290,{align:'right'}); }
+    doc.save('PenhaEmCena_M02_A05_Resumo.pdf');
+    btn.innerHTML='✓ PDF baixado!'; btn.style.background='rgba(29,158,117,0.25)';
+    setTimeout(()=>{ btn.innerHTML=orig; btn.style.background=''; btn.disabled=false; },3000);
+  } catch(e) { console.error('Erro PDF:',e); btn.innerHTML='✗ Erro.'; btn.disabled=false; }
+}
+
+buildSteps(); buildFluxo(); buildQuiz(); buildRes();
+</script>
+</body>
+</html>

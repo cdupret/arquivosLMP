@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Módulo 02 · Aula 2 — Medidas Protetivas: Arts. 22, 23 e 24 · Penha em Cena</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --rosa: #D4537E; --rosa2: #A33360;
+  --fundo: #0E0B14; --fundo2: #17122A; --fundo3: #211A38;
+  --roxo: #7F77DD; --texto: #F0EAF8; --muted: #9B8FBC;
+  --borda: rgba(212,83,126,0.2); --verde: #1D9E75;
+  --dourado: #C9963A; --azul: #3A8ADC;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'DM Sans', sans-serif; background: var(--fundo); color: var(--texto); min-height: 100vh; overflow-x: hidden; font-size: 18px; line-height: 1.75; }
+.bg-p { position:fixed;inset:0;pointer-events:none;z-index:0; background: radial-gradient(ellipse 60% 40% at 20% 20%, rgba(127,119,221,0.07) 0%, transparent 60%), radial-gradient(ellipse 40% 60% at 80% 80%, rgba(212,83,126,0.06) 0%, transparent 60%); }
+.header { position:sticky;top:0;z-index:100;background:rgba(14,11,20,0.95);border-bottom:1px solid var(--borda);padding:16px 32px;display:flex;align-items:center;gap:14px;backdrop-filter:blur(16px); }
+.logo { font-family:'Playfair Display',serif;font-size:20px;color:var(--rosa);font-weight:700; }
+.sep { color:var(--muted); } .info { font-size:15px;color:var(--muted); }
+.prog { background:var(--fundo2);border-bottom:1px solid var(--borda);padding:16px 32px;position:sticky;top:61px;z-index:99; }
+.steps { max-width:780px;margin:0 auto;display:flex;align-items:center; }
+.step { display:flex;flex-direction:column;align-items:center;gap:6px;flex:1;cursor:pointer;border:none;background:none; }
+.dot { width:36px;height:36px;border-radius:50%;border:2px solid rgba(155,143,188,0.3);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:500;color:var(--muted);transition:all .3s; }
+.dot.a { background:var(--rosa);border-color:var(--rosa);color:#fff;box-shadow:0 0 24px rgba(212,83,126,0.5); }
+.dot.d { background:var(--verde);border-color:var(--verde);color:#fff; }
+.slbl { font-size:11px;color:var(--muted);white-space:nowrap; }
+.slbl.a { color:var(--rosa); } .slbl.d { color:var(--verde); }
+.sline { flex:1;height:2px;background:rgba(155,143,188,0.15);margin-bottom:18px;transition:background .4s; }
+.sline.d { background:var(--verde); }
+.main { max-width:860px;margin:0 auto;padding:44px 32px 120px;position:relative;z-index:1; }
+.tela { display:none;animation:up .4s ease; }
+.tela.on { display:block; }
+@keyframes up { from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);} }
+.badge { display:inline-flex;align-items:center;gap:6px;background:rgba(212,83,126,0.12);border:1px solid rgba(212,83,126,0.3);border-radius:20px;padding:6px 16px;font-size:13px;font-weight:500;color:var(--rosa);letter-spacing:.06em;text-transform:uppercase;margin-bottom:20px; }
+.titulo { font-family:'Playfair Display',serif;font-size:clamp(28px,5vw,44px);font-weight:900;line-height:1.15;color:var(--texto);margin-bottom:16px; }
+.titulo em { color:var(--rosa);font-style:italic; }
+.desc { font-size:18px;color:var(--muted);line-height:1.9;margin-bottom:36px; }
+
+/* MEDIDAS GRID */
+.med-grid { display:grid;grid-template-columns:1fr;gap:12px;margin-bottom:24px; }
+.med-card { background:var(--fundo2);border:1px solid var(--borda);border-radius:14px;padding:0;overflow:hidden;cursor:pointer;transition:all .2s; }
+.med-card:hover { border-color:rgba(212,83,126,0.4);transform:translateY(-1px); }
+.med-card.on { border-color:var(--rosa);background:rgba(212,83,126,0.04); }
+.med-header { display:flex;align-items:center;gap:16px;padding:20px 24px; }
+.med-inciso { width:48px;height:48px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0;text-align:center;line-height:1.2; }
+.med-titulo { font-size:18px;font-weight:500;color:var(--texto);flex:1; }
+.med-chev { color:var(--muted);font-size:14px;transition:transform .2s; }
+.med-card.on .med-chev { transform:rotate(180deg); }
+.med-body { display:none;padding:0 24px 22px;border-top:1px solid rgba(155,143,188,0.1); }
+.med-body.on { display:block; }
+.med-lei { font-size:16px;color:var(--muted);font-style:italic;border-left:3px solid var(--rosa);padding-left:16px;margin:18px 0;line-height:1.8; }
+.med-analise { font-size:17px;color:var(--muted);line-height:1.85;margin-bottom:12px; }
+.med-analise strong { color:var(--texto); }
+.med-tip { background:rgba(201,150,58,0.08);border:1px solid rgba(201,150,58,0.25);border-radius:10px;padding:14px 18px;font-size:16px;color:#E8C46A;line-height:1.75;margin-top:12px; }
+
+/* ARTIGO BOX */
+.art { background:var(--fundo2);border:1px solid var(--borda);border-radius:18px;padding:30px 34px;margin-bottom:22px; }
+.art.dest { border-color:rgba(212,83,126,0.5);background:rgba(212,83,126,0.04); }
+.art.verde { border-color:rgba(29,158,117,0.4);background:rgba(29,158,117,0.04); }
+.art.roxo { border-color:rgba(127,119,221,0.4);background:rgba(127,119,221,0.04); }
+.art-num { font-size:13px;font-weight:600;color:var(--rosa);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px; }
+.art-num.verde { color:#5DCAA5; }
+.art-h { font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:var(--texto);margin-bottom:18px; }
+.art-lei { font-size:17px;color:var(--muted);border-left:3px solid var(--rosa);padding-left:20px;margin-bottom:20px;font-style:italic;line-height:1.85; }
+.art-p { font-size:17px;color:var(--muted);line-height:1.85;margin-bottom:14px; }
+.art-p strong { color:var(--texto); }
+.alerta { background:rgba(212,83,126,0.07);border:1px solid rgba(212,83,126,0.25);border-radius:12px;padding:18px 24px;font-size:16px;color:rgba(240,234,248,0.85);line-height:1.8;margin-top:18px; }
+.alerta strong { color:var(--rosa); }
+.alerta-verde { background:rgba(29,158,117,0.07);border:1px solid rgba(29,158,117,0.25);border-radius:12px;padding:18px 24px;font-size:16px;color:rgba(240,234,248,0.85);line-height:1.8;margin-top:18px; }
+.alerta-verde strong { color:#5DCAA5; }
+.alerta-roxo { background:rgba(127,119,221,0.07);border:1px solid rgba(127,119,221,0.25);border-radius:12px;padding:18px 24px;font-size:16px;color:rgba(240,234,248,0.85);line-height:1.8;margin-top:18px; }
+.alerta-roxo strong { color:#AFA9EC; }
+
+/* PAR GRID */
+.par-grid { display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;margin:16px 0; }
+.par-card { background:rgba(127,119,221,0.06);border:1px solid rgba(127,119,221,0.2);border-radius:12px;padding:18px 20px; }
+.par-num { font-size:12px;font-weight:700;color:var(--roxo);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px; }
+.par-txt { font-size:16px;color:var(--muted);line-height:1.8; }
+.par-txt strong { color:var(--texto); }
+
+/* QUIZ */
+.qcard { background:var(--fundo2);border:1px solid var(--borda);border-radius:18px;padding:32px 30px;margin-bottom:22px; }
+.qnum { font-size:13px;font-weight:600;color:var(--rosa);letter-spacing:.07em;text-transform:uppercase;margin-bottom:12px; }
+.qp { font-family:'Playfair Display',serif;font-size:21px;font-weight:700;line-height:1.5;color:var(--texto);margin-bottom:24px; }
+.qop { background:rgba(255,255,255,0.03);border:1px solid rgba(155,143,188,0.2);border-radius:10px;padding:16px 20px;margin-bottom:12px;cursor:pointer;font-size:17px;color:var(--muted);transition:all .2s;line-height:1.65; }
+.qop:hover:not(.bl) { border-color:var(--rosa);color:var(--texto);background:rgba(212,83,126,0.07); }
+.qop.ok { background:rgba(29,158,117,0.12);border-color:var(--verde);color:#9FE1CB; }
+.qop.er { background:rgba(212,83,126,0.1);border-color:var(--rosa);color:#EDB0C5; }
+.qop.bl { cursor:default; }
+.qfb { display:none;margin-top:14px;padding:18px 22px;border-radius:10px;font-size:17px;line-height:1.8; }
+.qfb.on { display:block; }
+.qfb.ok { background:rgba(29,158,117,0.1);border:1px solid rgba(29,158,117,0.25);color:#9FE1CB; }
+.qfb.er { background:rgba(212,83,126,0.08);border:1px solid rgba(212,83,126,0.2);color:#EDB0C5; }
+
+/* RESUMO */
+.rgrid { display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;margin-bottom:30px; }
+.rcard { background:var(--fundo2);border:1px solid var(--borda);border-radius:14px;padding:24px 26px;transition:border-color .2s; }
+.rcard:hover { border-color:rgba(212,83,126,0.35); }
+.ric { font-size:26px;margin-bottom:12px; }
+.rtit { font-size:18px;font-weight:500;color:var(--texto);margin-bottom:8px; }
+.rtxt { font-size:16px;color:var(--muted);line-height:1.8; }
+.conclusao { background:linear-gradient(135deg,rgba(212,83,126,0.08),rgba(127,119,221,0.05));border:1px solid rgba(212,83,126,0.2);border-radius:18px;padding:40px;text-align:center;margin-top:28px; }
+.c-ic { font-size:48px;margin-bottom:14px; }
+.c-tit { font-family:'Playfair Display',serif;font-size:28px;font-weight:900;color:var(--verde);margin-bottom:10px; }
+.c-txt { font-size:18px;color:var(--muted);line-height:1.85; }
+.nav { display:flex;align-items:center;justify-content:space-between;margin-top:48px;padding-top:30px;border-top:1px solid var(--borda); }
+.btn { display:inline-flex;align-items:center;gap:8px;padding:14px 28px;border-radius:10px;font-size:17px;font-weight:500;cursor:pointer;transition:all .2s;border:none;font-family:'DM Sans',sans-serif; }
+.btn-s { background:rgba(255,255,255,0.05);color:var(--muted);border:1px solid rgba(155,143,188,0.2); }
+.btn-s:hover { background:rgba(255,255,255,0.09);color:var(--texto); }
+.btn-p { background:var(--rosa);color:#fff;box-shadow:0 4px 18px rgba(212,83,126,0.3); }
+.btn-p:hover { background:var(--rosa2);transform:translateY(-1px); }
+.btn-dl { display:inline-flex;align-items:center;gap:10px;margin-top:18px;padding:15px 26px;border-radius:10px;background:rgba(29,158,117,0.15);border:1px solid rgba(29,158,117,0.4);color:#5DCAA5;font-size:17px;font-weight:500;cursor:pointer;transition:all .2s;font-family:'DM Sans',sans-serif; }
+.btn-dl:hover { background:rgba(29,158,117,0.25); }
+</style>
+</head>
+<body>
+<div class="bg-p"></div>
+<header class="header">
+  <span class="logo">PENHA em Cena</span>
+  <span class="sep">/</span>
+  <span class="info">Módulo 02 · Aula 2</span>
+</header>
+<div class="prog"><div class="steps" id="stps"></div></div>
+<div class="main">
+
+  <!-- TELA 0: VISÃO GERAL -->
+  <div class="tela on" id="t0">
+    <div class="badge">Módulo 02 · Aula 2</div>
+    <h1 class="titulo">Medidas protetivas:<br><em>ao agressor e à ofendida</em></h1>
+    <p class="desc">A Lei Maria da Penha criou três grupos de medidas protetivas: as que obrigam o agressor (art. 22), as que protegem a ofendida (art. 23) e as que protegem o patrimônio (art. 24). Conhecer cada uma — e quando pedir — é o coração da advocacia em violência doméstica.</p>
+
+    <div class="art dest">
+      <div class="art-num">Art. 19 — Disposições gerais sobre as medidas protetivas</div>
+      <div class="art-h">Natureza jurídica: autônoma e satisfativa</div>
+      <div class="art-lei">"As medidas protetivas de urgência poderão ser concedidas pelo juiz, a requerimento do Ministério Público ou a pedido da ofendida."</div>
+      <p class="art-p">O <strong>§1º do art. 19</strong> permite a concessão de imediato, independentemente de audiência das partes e de manifestação do Ministério Público, e permite cumulação e substituição a qualquer tempo.</p>
+      <p class="art-p">A <strong>Lei 14.550/2023</strong> inseriu os §§ 4º, 5º e 6º. O <strong>§5º</strong> é o dispositivo que expressamente autoriza a concessão das medidas protetivas independentemente do ajuizamento de ação penal ou cível, de inquérito policial ou de boletim de ocorrência. O <strong>§6º</strong> estabelece que as medidas <strong>vigorarão enquanto persistir risco</strong> à integridade física, psicológica, sexual, patrimonial ou moral da ofendida — ou seja, não têm prazo determinado.</p>
+      <div class="alerta"><strong>STJ — Jurisprudência em Teses Ed. 231/2024, Tese 1:</strong> "A vítima de violência doméstica deve ser ouvida para que se verifique a necessidade de prorrogação/concessão das medidas protetivas, ainda que extinta a punibilidade do autor." As medidas têm natureza autônoma — não dependem de ação penal em curso.</div>
+    </div>
+
+    <div class="art">
+      <div class="art-num">Natureza jurídica consolidada</div>
+      <div class="art-h">O debate já está resolvido: medidas protetivas são autônomas</div>
+      <p class="art-p">O STJ pacificou: as medidas protetivas têm <strong>natureza jurídica autônoma e satisfativa</strong> — não são meras cautelares instrumentais a um processo principal. O art. 19, §5º (Lei 14.550/2023) consagra essa autonomia expressamente: a concessão independe de inquérito, ação penal ou BO.</p>
+      <div class="alerta-verde"><strong>Por que isso importa na advocacia:</strong> você pode pedir medida protetiva antes mesmo de decidir se vai propor ação penal. A vítima não precisa "escolher" entre proteger-se agora e processar depois. São decisões completamente independentes.</div>
+    </div>
+
+    <div class="nav">
+      <span></span>
+      <button class="btn btn-p" onclick="ir(1)">Próximo: Art. 22 — Medidas ao agressor →</button>
+    </div>
+  </div>
+
+  <!-- TELA 1: ART. 22 -->
+  <div class="tela" id="t1">
+    <div class="badge">Etapa 2 de 5</div>
+    <h1 class="titulo">Art. 22 — Medidas que<br><em>obrigam o agressor</em></h1>
+    <p class="desc">O art. 22 lista as medidas aplicáveis ao agressor. São de aplicação imediata e podem ser cumuladas. A Lei Maria da Penha tem hoje <strong>8 incisos</strong> — os dois últimos foram inseridos pela Lei 13.984/2020 (inciso VII) e pela Lei 15.383/2026 (inciso VIII). Clique em cada um para ver o detalhamento.</p>
+
+    <div id="grid-22"></div>
+
+    <div class="art" style="margin-top:28px;">
+      <div class="art-num">Art. 22 — Parágrafos: §§1º ao 4º (originais) + revogação do §5º + §§6º ao 9º (Lei 15.383/2026)</div>
+      <div class="art-h">Disposições gerais e o regime do monitoramento eletrônico</div>
+
+      <p class="art-p">Os <strong>§§1º ao 4º</strong> são dispositivos originais da Lei Maria da Penha:</p>
+      <div class="par-grid">
+        <div class="par-card"><div class="par-num">§1º</div><div class="par-txt">As medidas não impedem a aplicação de outras previstas na legislação — <strong>rol exemplificativo</strong>. Qualquer providência adicional deve ser comunicada ao MP.</div></div>
+        <div class="par-card"><div class="par-num">§2º</div><div class="par-txt">Na aplicação do inciso I (armas), se o agressor for policial, militar ou servidor armado: o juiz comunica ao órgão e determina a restrição do porte, ficando o <strong>superior hierárquico responsável</strong>, sob pena de prevaricação ou desobediência.</div></div>
+        <div class="par-card"><div class="par-num">§3º</div><div class="par-txt">Para garantir a efetividade das medidas, o juiz pode <strong>requisitar auxílio da força policial</strong> a qualquer momento.</div></div>
+        <div class="par-card"><div class="par-num">§4º</div><div class="par-txt">Aplica-se, no que couber, o disposto no Código de Processo Civil — especialmente as normas sobre cumprimento de obrigações de fazer e não fazer.</div></div>
+      </div>
+
+      <p class="art-p" style="margin-top:20px;"><strong>§5º — REVOGADO pela Lei 15.383/2026.</strong> Esse parágrafo, inserido pela Lei 15.125/2025, previa que a monitoração eletrônica poderia ser cumulada com as medidas protetivas. Com a Lei 15.383/2026, a monitoração eletrônica passou a ser inciso próprio do caput (inciso VIII), tornando o §5º desnecessário e por isso revogado.</p>
+
+      <p class="art-p"><strong>A Lei 15.383/2026 inseriu os §§6º ao 9º</strong>, disciplinando o regime da monitoração eletrônica (inciso VIII):</p>
+      <div class="par-grid">
+        <div class="par-card"><div class="par-num">§6º — Prioridade</div><div class="par-txt">A monitoração eletrônica (inciso VIII) terá <strong>aplicação prioritária</strong> nos casos de descumprimento de medidas protetivas anteriores ou risco iminente à integridade física ou psicológica da vítima.</div></div>
+        <div class="par-card"><div class="par-num">§7º — Instalação e ciência</div><div class="par-txt">A autoridade competente instalará o equipamento e <strong>instruirá o agressor</strong> sobre o funcionamento e as áreas de exclusão onde não poderá circular, conforme a decisão judicial. A ciência deverá constar de termo nos autos.</div></div>
+        <div class="par-card"><div class="par-num">§8º — Alerta automático</div><div class="par-txt">O sistema de monitoração deverá emitir <strong>alerta automático e simultâneo à vítima e à unidade policial mais próxima</strong> sempre que o agressor romper o perímetro de exclusão fixado judicialmente.</div></div>
+        <div class="par-card"><div class="par-num">§9º — Fundamentação</div><div class="par-txt">Nas hipóteses do §6º (descumprimento anterior ou risco iminente), a decisão que <strong>não aplicar</strong> a monitoração eletrônica deverá apresentar <strong>fundamentação expressa</strong> sobre os motivos da não aplicação.</div></div>
+      </div>
+
+      <div class="alerta" style="margin-top:20px;"><strong>Consequência prática do §6º + §9º (Lei 15.383/2026):</strong> quando há descumprimento anterior de medida protetiva, a monitoração eletrônica é a regra — a exceção (não aplicar) precisa ser justificada pelo juiz. Se o juiz negar a monitoração sem fundamentar, cabe mandado de segurança ou agravo.</div>
+    </div>
+
+    <div class="nav">
+      <button class="btn btn-s" onclick="ir(0)">← Voltar</button>
+      <button class="btn btn-p" onclick="ir(2)">Próximo: Art. 23 — Medidas à ofendida →</button>
+    </div>
+  </div>
+
+  <!-- TELA 2: ART. 23 -->
+  <div class="tela" id="t2">
+    <div class="badge">Etapa 3 de 5</div>
+    <h1 class="titulo">Arts. 23 e 24 — Medidas que<br><em>protegem a ofendida</em></h1>
+    <p class="desc">O art. 23 traz medidas de proteção direta à ofendida — 6 incisos. O art. 24 protege o patrimônio. Clique em cada uma para ver o detalhamento.</p>
+
+    <div id="grid-23"></div>
+
+    <div class="nav">
+      <button class="btn btn-s" onclick="ir(1)">← Voltar</button>
+      <button class="btn btn-p" onclick="ir(3)">Próximo: Art. 24-A — O crime de descumprimento →</button>
+    </div>
+  </div>
+
+  <!-- TELA 3: ART. 24-A -->
+  <div class="tela" id="t3">
+    <div class="badge">Etapa 4 de 5</div>
+    <h1 class="titulo">Art. 24-A — <em>Descumprir</em><br>é crime próprio da Lei Maria da Penha</h1>
+    <p class="desc">O descumprimento de medida protetiva de urgência é crime próprio da Lei Maria da Penha — não se confunde com a desobediência do Código Penal. A pena foi elevada pela Lei 14.994/2024. A Lei 15.383/2026 acrescentou causa de aumento.</p>
+
+    <div class="art dest">
+      <div class="art-num">Art. 24-A — Lei 13.641/2018, pena alterada pela Lei 14.994/2024, §4º incluído pela Lei 15.383/2026</div>
+      <div class="art-h">O crime e seus parágrafos</div>
+      <div class="art-lei">"Descumprir decisão judicial que defere medidas protetivas de urgência previstas nesta Lei:
+Pena — reclusão, de 2 (dois) a 5 (cinco) anos, e multa.
+§1º A configuração do crime independe da competência civil ou criminal do juiz que deferiu as medidas.
+§2º Na hipótese de prisão em flagrante, apenas a autoridade judicial poderá conceder fiança.
+§3º O disposto neste artigo não exclui a aplicação de outras sanções cabíveis.
+§4º A pena será aumentada de 1/3 (um terço) até a metade se o descumprimento decorrer da violação das áreas de exclusão monitoradas eletronicamente ou da remoção, violação ou alteração do dispositivo de monitoração sem autorização judicial."
+(§4º incluído pela Lei nº 15.383, de 10/4/2026)</div>
+    </div>
+
+    <div class="art roxo">
+      <div class="art-num" style="color:var(--roxo)">Princípio da especialidade — por que não se aplica o art. 330 do CP (desobediência)</div>
+      <div class="art-h">O art. 24-A da Lei Maria da Penha é crime especial e afasta o crime de desobediência</div>
+      <p class="art-p">Pelo <strong>princípio da especialidade</strong>, quando dois tipos penais regulam a mesma conduta, o especial prevalece sobre o geral. O art. 24-A da Lei Maria da Penha é norma especial em relação ao art. 330 do Código Penal (desobediência).</p>
+      <p class="art-p">Portanto, <strong>o agressor que descumpre medida protetiva responde exclusivamente pelo art. 24-A da Lei Maria da Penha</strong> — não pelo crime de desobediência. Não há concurso de crimes.</p>
+      <p class="art-p">A diferença é relevante: a desobediência (art. 330 CP) tem pena de detenção de 15 dias a 6 meses, ou multa. O art. 24-A tem pena de reclusão de 2 a 5 anos e multa — muito mais grave.</p>
+      <div class="alerta-roxo"><strong>Aplicação prática:</strong> se o MP denunciar pelo art. 330 do CP em vez do art. 24-A da LMP, a defesa pode requerer a correção da capitulação. Mas, do ponto de vista da acusação/vítima: insistir no art. 24-A garante pena muito mais elevada e afasta a prescrição mais rápida do art. 330.</div>
+    </div>
+
+    <div class="art">
+      <div class="art-num">§4º do art. 24-A — Lei 15.383/2026, vigor 10/4/2026</div>
+      <div class="art-h">Causa de aumento: violação de área de exclusão monitorada e adulteração do dispositivo</div>
+      <p class="art-p">A Lei 15.383/2026 acrescentou o <strong>§4º ao art. 24-A</strong>: a pena é aumentada de <strong>1/3 até a metade</strong> se o descumprimento decorrer:</p>
+      <p class="art-p"><strong>(a) Da violação das áreas de exclusão monitoradas eletronicamente</strong> — quando o agressor que usa tornozeleira rompe o perímetro de exclusão fixado judicialmente.</p>
+      <p class="art-p"><strong>(b) Da remoção, violação ou alteração do dispositivo de monitoração sem autorização judicial</strong> — quando o agressor adultera, remove ou danifica a tornozeleira ou qualquer dispositivo de monitoramento.</p>
+      <div class="alerta"><strong>Vigência e irretroatividade (nova norma mais gravosa):</strong> a Lei 15.383/2026 entrou em vigor em <strong>10 de abril de 2026</strong>. O §4º é causa de aumento que agrava a situação do réu — é novatio legis in pejus. Não retroage. Para fatos anteriores a 10/4/2026, a causa de aumento do §4º é inaplicável, mesmo que o processo ainda esteja em andamento.</div>
+    </div>
+
+    <div class="art verde">
+      <div class="art-num verde">Irretroatividade como tese de defesa — quando e como usar</div>
+      <div class="art-h">Estratégia processual: em que momento arguir a irretroatividade</div>
+      <p class="art-p">A irretroatividade da lei penal mais grave (CF, art. 5º, XL; CP, art. 2º) é tese de defesa válida tanto para a nova pena do art. 24-A (Lei 14.994/2024, vigor 10/10/2024) quanto para a causa de aumento do §4º (Lei 15.383/2026, vigor 10/4/2026).</p>
+      <p class="art-p"><strong>Atenção ao momento processual:</strong> a irretroatividade não conduz à absolvição sumária (art. 397 CPP). As hipóteses de absolvição sumária são taxativas: atipicidade manifesta, causa extintiva de punibilidade, isenção de pena e extinção da punibilidade. A irretroatividade, isoladamente, não se encaixa em nenhuma delas.</p>
+      <p class="art-p">Por isso, <strong>esta tese não deve ser elencada na resposta à acusação</strong> como fundamento para absolvição sumária — o juiz não a acolherá nessa fase. A estratégia correta é:</p>
+      <p class="art-p">① Na resposta à acusação: arguir teses que possam levar à absolvição sumária (atipicidade, isenção de pena, etc.) e reservar a irretroatividade para o momento adequado.</p>
+      <p class="art-p">② <strong>Nas alegações finais</strong>: arguir a irretroatividade como tese de dosimetria — pedindo que, na fixação da pena, seja aplicada a pena anterior mais benéfica aos fatos praticados antes da vigência das novas leis.</p>
+      <div class="alerta-verde"><strong>Resumo da linha do tempo das penas:</strong><br>• Fatos anteriores a 10/10/2024: detenção de 3 meses a 2 anos (pena original, Lei 13.641/2018).<br>• Fatos a partir de 10/10/2024: reclusão de 2 a 5 anos + multa (Lei 14.994/2024).<br>• Fatos a partir de 10/4/2026 com monitoração violada: acréscimo de 1/3 até metade (Lei 15.383/2026, §4º).</div>
+    </div>
+
+    <div class="nav">
+      <button class="btn btn-s" onclick="ir(2)">← Voltar</button>
+      <button class="btn btn-p" onclick="ir(4)">Próximo: Quiz e Resumo →</button>
+    </div>
+  </div>
+
+  <!-- TELA 4: QUIZ + RESUMO -->
+  <div class="tela" id="t4">
+    <div class="badge">Etapa 5 de 5 — Fixação</div>
+    <h1 class="titulo">Teste seu <em>domínio</em></h1>
+    <p class="desc">Quatro questões sobre os arts. 22, 23, 24 e 24-A. Feedback imediato com explicação completa.</p>
+    <div id="quiz"></div>
+    <div style="margin-top:52px;padding-top:40px;border-top:1px solid var(--borda);">
+      <div style="text-align:center;margin-bottom:32px;">
+        <div style="font-family:'Playfair Display',serif;font-size:30px;font-weight:900;color:var(--texto);">O que fixar desta aula</div>
+        <div style="font-size:17px;color:var(--muted);margin-top:8px;">Os pontos críticos para a prática</div>
+      </div>
+      <div class="rgrid" id="rgrid"></div>
+      <div class="conclusao">
+        <div class="c-ic">✓</div>
+        <div class="c-tit">Aula 2 do Módulo 2 concluída</div>
+        <div class="c-txt">Você domina os arts. 22, 23, 24 e 24-A da Lei Maria da Penha com todas as atualizações.<br>Continue para a <strong>Aula 3: Quem pode pedir, prazo e procedimento.</strong></div>
+      </div>
+      <div style="text-align:center;margin-top:28px;">
+        <button class="btn-dl" onclick="baixarPDF()">↓ Baixar resumo desta aula (PDF)</button>
+      </div>
+    </div>
+    <div class="nav">
+      <button class="btn btn-s" onclick="ir(3)">← Revisitar art. 24-A</button>
+      <button class="btn btn-p" onclick="ir(0)">↺ Rever do início</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const ETAPAS = ['Introdução','Art. 22','Arts. 23-24','Art. 24-A','Quiz'];
+let cur = 0;
+const respostas = {};
+
+function buildSteps() {
+  const el = document.getElementById('stps'); el.innerHTML = '';
+  ETAPAS.forEach((n, i) => {
+    if (i > 0) { const l = document.createElement('div'); l.className = 'sline' + (i <= cur ? ' d' : ''); el.appendChild(l); }
+    const btn = document.createElement('button'); btn.className = 'step'; btn.onclick = () => ir(i);
+    const dot = document.createElement('div'); dot.className = 'dot' + (i === cur ? ' a' : i < cur ? ' d' : ''); dot.textContent = i < cur ? '✓' : i + 1;
+    const lbl = document.createElement('div'); lbl.className = 'slbl' + (i === cur ? ' a' : i < cur ? ' d' : ''); lbl.textContent = n;
+    btn.appendChild(dot); btn.appendChild(lbl); el.appendChild(btn);
+  });
+}
+
+function ir(n) {
+  document.querySelectorAll('.tela').forEach(t => t.classList.remove('on'));
+  document.getElementById('t' + n).classList.add('on');
+  cur = n; buildSteps(); window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// MEDIDAS ART. 22 — 8 incisos
+const M22 = [
+  {
+    inciso:'I', cor:'#D4537E', bg:'rgba(212,83,126,0.15)',
+    titulo:'Suspensão da posse ou restrição do porte de armas',
+    lei:'Art. 22, I: "suspensão da posse ou restrição do porte de armas, com comunicação ao órgão competente, nos termos da Lei nº 10.826, de 22 de dezembro de 2003 (Estatuto do Desarmamento)."',
+    analise:'Pode determinar tanto a suspensão da posse (recolhimento da arma registrada) quanto a restrição do porte (impedimento de andar armado). A comunicação ao SINARM/SIGMA é obrigatória. Se o agressor for policial, militar ou outro portador legal, incide o §2º: o juiz comunica ao superior hierárquico, que fica responsável pelo cumprimento sob pena de prevaricação ou desobediência.',
+    tip:'Prático: na petição, requeira expressamente que o juiz oficie ao órgão emissor do registro/porte para suspensão imediata. Verifique se há arma registrada (art. 12, VI-A da LMP — a delegacia é obrigada a checar).'
+  },
+  {
+    inciso:'II', cor:'#7F77DD', bg:'rgba(127,119,221,0.15)',
+    titulo:'Afastamento do lar, domicílio ou local de convivência',
+    lei:'Art. 22, II: "afastamento do lar, domicílio ou local de convivência com a ofendida."',
+    analise:'O agressor é retirado do lar da vítima — independentemente de quem é o proprietário do imóvel. O STJ pacificou que o fato de o agressor ser o único titular do imóvel não impede o afastamento. A medida protege a mulher no ambiente onde vive.',
+    tip:'Prático: inclua também o afastamento do local de trabalho da vítima e dos locais que ela frequenta habitualmente, usando a medida do inciso III, "c" de forma complementar.'
+  },
+  {
+    inciso:'III, a', cor:'#3A8ADC', bg:'rgba(58,138,220,0.15)',
+    titulo:'Proibição de aproximação — distância mínima',
+    lei:'Art. 22, III, "a": "proibição de determinadas condutas, entre as quais: aproximação da ofendida, de seus familiares e das testemunhas, fixando o limite mínimo de distância entre estes e o agressor."',
+    analise:'O juiz fixa a distância mínima — normalmente entre 100m e 500m. Abrange também familiares e testemunhas. A distância deve ser indicada na petição com base na situação concreta.',
+    tip:'Prático: requeira distância suficiente para que a vítima consiga chamar socorro. Se moram em bairros próximos, peça 300m ou mais. Inclua expressamente os filhos e a escola deles na medida.'
+  },
+  {
+    inciso:'III, b', cor:'#1D9E75', bg:'rgba(29,158,117,0.15)',
+    titulo:'Proibição de contato por qualquer meio',
+    lei:'Art. 22, III, "b": "contato com a ofendida, seus familiares e testemunhas por qualquer meio de comunicação."',
+    analise:'Abrange ligações, mensagens, WhatsApp, e-mail, redes sociais, cartas, intermediários e qualquer outro meio. A proibição é por "qualquer meio" — sem exceções.',
+    tip:'Prático: preserve e salve todas as evidências de contato proibido (prints com data/hora, logs de chamadas). Cada contato é um potencial crime do art. 24-A.'
+  },
+  {
+    inciso:'III, c', cor:'#C9963A', bg:'rgba(201,150,58,0.15)',
+    titulo:'Proibição de frequentar determinados lugares',
+    lei:'Art. 22, III, "c": "frequentação de determinados lugares a fim de preservar a integridade física e psicológica da ofendida."',
+    analise:'Permite impedir que o agressor frequente o local de trabalho da vítima, a escola dos filhos, a casa dos pais, bares próximos etc. A lista deve ser específica na petição.',
+    tip:'Prático: pergunte à vítima quais lugares ela frequenta e onde teme encontrar o agressor. Liste cada endereço expressamente. O genérico "locais frequentados pela vítima" é menos eficaz.'
+  },
+  {
+    inciso:'IV', cor:'#D4537E', bg:'rgba(212,83,126,0.15)',
+    titulo:'Restrição ou suspensão de visitas aos dependentes',
+    lei:'Art. 22, IV: "restrição ou suspensão de visitas aos dependentes menores, ouvida a equipe de atendimento multidisciplinar ou serviço similar."',
+    analise:'Pode suspender ou restringir (com supervisão) as visitas do agressor aos filhos. A oitiva da equipe multidisciplinar é requisito legal, mas pode ser posterior — a medida pode ser concedida liminarmente. A proteção dos filhos prevalece sobre o direito de visitas.',
+    tip:'Prático: se os filhos testemunharam violência, peça suspensão total ou visitas assistidas. Use o art. 7º, VI (violência vicária) e o art. 22, IV em conjunto.'
+  },
+  {
+    inciso:'V', cor:'#7F77DD', bg:'rgba(127,119,221,0.15)',
+    titulo:'Prestação de alimentos provisionais ou provisórios',
+    lei:'Art. 22, V: "prestação de alimentos provisionais ou provisórios."',
+    analise:'Permite a fixação de alimentos de urgência no mesmo pedido de medida protetiva — sem necessidade de ação separada de alimentos. Muito mais célere do que a ação autônoma.',
+    tip:'Prático: aproveite o pedido de medida protetiva para já pedir alimentos provisionais se a vítima e filhos dependem financeiramente do agressor. Indique a renda do agressor e as necessidades da família.'
+  },
+  {
+    inciso:'VI', cor:'#3A8ADC', bg:'rgba(58,138,220,0.15)',
+    titulo:'Comparecimento a programas de recuperação e reeducação',
+    lei:'Art. 22, VI (incluído pela Lei nº 13.984, de 2020): "comparecimento do agressor a programas de recuperação e reeducação."',
+    analise:'O juiz pode determinar que o agressor participe de grupos reflexivos para agressores, programas de reeducação ou tratamento para dependência química/alcoólica. Tem caráter preventivo e ressocializador.',
+    tip:'Prático: o descumprimento dessa obrigação também configura o crime do art. 24-A. Se a defesa quiser usar a frequência voluntária ao grupo reflexivo como argumento, documente com lista de presença e atestado do programa.'
+  },
+  {
+    inciso:'VII', cor:'#1D9E75', bg:'rgba(29,158,117,0.15)',
+    titulo:'Acompanhamento psicossocial do agressor',
+    lei:'Art. 22, VII (incluído pela Lei nº 13.984, de 2020): "acompanhamento psicossocial do agressor, por meio de atendimento individual e/ou em grupo de apoio."',
+    analise:'Complementar ao inciso VI: enquanto o inciso VI trata de programas de reeducação coletivos, o inciso VII foca no acompanhamento psicossocial individualizado. Ambos os incisos foram inseridos pela Lei 13.984/2020.',
+    tip:'Prático: a combinação dos incisos VI e VII permite ao juiz impor tanto a participação em grupo reflexivo (VI) quanto o atendimento psicológico individual (VII). Peça ambos na petição quando houver histórico de violência reiterada.'
+  },
+  {
+    inciso:'VIII', cor:'#C9963A', bg:'rgba(201,150,58,0.15)',
+    titulo:'Monitoração eletrônica — NOVO (Lei 15.383/2026)',
+    lei:'Art. 22, VIII (incluído pela Lei nº 15.383, de 10/4/2026): "monitoração eletrônica, disponibilizando-se à vítima aplicação ou dispositivo de segurança que alerte sobre eventual aproximação do agressor."',
+    analise:'A monitoração eletrônica passou a ser medida protetiva autônoma com o inciso VIII — antes, havia apenas menção no §5º (ora revogado). O sistema deve emitir alerta automático e simultâneo à vítima e à unidade policial mais próxima quando o agressor romper o perímetro de exclusão (§8º). Nos casos de descumprimento anterior ou risco iminente, é medida prioritária (§6º) — e o juiz que não a aplicar precisa fundamentar expressamente (§9º). O §4º do art. 24-A prevê pena aumentada de 1/3 a metade se o agressor violar as áreas de exclusão ou danificar o dispositivo.',
+    tip:'Prático: requeira sempre a monitoração eletrônica + dispositivo de segurança para a vítima em casos de risco grave. Se o juiz negar sem fundamentar, cabe impugnação. O §6º torna a medida praticamente obrigatória em casos de reincidência no descumprimento.'
+  },
+];
+
+// MEDIDAS ART. 23
+const M23 = [
+  {
+    inciso:'Art. 23, I', cor:'#1D9E75', bg:'rgba(29,158,117,0.15)',
+    titulo:'Encaminhamento a programa oficial ou comunitário de proteção',
+    lei:'Art. 23, I: "encaminhar a ofendida e seus dependentes a programa oficial ou comunitário de proteção ou de atendimento."',
+    analise:'Inclui casas-abrigo, CRAM (Centros de Referência de Atendimento à Mulher), CREAS, CRAS e serviços de assistência social. O encaminhamento é determinado pelo juiz e executado em parceria com a rede de proteção.',
+    tip:'Prático: no pedido, requeira expressamente que o encaminhamento seja feito com a preservação do sigilo do endereço da vítima (art. 17-A da Lei Maria da Penha, vigor novembro/2024). O agressor não pode saber onde ela está abrigada.'
+  },
+  {
+    inciso:'Art. 23, II', cor:'#D4537E', bg:'rgba(212,83,126,0.15)',
+    titulo:'Recondução ao domicílio após afastamento do agressor',
+    lei:'Art. 23, II: "determinar a recondução da ofendida e a de seus dependentes ao respectivo domicílio, após afastamento do agressor."',
+    analise:'Complementar ao afastamento do agressor (art. 22, II): afasta o agressor e garante o retorno seguro da vítima ao lar com escolta policial.',
+    tip:'Prático: peça sempre conjuntamente o afastamento do agressor (art. 22, II) e a recondução da vítima (art. 23, II). Isso dá segurança jurídica para que a vítima volte para casa com escolta policial.'
+  },
+  {
+    inciso:'Art. 23, III', cor:'#7F77DD', bg:'rgba(127,119,221,0.15)',
+    titulo:'Afastamento da vítima do lar — sem perda de direitos',
+    lei:'Art. 23, III: "determinar o afastamento da ofendida do lar, sem prejuízo dos direitos relativos a bens, guarda dos filhos e alimentos."',
+    analise:'A vítima pode sair do lar sem perder seus direitos. O afastamento voluntário por violência doméstica não implica abandono de lar nem perda de direitos sobre o imóvel, a guarda dos filhos ou aos alimentos.',
+    tip:'Prático: oriente a vítima que sair de casa por força de violência doméstica não é abandono voluntário. Documente o motivo da saída (BO, laudos, etc.).'
+  },
+  {
+    inciso:'Art. 23, IV', cor:'#C9963A', bg:'rgba(201,150,58,0.15)',
+    titulo:'Separação de corpos como medida protetiva',
+    lei:'Art. 23, IV: "determinar a separação de corpos."',
+    analise:'A separação de corpos pode ser determinada pelo juiz do JVD como medida protetiva — sem necessidade de ação separada de separação judicial. Tem efeito imediato e os mesmos efeitos jurídicos da determinada em ação de separação.',
+    tip:'Prático: muito útil quando a vítima quer a separação mas o agressor se recusa a sair voluntariamente. A separação de corpos como medida protetiva é mais rápida do que a ação autônoma.'
+  },
+  {
+    inciso:'Art. 23, V', cor:'#1D9E75', bg:'rgba(29,158,117,0.15)',
+    titulo:'Matrícula dos filhos na escola mais próxima — Lei 13.882/2019',
+    lei:'Art. 23, V (acrescido pela Lei 13.882/2019): "determinar a matrícula dos dependentes da ofendida em instituição de educação básica mais próxima do seu domicílio, ou a transferência deles para essa instituição, independentemente da existência de vaga."',
+    analise:'Garante que os filhos possam continuar estudando mesmo se a vítima mudar de endereço por segurança. A matrícula independe de vaga — a escola é obrigada a receber. O endereço da nova escola deve ser mantido em sigilo.',
+    tip:'Prático: essencial quando a vítima muda de bairro ou cidade por segurança. Requeira expressamente e solicite que o endereço da nova escola não conste dos autos acessíveis ao agressor.'
+  },
+  {
+    inciso:'Art. 23, VI', cor:'#3A8ADC', bg:'rgba(58,138,220,0.15)',
+    titulo:'Auxílio-aluguel — NOVO (Lei 14.674/2023)',
+    lei:'Art. 23, VI (acrescido pela Lei 14.674/2023): "conceder à ofendida auxílio-aluguel, com valor fixado em função de sua situação de vulnerabilidade social e econômica, por período não superior a 6 (seis) meses."',
+    analise:'A Lei 14.674/2023 inseriu o auxílio-aluguel como medida protetiva. O valor é fixado pelo juiz considerando a vulnerabilidade social e econômica da ofendida. O benefício tem duração máxima de 6 meses — período para que a ofendida possa se reorganizar financeiramente após deixar o lar conjugal.',
+    tip:'Prático: requeira o auxílio-aluguel sempre que a vítima não tiver onde ficar e não puder arcar com moradia própria. Informe ao juiz a situação econômica da vítima e o valor médio de aluguéis na região. É medida ainda pouco utilizada na prática — explore essa possibilidade.'
+  },
+  {
+    inciso:'Art. 24 — Patrimônio', cor:'#C9963A', bg:'rgba(201,150,58,0.15)',
+    titulo:'Medidas de proteção patrimonial (art. 24)',
+    lei:'Art. 24: "Para a proteção patrimonial dos bens da sociedade conjugal ou daqueles de propriedade particular da mulher, o juiz poderá determinar, liminarmente, as seguintes medidas, entre outras: I - restituição de bens indevidamente subtraídos; II - proibição temporária para celebração de atos e contratos de compra, venda e locação de propriedade em comum, salvo expressa autorização judicial; III - suspensão das procurações conferidas pela ofendida ao agressor; IV - prestação de caução provisória, mediante depósito judicial, por perdas e danos materiais." Parágrafo único: o juiz deverá oficiar ao cartório competente para os incisos II e III.',
+    analise:'As medidas patrimoniais impedem que o agressor se desfaça dos bens comuns ou use procuração da vítima para transações prejudiciais a ela.',
+    tip:'Prático: suspenda procurações urgentemente quando a vítima as tiver outorgado ao agressor (muito comum em casais). Se o agressor está na posse de documentos, chaves ou bens da vítima, peça a restituição imediata no mesmo pedido.'
+  },
+];
+
+function buildGrid(containerId, medidas) {
+  const el = document.getElementById(containerId);
+  medidas.forEach((m, i) => {
+    const card = document.createElement('div');
+    card.className = 'med-card';
+    card.innerHTML = `
+      <div class="med-header">
+        <div class="med-inciso" style="background:${m.bg};color:${m.cor}">${m.inciso}</div>
+        <div class="med-titulo">${m.titulo}</div>
+        <span class="med-chev">▼</span>
+      </div>
+      <div class="med-body" id="mb${containerId}${i}">
+        <div class="med-lei">${m.lei}</div>
+        <p class="med-analise">${m.analise}</p>
+        <div class="med-tip">⚡ ${m.tip}</div>
+      </div>`;
+    card.onclick = () => {
+      const isOn = card.classList.contains('on');
+      document.querySelectorAll(`#${containerId} .med-card`).forEach(c => { c.classList.remove('on'); });
+      document.querySelectorAll(`#${containerId} .med-body`).forEach(b => b.classList.remove('on'));
+      if (!isOn) { card.classList.add('on'); document.getElementById(`mb${containerId}${i}`).classList.add('on'); }
+    };
+    el.appendChild(card);
+  });
+}
+
+// QUIZ
+const QS = [
+  {
+    p: 'Qual dispositivo da Lei Maria da Penha, inserido pela Lei 14.550/2023, expressamente autoriza a concessão de medidas protetivas independentemente de boletim de ocorrência, inquérito policial ou ação penal?',
+    ops: ['Art. 19, §1º — que autoriza a concessão de imediato, independentemente de audiência das partes', 'Art. 19, §5º — que expressamente dispensa BO, inquérito e ação penal para a concessão das medidas protetivas', 'Art. 19, §4º — que trata da vigência das medidas enquanto persistir risco', 'Art. 22, §1º — que estabelece o rol exemplificativo de medidas ao agressor'],
+    c: 1, fb: 'O art. 19, §5º da Lei Maria da Penha (inserido pela Lei 14.550/2023) é o dispositivo que expressamente autoriza a concessão das medidas protetivas independentemente do ajuizamento de ação penal ou cível, de inquérito policial ou de boletim de ocorrência. O §1º trata apenas da concessão de imediato sem audiência — não menciona a dispensa de BO ou inquérito. É importante precisar o parágrafo correto nas peças processuais.'
+  },
+  {
+    p: 'O agressor descumpre medida protetiva. O MP denuncia-o pelo art. 330 do Código Penal (desobediência). A defesa pode arguir algo sobre a capitulação?',
+    ops: ['Não — o art. 330 CP e o art. 24-A LMP podem ser aplicados cumulativamente ao mesmo fato', 'Sim — pelo princípio da especialidade, o art. 24-A da Lei Maria da Penha afasta o art. 330 do CP; o réu responde exclusivamente pelo crime da LMP', 'Não — o MP tem discricionariedade para escolher qual tipo penal aplicar ao descumprimento', 'Sim — mas apenas se a pena do art. 330 for mais grave que a do art. 24-A no caso concreto'],
+    c: 1, fb: 'Pelo princípio da especialidade, a norma especial afasta a geral. O art. 24-A da Lei Maria da Penha é norma especial em relação ao art. 330 do Código Penal (desobediência). Portanto, o agressor que descumpre medida protetiva responde exclusivamente pelo art. 24-A da LMP — não há concurso com o art. 330 CP. A defesa pode (e deve) requerer a correção da capitulação se o MP denunciar pelo artigo errado. Do ponto de vista da acusação, o art. 24-A é muito mais grave (reclusão de 2 a 5 anos vs. detenção de 15 dias a 6 meses do art. 330).'
+  },
+  {
+    p: 'O art. 23, VI da Lei Maria da Penha (inserido pela Lei 14.674/2023) prevê qual medida protetiva à ofendida?',
+    ops: ['Proibição de acesso do agressor a dados cadastrais sigilosos da vítima em sistemas públicos', 'Concessão de auxílio-aluguel à ofendida, com valor fixado pelo juiz conforme sua vulnerabilidade, por até 6 meses', 'Matrícula dos filhos da ofendida na escola mais próxima do novo domicílio, independentemente de vaga', 'Encaminhamento a programa oficial de proteção ou atendimento'],
+    c: 1, fb: 'O art. 23, VI da Lei Maria da Penha (Lei 14.674/2023) prevê a concessão de auxílio-aluguel à ofendida, com valor fixado em função de sua situação de vulnerabilidade social e econômica, por período não superior a 6 meses. Trata-se de medida ainda pouco utilizada na prática — vale explorá-la sempre que a vítima não tiver condições financeiras de arcar com moradia após deixar o lar conjugal. A matrícula dos filhos está no inciso V (Lei 13.882/2019) e o encaminhamento a programa de proteção está no inciso I.'
+  },
+  {
+    p: 'O agressor com tornozeleira eletrônica rompe o perímetro de exclusão. Em qual data foi inserida a causa de aumento de pena (§4º do art. 24-A) para essa conduta, e qual o acréscimo previsto?',
+    ops: ['Lei 14.994/2024 (vigor 10/10/2024) — acréscimo de 1/3 a 2/3', 'Lei 15.383/2026 (vigor 10/4/2026) — acréscimo de 1/3 até a metade', 'Lei 14.550/2023 — acréscimo de metade', 'Lei 13.641/2018 — acréscimo de 1/3'],
+    c: 1, fb: 'O §4º do art. 24-A foi incluído pela Lei 15.383, de 10 de abril de 2026, que entrou em vigor na data da sua publicação (10/4/2026). O acréscimo de pena é de 1/3 (um terço) até a metade quando o descumprimento decorrer da violação das áreas de exclusão monitoradas eletronicamente ou da remoção, violação ou alteração do dispositivo de monitoração sem autorização judicial. Por ser norma mais grave, não retroage a fatos anteriores a 10/4/2026.'
+  }
+];
+
+function buildQuiz() {
+  const el = document.getElementById('quiz');
+  QS.forEach((q, qi) => {
+    const c = document.createElement('div'); c.className = 'qcard';
+    c.innerHTML = `<div class="qnum">Questão ${qi+1} de ${QS.length}</div>
+      <div class="qp">${q.p}</div>
+      ${q.ops.map((op,oi)=>`<div class="qop" id="qo${qi}_${oi}" onclick="ans(${qi},${oi})">${String.fromCharCode(65+oi)}) ${op}</div>`).join('')}
+      <div class="qfb" id="qf${qi}"></div>`;
+    el.appendChild(c);
+  });
+}
+
+function ans(qi, oi) {
+  if (respostas[qi] !== undefined) return;
+  respostas[qi] = oi;
+  const q = QS[qi];
+  for (let j = 0; j < q.ops.length; j++) {
+    const e = document.getElementById(`qo${qi}_${j}`); e.classList.add('bl');
+    if (j === q.c) e.classList.add('ok'); else if (j === oi) e.classList.add('er');
+  }
+  const fb = document.getElementById('qf' + qi); const ok = oi === q.c;
+  fb.className = 'qfb on ' + (ok ? 'ok' : 'er');
+  fb.innerHTML = `<strong>${ok ? '✓ Correto!' : '✗ Atenção.'}</strong> ${q.fb}`;
+}
+
+// RESUMO — sem menção a dados sigilosos
+const RES = [
+  { ic:'⚖️', tit:'Art. 19, §5º — Autonomia confirmada (Lei 14.550/2023)', txt:'Medidas protetivas dispensam BO, inquérito e ação penal. O §6º garante vigência enquanto persistir o risco — sem prazo determinado.' },
+  { ic:'🔫', tit:'Art. 22, I e II — Armas e afastamento', txt:'Afastamento independe de quem é proprietário (STJ pacificado). Sempre requeira suspensão do porte/posse de arma e ofício ao órgão emissor. Se agressor for policial: superior hierárquico responde pela execução.' },
+  { ic:'📏', tit:'Art. 22, III — Aproximação, contato e lugares', txt:'Distância mínima: requeira valor específico (300m ou mais). Proibição de contato por qualquer meio — cada violação é crime do art. 24-A. Liste endereços específicos para proibição de frequência.' },
+  { ic:'👶', tit:'Art. 22, IV e V — Filhos e alimentos', txt:'Suspensão de visitas possível liminarmente (oitiva multidisciplinar pode ser posterior). Alimentos provisionais no mesmo pedido — mais rápido do que ação autônoma.' },
+  { ic:'📡', tit:'Art. 22, VIII — Monitoração eletrônica (Lei 15.383/2026)', txt:'Novo inciso VIII criado pela Lei 15.383/2026. Prioritária em caso de descumprimento anterior ou risco iminente (§6º). Alerta automático à vítima e à polícia ao romper perímetro (§8º). Juiz que não aplicar precisa fundamentar (§9º).' },
+  { ic:'🏠', tit:'Art. 23, I a V — Proteção à ofendida', txt:'Encaminhamento a abrigo com sigilo de endereço. Afastamento voluntário não é abandono de lar. Separação de corpos como medida protetiva. Matrícula dos filhos independe de vaga (Lei 13.882/2019).' },
+  { ic:'💰', tit:'Art. 23, VI — Auxílio-aluguel (Lei 14.674/2023)', txt:'Juiz pode conceder auxílio-aluguel à ofendida por até 6 meses, conforme vulnerabilidade econômica. Medida subutilizada na prática — use sempre que a vítima não tiver como arcar com moradia.' },
+  { ic:'🔒', tit:'Art. 24-A — Descumprimento e irretroatividade', txt:'Crime especial da LMP — afasta desobediência do CP (especialidade). Pena: reclusão 2-5 anos + multa (Lei 14.994/2024, vigor 10/10/2024). §4º: +1/3 a 1/2 se violar monitoração (Lei 15.383/2026, vigor 10/4/2026). Irretroatividade: arguir nas alegações finais, não na resposta à acusação.' },
+];
+
+function buildRes() {
+  const el = document.getElementById('rgrid');
+  RES.forEach(r => {
+    const d = document.createElement('div'); d.className = 'rcard';
+    d.innerHTML = `<div class="ric">${r.ic}</div><div class="rtit">${r.tit}</div><div class="rtxt">${r.txt}</div>`;
+    el.appendChild(d);
+  });
+}
+
+function baixarPDF() {
+  const btn = document.querySelector('.btn-dl');
+  const orig = btn.innerHTML;
+  btn.innerHTML = '⏳ Gerando PDF...'; btn.disabled = true;
+  if (window.jspdf && window.jspdf.jsPDF) { gerarPDF(btn, orig); return; }
+  const s = document.createElement('script');
+  s.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
+  s.onload = () => gerarPDF(btn, orig);
+  s.onerror = () => { btn.innerHTML = '✗ Erro.'; btn.disabled = false; };
+  document.head.appendChild(s);
+}
+
+function gerarPDF(btn, orig) {
+  try {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ unit:'mm', format:'a4' });
+    const R=[212,83,126], G=[29,158,117], E=[26,18,40], M=[100,90,130];
+    const W=210, MG=18, LW=174; let y=0;
+    const np=()=>{ doc.addPage(); y=18; };
+    const ck=h=>{ if(y+h>272) np(); };
+    const tx=t=>t.normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[\u2014\u2013]/g,'-').replace(/[\u2018\u2019]/g,"'").replace(/[\u201C\u201D]/g,'"').replace(/[^\x00-\x7F]/g,'?');
+    doc.setFillColor(...R); doc.rect(0,0,W,18,'F');
+    doc.setTextColor(255,255,255); doc.setFontSize(11); doc.setFont('helvetica','bold');
+    doc.text('PENHA em Cena',MG,11); doc.setFont('helvetica','normal'); doc.setFontSize(9);
+    doc.text('Modulo 02 - Aula 2 - Resumo',W-MG,11,{align:'right'}); y=26;
+    doc.setTextColor(...E); doc.setFontSize(16); doc.setFont('helvetica','bold');
+    doc.text('Medidas Protetivas: Arts. 22, 23, 24 e 24-A',MG,y); y+=8;
+    doc.setFontSize(10); doc.setFont('helvetica','normal'); doc.setTextColor(...M);
+    doc.text('Lei Maria da Penha atualizada ate Lei 15.383/2026',MG,y); y+=7;
+    doc.setDrawColor(...R); doc.setLineWidth(0.5); doc.line(MG,y,W-MG,y); y+=8;
+    const sec=t=>{ ck(12); doc.setFillColor(...R); doc.roundedRect(MG,y,LW,8,1,1,'F'); doc.setTextColor(255,255,255); doc.setFontSize(9); doc.setFont('helvetica','bold'); doc.text(tx(t),MG+4,y+5.5); y+=12; doc.setTextColor(...E); };
+    const bull=t=>{ ck(7); doc.setFillColor(...R); doc.circle(MG+2,y-1,1,'F'); const ls=doc.splitTextToSize(tx(t),LW-7); doc.setFontSize(9); doc.setFont('helvetica','normal'); doc.setTextColor(...E); doc.text(ls,MG+6,y); y+=ls.length*5+2; };
+    const par=t=>{ const ls=doc.splitTextToSize(tx(t),LW); ck(ls.length*5+2); doc.setFontSize(9); doc.setFont('helvetica','normal'); doc.setTextColor(...E); doc.text(ls,MG,y); y+=ls.length*5+2; };
+    const dest=(t,c)=>{ const ls=doc.splitTextToSize(tx(t),LW-8); const h=ls.length*5+8; ck(h+4); const cc=c||R; doc.setDrawColor(...cc); doc.setLineWidth(2); doc.line(MG,y,MG,y+h); doc.setLineWidth(0.3); doc.setDrawColor(...cc); doc.roundedRect(MG,y,LW,h,2,2,'S'); doc.setTextColor(...E); doc.setFontSize(9); doc.setFont('helvetica','bolditalic'); doc.text(ls,MG+5,y+5); y+=h+5; doc.setFont('helvetica','normal'); };
+
+    sec('1. Art. 19 — Natureza autonoma das medidas protetivas');
+    par('Medidas protetivas: natureza autonoma e satisfativa — nao sao cautelares dependentes de processo principal.');
+    bull('Art. 19, §5 (Lei 14.550/2023): medidas podem ser concedidas INDEPENDENTEMENTE de BO, inquerito policial ou acao penal.');
+    bull('Art. 19, §6 (Lei 14.550/2023): vigencia enquanto persistir o risco — sem prazo determinado.');
+    bull('STJ Ed. 231/2024, Tese 1: vitima deve ser ouvida para prorrogacao, mesmo extinta a punibilidade.');
+    y+=3;
+
+    sec('2. Art. 22 — 8 medidas ao agressor (atualizadas ate Lei 15.383/2026)');
+    bull('I: Suspensao da posse/restricao do porte de armas — oficio ao SINARM/SIGMA obrigatorio. Se policial: superior hierarquico responde (§2).');
+    bull('II: Afastamento do lar — independe de quem e o proprietario do imovel (STJ pacificado).');
+    bull('III, "a": Proibicao de aproximacao — distancia minima fixada (requeira 300m ou mais).');
+    bull('III, "b": Proibicao de contato por qualquer meio — incluindo redes sociais e intermediarios.');
+    bull('III, "c": Proibicao de frequentar lugares — liste enderecos especificos na peticao.');
+    bull('IV: Restricao/suspensao de visitas aos filhos — oitiva multidisciplinar pode ser posterior.');
+    bull('V: Alimentos provisionais — no mesmo pedido, sem acao separada.');
+    bull('VI (Lei 13.984/2020): Comparecimento a programas de recuperacao e reeducacao.');
+    bull('VII (Lei 13.984/2020): Acompanhamento psicossocial individual e/ou em grupo de apoio.');
+    bull('VIII (Lei 15.383/2026): Monitoracao eletronica + dispositivo de seguranca para a vitima.');
+    y+=3;
+
+    sec('3. Paragrafos do art. 22 — regime da monitoracao (Lei 15.383/2026)');
+    bull('§5: REVOGADO pela Lei 15.383/2026 (o §5 da Lei 15.125/2025, sobre monitoracao, foi substituido pelo inciso VIII).');
+    dest('§6: Monitoracao PRIORITARIA quando ha descumprimento anterior ou risco iminente. §9: juiz que nao aplicar deve fundamentar expressamente.', R);
+    bull('§7: Autoridade instala o equipamento e instrui o agressor sobre areas de exclusao — ciencia consta de termo nos autos.');
+    bull('§8: Alerta automatico e simultaneo a vitima e a unidade policial mais proxima ao romper o perimetro de exclusao.');
+    y+=3;
+
+    sec('4. Art. 23 — 6 medidas a ofendida (atualizadas)');
+    bull('I: Encaminhamento a programa de protecao — com sigilo de endereco (art. 17-A LMP).');
+    bull('II: Reconducao ao domicilio apos afastamento do agressor — com escolta policial.');
+    bull('III: Afastamento voluntario da vitima — nao e abandono de lar, nao perde direitos.');
+    bull('IV: Separacao de corpos como medida protetiva — efeitos imediatos.');
+    bull('V (Lei 13.882/2019): Matricula dos filhos na escola mais proxima, independente de vaga.');
+    bull('VI (Lei 14.674/2023): Auxilio-aluguel por ate 6 meses, valor fixado conforme vulnerabilidade. Medida subutilizada — usar sempre que a vitima nao puder arcar com moradia.');
+    y+=3;
+
+    sec('5. Art. 24 — Medidas patrimoniais');
+    bull('I: Restituicao de bens subtraidos. II: Proibicao de alienacao de bens comuns. III: Suspensao de procuracoes. IV: Caucao por danos materiais.');
+    bull('Paragrafo unico: juiz oficia ao cartorio competente para os incisos II e III.');
+    y+=3;
+
+    sec('6. Art. 24-A — Crime de descumprimento e irretroatividade');
+    par('Principio da especialidade: o art. 24-A LMP afasta o art. 330 CP (desobediencia). O agente responde SOMENTE pelo art. 24-A — nao ha concurso.');
+    dest('Linha do tempo das penas: Fatos ate 9/10/2024: detencao 3 meses a 2 anos. Fatos a partir de 10/10/2024: reclusao 2 a 5 anos + multa (Lei 14.994/2024). Fatos a partir de 10/4/2026 com monitoracao violada: +1/3 a 1/2 (Lei 15.383/2026, §4).', R);
+    bull('§1: Crime independe da competencia (civel ou criminal) do juiz que deferiu. §2: Fianca so pelo juiz. §3: Nao exclui outras sancoes.');
+    bull('§4 (Lei 15.383/2026): Pena aumentada de 1/3 a metade se violar area de exclusao monitorada ou danificar dispositivo.');
+    par('Irretroatividade como tese de defesa: NAO arguir na resposta a acusacao (nao conduz a absolvicao sumaria). ARGUIR nas alegacoes finais como tese de dosimetria.');
+
+    const tot=doc.getNumberOfPages();
+    for(let i=1;i<=tot;i++){ doc.setPage(i); doc.setFontSize(8); doc.setTextColor(...M); doc.text('Penha em Cena - Modulo 02 - Aula 2 - Material de apoio exclusivo do aluno',MG,290); doc.text(i+' / '+tot,W-MG,290,{align:'right'}); }
+    doc.save('PenhaEmCena_M02_A02_Resumo.pdf');
+    btn.innerHTML='✓ PDF baixado!'; btn.style.background='rgba(29,158,117,0.25)';
+    setTimeout(()=>{ btn.innerHTML=orig; btn.style.background=''; btn.disabled=false; },3000);
+  } catch(e) { console.error('Erro PDF:',e); btn.innerHTML='✗ Erro.'; btn.disabled=false; }
+}
+
+buildSteps();
+buildGrid('grid-22', M22);
+buildGrid('grid-23', M23);
+buildQuiz();
+buildRes();
+</script>
+</body>
+</html>
