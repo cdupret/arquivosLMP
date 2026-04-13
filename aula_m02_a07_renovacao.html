@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Módulo 02 · Aula 7 — Renovação, Revisão e Revogação · Penha em Cena</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --rosa: #D4537E; --rosa2: #A33360;
+  --fundo: #0E0B14; --fundo2: #17122A; --fundo3: #211A38;
+  --roxo: #7F77DD; --texto: #F0EAF8; --muted: #9B8FBC;
+  --borda: rgba(212,83,126,0.2); --verde: #1D9E75;
+  --dourado: #C9963A; --azul: #3A8ADC;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'DM Sans', sans-serif; background: var(--fundo); color: var(--texto); min-height: 100vh; overflow-x: hidden; font-size: 18px; line-height: 1.75; }
+.bg-p { position:fixed;inset:0;pointer-events:none;z-index:0; background: radial-gradient(ellipse 60% 40% at 20% 20%, rgba(127,119,221,0.07) 0%, transparent 60%), radial-gradient(ellipse 40% 60% at 80% 80%, rgba(212,83,126,0.06) 0%, transparent 60%); }
+.header { position:sticky;top:0;z-index:100;background:rgba(14,11,20,0.95);border-bottom:1px solid var(--borda);padding:16px 32px;display:flex;align-items:center;gap:14px;backdrop-filter:blur(16px); }
+.logo { font-family:'Playfair Display',serif;font-size:20px;color:var(--rosa);font-weight:700; }
+.sep { color:var(--muted); } .info { font-size:15px;color:var(--muted); }
+.prog { background:var(--fundo2);border-bottom:1px solid var(--borda);padding:16px 32px;position:sticky;top:61px;z-index:99; }
+.steps { max-width:780px;margin:0 auto;display:flex;align-items:center; }
+.step { display:flex;flex-direction:column;align-items:center;gap:6px;flex:1;cursor:pointer;border:none;background:none; }
+.dot { width:36px;height:36px;border-radius:50%;border:2px solid rgba(155,143,188,0.3);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:500;color:var(--muted);transition:all .3s; }
+.dot.a { background:var(--rosa);border-color:var(--rosa);color:#fff;box-shadow:0 0 24px rgba(212,83,126,0.5); }
+.dot.d { background:var(--verde);border-color:var(--verde);color:#fff; }
+.slbl { font-size:11px;color:var(--muted);white-space:nowrap; }
+.slbl.a { color:var(--rosa); } .slbl.d { color:var(--verde); }
+.sline { flex:1;height:2px;background:rgba(155,143,188,0.15);margin-bottom:18px;transition:background .4s; }
+.sline.d { background:var(--verde); }
+.main { max-width:860px;margin:0 auto;padding:44px 32px 120px;position:relative;z-index:1; }
+.tela { display:none;animation:up .4s ease; }
+.tela.on { display:block; }
+@keyframes up { from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);} }
+.badge { display:inline-flex;align-items:center;gap:6px;background:rgba(212,83,126,0.12);border:1px solid rgba(212,83,126,0.3);border-radius:20px;padding:6px 16px;font-size:13px;font-weight:500;color:var(--rosa);letter-spacing:.06em;text-transform:uppercase;margin-bottom:20px; }
+.titulo { font-family:'Playfair Display',serif;font-size:clamp(28px,5vw,44px);font-weight:900;line-height:1.15;color:var(--texto);margin-bottom:16px; }
+.titulo em { color:var(--rosa);font-style:italic; }
+.desc { font-size:18px;color:var(--muted);line-height:1.9;margin-bottom:36px; }
+
+/* ARTIGOS */
+.art { background:var(--fundo2);border:1px solid var(--borda);border-radius:18px;padding:30px 34px;margin-bottom:22px; }
+.art.dest { border-color:rgba(212,83,126,0.5);background:rgba(212,83,126,0.04); }
+.art.verde { border-color:rgba(29,158,117,0.4);background:rgba(29,158,117,0.04); }
+.art.roxo { border-color:rgba(127,119,221,0.4);background:rgba(127,119,221,0.04); }
+.art.dourado { border-color:rgba(201,150,58,0.4);background:rgba(201,150,58,0.04); }
+.art-num { font-size:13px;font-weight:600;color:var(--rosa);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px; }
+.art-num.verde { color:#5DCAA5; }
+.art-num.roxo { color:var(--roxo); }
+.art-num.dourado { color:var(--dourado); }
+.art-h { font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:var(--texto);margin-bottom:18px; }
+.art-lei { font-size:17px;color:var(--muted);border-left:3px solid var(--rosa);padding-left:20px;margin-bottom:20px;font-style:italic;line-height:1.85; }
+.art-lei.verde { border-left-color:var(--verde); }
+.art-lei.roxo { border-left-color:var(--roxo); }
+.art-p { font-size:17px;color:var(--muted);line-height:1.85;margin-bottom:14px; }
+.art-p strong { color:var(--texto); }
+.alerta { background:rgba(212,83,126,0.07);border:1px solid rgba(212,83,126,0.25);border-radius:12px;padding:18px 24px;font-size:16px;color:rgba(240,234,248,0.85);line-height:1.8;margin-top:18px; }
+.alerta strong { color:var(--rosa); }
+.alerta-verde { background:rgba(29,158,117,0.07);border:1px solid rgba(29,158,117,0.25);border-radius:12px;padding:18px 24px;font-size:16px;color:rgba(240,234,248,0.85);line-height:1.8;margin-top:18px; }
+.alerta-verde strong { color:#5DCAA5; }
+.alerta-roxo { background:rgba(127,119,221,0.07);border:1px solid rgba(127,119,221,0.25);border-radius:12px;padding:18px 24px;font-size:16px;color:rgba(240,234,248,0.85);line-height:1.8;margin-top:18px; }
+.alerta-roxo strong { color:#AFA9EC; }
+.alerta-dourado { background:rgba(201,150,58,0.07);border:1px solid rgba(201,150,58,0.25);border-radius:12px;padding:18px 24px;font-size:16px;color:rgba(240,234,248,0.85);line-height:1.8;margin-top:18px; }
+.alerta-dourado strong { color:#E8C46A; }
+
+/* COMPARATIVO 3 colunas */
+.comp3 { display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:24px; }
+@media(max-width:640px) { .comp3 { grid-template-columns:1fr; } }
+.comp3-col { background:var(--fundo2);border:1px solid var(--borda);border-radius:14px;padding:22px 20px; }
+.comp3-tit { font-family:'Playfair Display',serif;font-size:17px;font-weight:700;margin-bottom:14px; }
+.comp3-item { font-size:15px;color:var(--muted);line-height:1.75;margin-bottom:8px; }
+.comp3-item strong { color:var(--texto); }
+
+/* TESES */
+.tese-grid { display:grid;grid-template-columns:1fr;gap:12px;margin-bottom:24px; }
+.tese-card { background:var(--fundo2);border:1px solid rgba(127,119,221,0.25);border-radius:14px;padding:22px 26px;display:flex;gap:16px; }
+.tese-num { width:36px;height:36px;border-radius:50%;background:var(--roxo);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;flex-shrink:0; }
+.tese-corpo { flex:1; }
+.tese-label { font-size:12px;font-weight:700;color:var(--roxo);text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px; }
+.tese-txt { font-size:16px;color:var(--muted);line-height:1.8; }
+.tese-txt strong { color:var(--texto); }
+
+/* QUIZ */
+.qcard { background:var(--fundo2);border:1px solid var(--borda);border-radius:18px;padding:32px 30px;margin-bottom:22px; }
+.qnum { font-size:13px;font-weight:600;color:var(--rosa);letter-spacing:.07em;text-transform:uppercase;margin-bottom:12px; }
+.qp { font-family:'Playfair Display',serif;font-size:21px;font-weight:700;line-height:1.5;color:var(--texto);margin-bottom:24px; }
+.qop { background:rgba(255,255,255,0.03);border:1px solid rgba(155,143,188,0.2);border-radius:10px;padding:16px 20px;margin-bottom:12px;cursor:pointer;font-size:17px;color:var(--muted);transition:all .2s;line-height:1.65; }
+.qop:hover:not(.bl) { border-color:var(--rosa);color:var(--texto);background:rgba(212,83,126,0.07); }
+.qop.ok { background:rgba(29,158,117,0.12);border-color:var(--verde);color:#9FE1CB; }
+.qop.er { background:rgba(212,83,126,0.1);border-color:var(--rosa);color:#EDB0C5; }
+.qop.bl { cursor:default; }
+.qfb { display:none;margin-top:14px;padding:18px 22px;border-radius:10px;font-size:17px;line-height:1.8; }
+.qfb.on { display:block; }
+.qfb.ok { background:rgba(29,158,117,0.1);border:1px solid rgba(29,158,117,0.25);color:#9FE1CB; }
+.qfb.er { background:rgba(212,83,126,0.08);border:1px solid rgba(212,83,126,0.2);color:#EDB0C5; }
+
+/* RESUMO */
+.rgrid { display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;margin-bottom:30px; }
+.rcard { background:var(--fundo2);border:1px solid var(--borda);border-radius:14px;padding:24px 26px;transition:border-color .2s; }
+.rcard:hover { border-color:rgba(212,83,126,0.35); }
+.ric { font-size:26px;margin-bottom:12px; }
+.rtit { font-size:18px;font-weight:500;color:var(--texto);margin-bottom:8px; }
+.rtxt { font-size:16px;color:var(--muted);line-height:1.8; }
+.conclusao { background:linear-gradient(135deg,rgba(212,83,126,0.08),rgba(127,119,221,0.05));border:1px solid rgba(212,83,126,0.2);border-radius:18px;padding:40px;text-align:center;margin-top:28px; }
+.c-ic { font-size:48px;margin-bottom:14px; }
+.c-tit { font-family:'Playfair Display',serif;font-size:28px;font-weight:900;color:var(--verde);margin-bottom:10px; }
+.c-txt { font-size:18px;color:var(--muted);line-height:1.85; }
+.nav { display:flex;align-items:center;justify-content:space-between;margin-top:48px;padding-top:30px;border-top:1px solid var(--borda); }
+.btn { display:inline-flex;align-items:center;gap:8px;padding:14px 28px;border-radius:10px;font-size:17px;font-weight:500;cursor:pointer;transition:all .2s;border:none;font-family:'DM Sans',sans-serif; }
+.btn-s { background:rgba(255,255,255,0.05);color:var(--muted);border:1px solid rgba(155,143,188,0.2); }
+.btn-s:hover { background:rgba(255,255,255,0.09);color:var(--texto); }
+.btn-p { background:var(--rosa);color:#fff;box-shadow:0 4px 18px rgba(212,83,126,0.3); }
+.btn-p:hover { background:var(--rosa2);transform:translateY(-1px); }
+.btn-dl { display:inline-flex;align-items:center;gap:10px;margin-top:18px;padding:15px 26px;border-radius:10px;background:rgba(29,158,117,0.15);border:1px solid rgba(29,158,117,0.4);color:#5DCAA5;font-size:17px;font-weight:500;cursor:pointer;transition:all .2s;font-family:'DM Sans',sans-serif; }
+.btn-dl:hover { background:rgba(29,158,117,0.25); }
+</style>
+</head>
+<body>
+<div class="bg-p"></div>
+<header class="header">
+  <span class="logo">PENHA em Cena</span>
+  <span class="sep">/</span>
+  <span class="info">Módulo 02 · Aula 7</span>
+</header>
+<div class="prog"><div class="steps" id="stps"></div></div>
+<div class="main">
+
+<!-- TELA 0: INTRODUÇÃO -->
+<div class="tela on" id="t0">
+  <div class="badge">Módulo 02 · Aula 7</div>
+  <h1 class="titulo">Renovação, Revisão<br>e <em>Revogação</em> da Medida Protetiva</h1>
+  <p class="desc">A medida protetiva não é eterna — mas também não tem prazo fixo. A regra é a cláusula <em>rebus sic stantibus</em>: vigora enquanto persistir o risco. O STJ pacificou o tema no Tema Repetitivo 1249 (novembro de 2024). Esta aula é essencial para advogados de ambos os lados: quem quer manter a proteção e quem quer revogar.</p>
+
+  <div class="art dest">
+    <div class="art-num">STJ — Tema Repetitivo 1249 — O julgado mais importante desta aula</div>
+    <div class="art-h">O STJ fixou as teses que regem a duração e revogação das medidas protetivas</div>
+    <div class="art-lei">REsp 2.070.717 e outros (Recursos representativos de controvérsia)<br>Rel. Min. Rogerio Schietti Cruz — 3ª Seção do STJ<br>Julgado em: 13/11/2024 — Publicado em: 25/03/2025<br><a href="https://www.stj.jus.br/sites/portalp/Paginas/Comunicacao/Noticias/2024/14112024-Medidas-protetivas-da-Lei-Maria-da-Penha-devem-ser-aplicadas-sem-prazo-determinado.aspx" target="_blank" style="color:var(--rosa);">Acesso no site do STJ</a></div>
+    <p class="art-p">O Tema 1249 é repetitivo — vincula todos os tribunais do país. As teses ali fixadas são o ponto de partida obrigatório para qualquer discussão sobre a duração, revisão e revogação de medidas protetivas.</p>
+  </div>
+
+  <div class="tese-grid">
+    <div class="tese-card">
+      <div class="tese-num">I</div>
+      <div class="tese-corpo">
+        <div class="tese-label">Tese I — Natureza e autonomia</div>
+        <div class="tese-txt">As medidas protetivas de urgência têm <strong>natureza jurídica de tutela inibitória</strong> e sua vigência não se subordina à existência (atual ou vindoura) de boletim de ocorrência, inquérito policial, processo cível ou criminal.</div>
+      </div>
+    </div>
+    <div class="tese-card">
+      <div class="tese-num">II</div>
+      <div class="tese-corpo">
+        <div class="tese-label">Tese II — Sem prazo fixo</div>
+        <div class="tese-txt">As medidas protetivas <strong>não têm prazo predeterminado de duração</strong>. Devem vigorar enquanto persistir o risco à integridade física, psicológica, sexual, patrimonial ou moral da ofendida ou de seus dependentes (art. 19, §6º, LMP — Lei 14.550/2023).</div>
+      </div>
+    </div>
+    <div class="tese-card">
+      <div class="tese-num">III</div>
+      <div class="tese-corpo">
+        <div class="tese-label">Tese III — Extinção de punibilidade não extingue a medida</div>
+        <div class="tese-txt">Eventual reconhecimento de extinção de punibilidade, arquivamento do inquérito ou <strong>absolvição do acusado não origina, necessariamente, a extinção da medida protetiva</strong>, se a situação de risco persistir.</div>
+      </div>
+    </div>
+    <div class="tese-card">
+      <div class="tese-num">IV</div>
+      <div class="tese-corpo">
+        <div class="tese-label">Tese IV — Revisão e revogação</div>
+        <div class="tese-txt">Não se submetem a prazo obrigatório de revisão periódica, <strong>mas devem ser reavaliadas pelo magistrado</strong>, de ofício ou a pedido do interessado, quando constatado concretamente o esvaziamento da situação de risco. A revogação deve sempre ser precedida de contraditório, com <strong>oitiva da vítima e do agressor</strong>. Em caso de extinção, a ofendida deve ser comunicada (art. 21, LMP).</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="nav">
+    <span></span>
+    <button class="btn btn-p" onclick="ir(1)">Próximo: Sem prazo fixo — a regra rebus sic stantibus →</button>
+  </div>
+</div>
+
+<!-- TELA 1: SEM PRAZO FIXO -->
+<div class="tela" id="t1">
+  <div class="badge">Etapa 2 de 5</div>
+  <h1 class="titulo">Sem prazo fixo:<br>a regra <em>rebus sic stantibus</em></h1>
+  <p class="desc">A medida protetiva dura o tempo que for necessário. Nenhum juiz pode presumir que o risco vai acabar em 30, 60 ou 90 dias. Mas isso não significa que a medida é perpétua — ela pode (e deve) ser revogada quando o risco cessar.</p>
+
+  <div class="art">
+    <div class="art-num">Art. 19, §6º da Lei Maria da Penha — Lei 14.550/2023</div>
+    <div class="art-h">A duração está na lei — e é enquanto persistir o risco</div>
+    <div class="art-lei">"As medidas protetivas de urgência vigorarão enquanto persistir risco à integridade física, psicológica, sexual, patrimonial ou moral da ofendida ou de seus dependentes."</div>
+    <p class="art-p">Antes da Lei 14.550/2023, a duração das medidas era objeto de intenso debate. Muitos juízes fixavam prazos de 30, 60 ou 90 dias — o que gerava o problema da "revogação automática" sem análise da situação real. O STJ já rechaçava essa prática, mas ela persistia. Com o §6º do art. 19, a lei positivou o que a jurisprudência já dizia: <strong>a medida dura enquanto durar o risco</strong>.</p>
+    <p class="art-p">A <strong>cláusula rebus sic stantibus</strong> significa que a decisão que concede a medida protetiva está condicionada à manutenção das circunstâncias que a fundamentaram. Se o contexto fático mudar (risco cessou, partes se reconciliaram de forma segura, agressor cumpriu tratamento, etc.), a medida pode ser revogada. Se o contexto persistir ou piorar, a medida permanece — e pode ser ampliada.</p>
+    <div class="alerta"><strong>Atenção para a praxe errada:</strong> ainda é comum juízes fixarem medidas por "180 dias" ou "até o término do processo". O Tema 1249 do STJ deixou claro que isso é ilegal. Se você se deparar com isso — seja como advogado da vítima ou da defesa — saiba que cabe impugnação.</div>
+  </div>
+
+  <div class="art roxo">
+    <div class="art-num roxo">O que fazer quando o juiz fixa prazo indevido</div>
+    <div class="art-h">Instrumentos para combater a fixação ilegal de prazo</div>
+    <p class="art-p"><strong>Advogado da vítima / MP:</strong> se o juiz fixou prazo de 90 dias e este se aproxima do fim sem que o risco tenha cessado, peticione imediatamente pedindo a manutenção da medida com fundamento no art. 19, §6º da LMP e no Tema 1249 do STJ. Não espere a expiração automática.</p>
+    <p class="art-p"><strong>Defesa:</strong> se a medida foi concedida há muito tempo e as circunstâncias mudaram substancialmente (ex: processo arquivado, vítima se reconciliou voluntariamente, agressor concluiu tratamento), formule pedido de revogação com base no esvaziamento da situação de risco — sempre com fundamento concreto, não mera alegação temporal.</p>
+    <div class="alerta-roxo"><strong>Recursos cabíveis:</strong> decisão que fixa prazo indevido pode ser atacada por Agravo de Instrumento (entendimento predominante — STJ, REsp 2.214.127, Min. Paciornik, out/2025) ou, em casos de vício procedimental grave, por Mandado de Segurança.</div>
+  </div>
+
+  <div class="nav">
+    <button class="btn btn-s" onclick="ir(0)">← Voltar</button>
+    <button class="btn btn-p" onclick="ir(2)">Próximo: Renovação e revisão →</button>
+  </div>
+</div>
+
+<!-- TELA 2: RENOVAÇÃO E REVISÃO -->
+<div class="tela" id="t2">
+  <div class="badge">Etapa 3 de 5</div>
+  <h1 class="titulo">Renovação e <em>Revisão</em></h1>
+  <p class="desc">Como manter a medida protetiva ativa e como pedir sua revisão. Os instrumentos são diferentes conforme o polo que você representa.</p>
+
+  <div class="art verde">
+    <div class="art-num verde">Para a advogada da vítima — Como garantir a manutenção</div>
+    <div class="art-h">A vítima não precisa ir ao fórum para "renovar" a medida</div>
+    <p class="art-p">O Tema 1249 do STJ foi categórico: <strong>exigir que a vítima vá ao fórum ou à delegacia periodicamente para pedir a manutenção da medida é uma forma de revitimização e violência institucional</strong>. O silêncio da vítima não implica revogação — presume-se a continuidade do risco.</p>
+    <p class="art-p">Portanto: a medida protetiva continua vigente automaticamente enquanto nenhuma das partes pedir sua revisão e o juiz não determinar de ofício. A vítima não precisa fazer nada para "renovar" — a medida se mantém por força de lei.</p>
+    <p class="art-p"><strong>Quando peticionar ativamente:</strong></p>
+    <p class="art-p">① Quando o processo penal for arquivado ou o agressor for absolvido — peticione imediatamente pedindo a manutenção da medida com fundamento na Tese III do Tema 1249 e no art. 19, §6º da LMP, demonstrando que o risco persiste independentemente do resultado penal.</p>
+    <p class="art-p">② Quando a situação de risco se agravar — peça ampliação das medidas ou inclusão de novas (ex: incluir monitoração eletrônica — art. 22, VIII da LMP, Lei 15.383/2026).</p>
+    <p class="art-p">③ Quando o prazo de auxílio-aluguel (art. 23, VI — máximo 6 meses) estiver se esgotando — peça outras providências de cunho assistencial.</p>
+    <div class="alerta-verde"><strong>STJ, AgRg no REsp 1.775.341/SP</strong> (Min. Sebastião Reis Júnior, 3ª Seção, DJe 14/4/2023): "A revogação das medidas protetivas de urgência exige a prévia oitiva da ofendida, procedimento essencial para avaliar a efetiva cessação da situação de risco à integridade física, moral, psicológica, sexual e patrimonial da vítima."</div>
+  </div>
+
+  <div class="art dourado">
+    <div class="art-num dourado">Para a defesa — Como pedir a revisão ou revogação</div>
+    <div class="art-h">O agressor pode pedir a revogação — mas precisa demonstrar a mudança concreta</div>
+    <p class="art-p">A Tese IV do Tema 1249 foi clara: as medidas devem ser <strong>reavaliadas pelo magistrado, de ofício ou a pedido do interessado, quando constatado concretamente o esvaziamento da situação de risco</strong>. O agressor, portanto, tem legitimidade para pedir a revisão ou revogação.</p>
+    <p class="art-p"><strong>O que o pedido de revogação deve demonstrar:</strong></p>
+    <p class="art-p">① <strong>Mudança concreta no contexto fático:</strong> não basta o decurso do tempo. É preciso demonstrar que as circunstâncias que geraram a medida não mais existem — ex: tratamento concluído e atestado, reconciliação voluntária e segura, ausência de qualquer novo episódio de risco por período substancial.</p>
+    <p class="art-p">② <strong>Proporcionalidade:</strong> argumente que a medida, nas circunstâncias atuais, é desproporcional ao risco concreto existente. Use o princípio da proporcionalidade (STJ, AgRg no REsp 2.070.292/MG, Min. Reynaldo Soares da Fonseca, 5ª Turma, j. 11/2/2025, DJEN 26/2/2025).</p>
+    <p class="art-p">③ <strong>Procedimento obrigatório:</strong> o juiz não pode revogar sem ouvir a vítima primeiro. Se o juiz revogar sem essa oitiva, a decisão é nula — o MP ou a vítima podem impugná-la.</p>
+    <div class="alerta-dourado"><strong>Atenção da defesa — o que NÃO funciona:</strong> alegar apenas que "já se passaram X meses", que "a vítima não compareceu ao fórum" ou que "o processo foi arquivado". O Tema 1249 fechou essas portas. O pedido precisa demonstrar mudança fática real e concreta.</div>
+  </div>
+
+  <div class="art">
+    <div class="art-num">Diferença prática: renovação, revisão e revogação</div>
+    <div class="art-h">Três institutos, três situações distintas</div>
+    <div class="comp3">
+      <div class="comp3-col" style="border-color:rgba(29,158,117,0.3);">
+        <div class="comp3-tit" style="color:#5DCAA5;">🔄 Renovação</div>
+        <div class="comp3-item"><strong>Quando:</strong> a medida tinha prazo fixado (situação irregular) e esse prazo está se esgotando, mas o risco persiste.</div>
+        <div class="comp3-item"><strong>Quem pede:</strong> vítima, MP ou juiz de ofício.</div>
+        <div class="comp3-item"><strong>Fundamento:</strong> art. 19, §6º + Tema 1249, Tese II. O prazo não pode se esgotar automaticamente.</div>
+        <div class="comp3-item"><strong>Na prática:</strong> com o Tema 1249, a "renovação" se torna dispensável — a medida simplesmente não termina enquanto o risco persistir.</div>
+      </div>
+      <div class="comp3-col" style="border-color:rgba(201,150,58,0.3);">
+        <div class="comp3-tit" style="color:var(--dourado);">🔍 Revisão</div>
+        <div class="comp3-item"><strong>Quando:</strong> as circunstâncias mudaram parcialmente e a medida precisa ser ajustada — ampliada, reduzida ou substituída por outra mais adequada.</div>
+        <div class="comp3-item"><strong>Quem pede:</strong> qualquer das partes ou o juiz de ofício.</div>
+        <div class="comp3-item"><strong>Exemplos:</strong> agressor mudou de cidade (distância mínima pode ser ajustada), novo episódio de violência (acrescentar monitoração eletrônica), filhos cresceram (revisar visitas).</div>
+        <div class="comp3-item"><strong>Procedimento:</strong> oitiva das partes antes da decisão.</div>
+      </div>
+      <div class="comp3-col" style="border-color:rgba(212,83,126,0.3);">
+        <div class="comp3-tit" style="color:var(--rosa);">❌ Revogação</div>
+        <div class="comp3-item"><strong>Quando:</strong> a situação de risco cessou concretamente.</div>
+        <div class="comp3-item"><strong>Quem pede:</strong> agressor, vítima, MP ou juiz de ofício.</div>
+        <div class="comp3-item"><strong>Requisito essencial:</strong> demonstração concreta da mudança fática — não basta o tempo.</div>
+        <div class="comp3-item"><strong>Procedimento obrigatório:</strong> contraditório com oitiva da vítima E do agressor antes da decisão. Sem isso, a decisão é nula.</div>
+        <div class="comp3-item"><strong>Consequência:</strong> vítima deve ser comunicada imediatamente (art. 21, LMP).</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="nav">
+    <button class="btn btn-s" onclick="ir(1)">← Voltar</button>
+    <button class="btn btn-p" onclick="ir(3)">Próximo: Quiz →</button>
+  </div>
+</div>
+
+<!-- TELA 3: QUIZ -->
+<div class="tela" id="t3">
+  <div class="badge">Etapa 4 de 5 — Fixação</div>
+  <h1 class="titulo">Teste seu <em>domínio</em></h1>
+  <p class="desc">Quatro casos práticos sobre renovação, revisão e revogação de medidas protetivas. Responda e veja o gabarito comentado.</p>
+  <div id="quiz"></div>
+  <div class="nav">
+    <button class="btn btn-s" onclick="ir(2)">← Voltar</button>
+    <button class="btn btn-p" onclick="ir(4)">Próximo: Resumo →</button>
+  </div>
+</div>
+
+<!-- TELA 4: RESUMO -->
+<div class="tela" id="t4">
+  <div class="badge">Etapa 5 de 5 — Resumo</div>
+  <h1 class="titulo">O que fixar<br>desta <em>aula</em></h1>
+  <div class="rgrid" id="rgrid"></div>
+  <div class="conclusao">
+    <div class="c-ic">✓</div>
+    <div class="c-tit">Módulo 02 concluído!</div>
+    <div class="c-txt">Você domina todo o ciclo das medidas protetivas de urgência — da concessão à revogação.<br>Continue para o <strong>Módulo 03: Flagrante, Prisão e Audiência de Custódia.</strong></div>
+  </div>
+  <div style="text-align:center;margin-top:28px;">
+    <button class="btn-dl" onclick="baixarPDF()">↓ Baixar resumo desta aula (PDF)</button>
+  </div>
+  <div class="nav">
+    <button class="btn btn-s" onclick="ir(3)">← Voltar ao quiz</button>
+    <button class="btn btn-p" onclick="ir(0)">↺ Rever do início</button>
+  </div>
+</div>
+
+</div><!-- /main -->
+
+<script>
+const ETAPAS = ['Introdução','Sem prazo fixo','Renovação e Revisão','Quiz','Resumo'];
+let cur = 0;
+const respostas = {};
+
+function buildSteps() {
+  const el = document.getElementById('stps'); el.innerHTML = '';
+  ETAPAS.forEach((n, i) => {
+    if (i > 0) { const l = document.createElement('div'); l.className = 'sline' + (i <= cur ? ' d' : ''); el.appendChild(l); }
+    const btn = document.createElement('button'); btn.className = 'step'; btn.onclick = () => ir(i);
+    const dot = document.createElement('div'); dot.className = 'dot' + (i === cur ? ' a' : i < cur ? ' d' : ''); dot.textContent = i < cur ? '✓' : i + 1;
+    const lbl = document.createElement('div'); lbl.className = 'slbl' + (i === cur ? ' a' : i < cur ? ' d' : ''); lbl.textContent = n;
+    btn.appendChild(dot); btn.appendChild(lbl); el.appendChild(btn);
+  });
+}
+
+function ir(n) {
+  document.querySelectorAll('.tela').forEach(t => t.classList.remove('on'));
+  document.getElementById('t' + n).classList.add('on');
+  cur = n; buildSteps(); window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+const QS = [
+  {
+    p: 'O juiz concedeu medida protetiva por 90 dias. O prazo expirou e o processo penal foi arquivado. O agressor alega que a medida está automaticamente revogada. Está correto?',
+    ops: [
+      'Sim — o prazo fixado pelo juiz deve ser respeitado, e o arquivamento encerra automaticamente a medida',
+      'Não — pelo Tema 1249 do STJ (REsp 2.070.717, j. 13/11/2024), medidas protetivas não têm prazo fixo e o arquivamento não extingue automaticamente a medida se o risco persistir. O juiz deve ouvir as partes antes de qualquer decisão',
+      'Sim, mas somente o arquivamento extingue — o prazo fixado não seria válido',
+      'Depende — se a vítima não se manifestou, presume-se que o risco cessou'
+    ],
+    c: 1,
+    fb: 'O Tema 1249 do STJ (3ª Seção, REsp 2.070.717, rel. Min. Rogerio Schietti Cruz, j. 13/11/2024) fixou duas teses relevantes aqui: (Tese II) medidas protetivas não têm prazo fixo — vigoram enquanto persistir o risco; (Tese III) o arquivamento do inquérito ou absolvição não extingue automaticamente a medida. O agressor está errado em ambos os argumentos. Para revogar a medida, é necessário pedido fundamentado na mudança concreta das circunstâncias e oitiva prévia da vítima.'
+  },
+  {
+    p: 'A defesa quer pedir a revogação da medida protetiva. Quais são os requisitos INDISPENSÁVEIS para que o pedido tenha chance de ser acolhido?',
+    ops: [
+      'Basta demonstrar que já se passaram mais de 6 meses desde a concessão sem novos episódios de violência registrados',
+      'Demonstrar mudança concreta no contexto fático que eliminou o risco, e o juiz deve ouvir a vítima antes de decidir',
+      'Apresentar declaração da vítima dizendo que perdoou o agressor e não sente mais medo',
+      'Mostrar que o processo penal foi arquivado, pois isso automaticamente extingue a medida'
+    ],
+    c: 1,
+    fb: 'A Tese IV do Tema 1249 do STJ é clara: a revogação exige demonstração concreta da mudança fática — não o mero decurso do tempo. E o procedimento é obrigatório: o juiz deve ouvir a vítima e o agressor antes de decidir. Uma declaração de perdão da vítima não é suficiente por si só — o juiz analisa a situação concreta de risco, não apenas a vontade expressa da vítima. O arquivamento, como já visto, não extingue automaticamente a medida.'
+  },
+  {
+    p: 'O juiz, sem ouvir a vítima, decide revogar de ofício a medida protetiva alegando que o processo foi arquivado. A vítima não foi sequer comunicada. O que pode fazer o MP ou o advogado da vítima?',
+    ops: [
+      'Nada — o juiz pode revogar de ofício a qualquer tempo sem necessidade de contraditório',
+      'Apenas aguardar a reabertura do inquérito para pedir nova medida protetiva',
+      'Impugnar a decisão por Agravo de Instrumento ou Mandado de Segurança, pois a revogação sem oitiva da vítima viola o Tema 1249 do STJ e o art. 21 da LMP; além disso, a vítima deve ser comunicada imediatamente da revogação',
+      'Registrar novo boletim de ocorrência e pedir nova medida, pois a anterior foi validamente revogada'
+    ],
+    c: 2,
+    fb: 'A decisão tem dois vícios graves: (1) revogação sem oitiva da vítima — a Tese IV do Tema 1249 exige contraditório prévio com oitiva de ambas as partes; (2) vítima não comunicada — o art. 21 da LMP e a própria Tese IV determinam que a vítima seja comunicada em caso de extinção da medida. O instrumento adequado para atacar a decisão é o Agravo de Instrumento (entendimento predominante — STJ, REsp 2.214.127) ou, se houver vício procedimental manifesto, o Mandado de Segurança.'
+  },
+  {
+    p: 'A situação de risco que motivou a medida protetiva persiste, mas o agressor mudou de cidade, tornando a proibição de aproximação de 300m geograficamente sem sentido prático. O que fazer?',
+    ops: [
+      'Pedir a revogação total da medida, pois perdeu seu objeto',
+      'Não fazer nada — a medida continua valendo onde quer que o agressor esteja',
+      'Pedir a revisão da medida protetiva para adequá-la à nova realidade: substituir a proibição de aproximação por proibição de contato por qualquer meio e, se necessário, incluir monitoração eletrônica (art. 22, VIII da LMP, Lei 15.383/2026)',
+      'Revogar a medida e pedir uma nova, pois medidas protetivas não podem ser modificadas — apenas substituídas'
+    ],
+    c: 2,
+    fb: 'A revisão é o instrumento adequado quando as circunstâncias mudaram parcialmente e a medida precisa ser ajustada — não revogada. Aqui, o risco persiste (não cabe revogação), mas a forma de proteção precisa ser adaptada à nova situação geográfica. A proibição de contato por qualquer meio (art. 22, III, "b") é a medida mais eficaz nesse caso. A monitoração eletrônica (art. 22, VIII, inserido pela Lei 15.383/2026, vigor 10/4/2026) pode ser incluída se o juiz entender necessário. A revisão, como a revogação, exige oitiva das partes antes da decisão.'
+  }
+];
+
+function buildQuiz() {
+  const el = document.getElementById('quiz');
+  QS.forEach((q, qi) => {
+    const c = document.createElement('div'); c.className = 'qcard';
+    c.innerHTML = `<div class="qnum">Questão ${qi+1} de ${QS.length}</div>
+      <div class="qp">${q.p}</div>
+      ${q.ops.map((op,oi)=>`<div class="qop" id="qo${qi}_${oi}" onclick="ans(${qi},${oi})">${String.fromCharCode(65+oi)}) ${op}</div>`).join('')}
+      <div class="qfb" id="qf${qi}"></div>`;
+    el.appendChild(c);
+  });
+}
+
+function ans(qi, oi) {
+  if (respostas[qi] !== undefined) return;
+  respostas[qi] = oi;
+  const q = QS[qi];
+  for (let j = 0; j < q.ops.length; j++) {
+    const e = document.getElementById(`qo${qi}_${j}`); e.classList.add('bl');
+    if (j === q.c) e.classList.add('ok'); else if (j === oi) e.classList.add('er');
+  }
+  const fb = document.getElementById('qf' + qi); const ok = oi === q.c;
+  fb.className = 'qfb on ' + (ok ? 'ok' : 'er');
+  fb.innerHTML = `<strong>${ok ? '✓ Correto!' : '✗ Atenção.'}</strong> ${q.fb}`;
+}
+
+const RES = [
+  { ic:'⚖️', tit:'Tema 1249 STJ — julgado central', txt:'REsp 2.070.717 (Min. Rogerio Schietti Cruz, 3ª Seção, j. 13/11/2024): medidas protetivas têm natureza inibitória, sem prazo fixo, vigem enquanto persistir o risco, arquivamento não as extingue automaticamente e revogação exige contraditório.' },
+  { ic:'⏰', tit:'Sem prazo fixo — rebus sic stantibus', txt:'Art. 19, §6º (Lei 14.550/2023): vigência enquanto persistir o risco. Nenhum juiz pode fixar prazo de 30, 60 ou 90 dias presumindo que o risco cessará. A medida termina quando o risco cessar — não quando o calendário vencer.' },
+  { ic:'🔄', tit:'A vítima não precisa "renovar"', txt:'O silêncio da vítima não implica revogação — presume-se continuidade do risco. Exigir que a vítima compareça periodicamente ao fórum para pedir a manutenção é revitimização e violência institucional (Tema 1249, STJ).' },
+  { ic:'🔍', tit:'Renovação x Revisão x Revogação', txt:'Renovação: manter medida com prazo se esgotando. Revisão: ajustar medida que persiste mas precisa ser adequada à nova realidade. Revogação: extinguir a medida quando o risco cessou concretamente. Todas exigem contraditório.' },
+  { ic:'📋', tit:'Requisitos para revogar', txt:'(1) Mudança fática concreta demonstrada — não basta o tempo. (2) Oitiva prévia da vítima e do agressor (Tese IV, Tema 1249). (3) Comunicação imediata à vítima após a revogação (art. 21 LMP). Revogação sem esses passos é nula.' },
+  { ic:'🛡️', tit:'Arquivamento e absolvição — atenção', txt:'Tese III do Tema 1249: extinção de punibilidade, arquivamento ou absolvição não extingue automaticamente a medida protetiva se o risco persistir. Peticione imediatamente nesses casos para manter a proteção.' },
+  { ic:'📡', tit:'Incluir monitoração eletrônica na revisão', txt:'Art. 22, VIII (Lei 15.383/2026, vigor 10/4/2026): monitoração eletrônica como medida protetiva autônoma. Nas revisões de medidas existentes, avalie sempre incluir a monitoração quando o risco persiste ou se agrava.' },
+  { ic:'⚡', tit:'Instrumento para atacar revogação ilegal', txt:'Decisão que revoga sem oitiva da vítima ou sem demonstração de mudança fática: Agravo de Instrumento (predominante — STJ, REsp 2.214.127) ou Mandado de Segurança para vícios procedimentais graves.' },
+];
+
+function buildRes() {
+  const el = document.getElementById('rgrid');
+  RES.forEach(r => {
+    const d = document.createElement('div'); d.className = 'rcard';
+    d.innerHTML = `<div class="ric">${r.ic}</div><div class="rtit">${r.tit}</div><div class="rtxt">${r.txt}</div>`;
+    el.appendChild(d);
+  });
+}
+
+function baixarPDF() {
+  const btn = document.querySelector('.btn-dl');
+  const orig = btn.innerHTML;
+  btn.innerHTML = '⏳ Gerando PDF...'; btn.disabled = true;
+  if (window.jspdf && window.jspdf.jsPDF) { gerarPDF(btn, orig); return; }
+  const s = document.createElement('script');
+  s.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
+  s.onload = () => gerarPDF(btn, orig);
+  s.onerror = () => { btn.innerHTML = '✗ Erro.'; btn.disabled = false; };
+  document.head.appendChild(s);
+}
+
+function gerarPDF(btn, orig) {
+  try {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ unit:'mm', format:'a4' });
+    const R=[212,83,126], G=[29,158,117], P=[127,119,221], E=[26,18,40], M=[100,90,130];
+    const W=210, MG=18, LW=174; let y=0;
+    const np=()=>{ doc.addPage(); y=18; };
+    const ck=h=>{ if(y+h>272) np(); };
+    const tx=t=>t.normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[\u2014\u2013]/g,'-').replace(/[\u2018\u2019]/g,"'").replace(/[\u201C\u201D]/g,'"').replace(/[^\x00-\x7F]/g,'?');
+    doc.setFillColor(...R); doc.rect(0,0,W,18,'F');
+    doc.setTextColor(255,255,255); doc.setFontSize(11); doc.setFont('helvetica','bold');
+    doc.text('PENHA em Cena',MG,11); doc.setFont('helvetica','normal'); doc.setFontSize(9);
+    doc.text('Modulo 02 - Aula 7 - Resumo',W-MG,11,{align:'right'}); y=26;
+    doc.setTextColor(...E); doc.setFontSize(16); doc.setFont('helvetica','bold');
+    doc.text('Renovacao, Revisao e Revogacao de Medida Protetiva',MG,y); y+=8;
+    doc.setFontSize(10); doc.setFont('helvetica','normal'); doc.setTextColor(...M);
+    doc.text('Tema Repetitivo 1249 do STJ (REsp 2.070.717 — j. 13/11/2024)',MG,y); y+=7;
+    doc.setDrawColor(...R); doc.setLineWidth(0.5); doc.line(MG,y,W-MG,y); y+=8;
+    const sec=t=>{ ck(12); doc.setFillColor(...R); doc.roundedRect(MG,y,LW,8,1,1,'F'); doc.setTextColor(255,255,255); doc.setFontSize(9); doc.setFont('helvetica','bold'); doc.text(tx(t),MG+4,y+5.5); y+=12; doc.setTextColor(...E); };
+    const bull=t=>{ ck(7); doc.setFillColor(...R); doc.circle(MG+2,y-1,1,'F'); const ls=doc.splitTextToSize(tx(t),LW-7); doc.setFontSize(9); doc.setFont('helvetica','normal'); doc.setTextColor(...E); doc.text(ls,MG+6,y); y+=ls.length*5+2; };
+    const par=t=>{ const ls=doc.splitTextToSize(tx(t),LW); ck(ls.length*5+2); doc.setFontSize(9); doc.setFont('helvetica','normal'); doc.setTextColor(...E); doc.text(ls,MG,y); y+=ls.length*5+2; };
+    const dest=(t,c)=>{ const ls=doc.splitTextToSize(tx(t),LW-8); const h=ls.length*5+8; ck(h+4); const cc=c||R; doc.setDrawColor(...cc); doc.setLineWidth(2); doc.line(MG,y,MG,y+h); doc.setLineWidth(0.3); doc.setDrawColor(...cc); doc.roundedRect(MG,y,LW,h,2,2,'S'); doc.setTextColor(...E); doc.setFontSize(9); doc.setFont('helvetica','bolditalic'); doc.text(ls,MG+5,y+5); y+=h+5; doc.setFont('helvetica','normal'); };
+
+    sec('1. Tema 1249 do STJ — As 4 teses vinculantes');
+    dest('REsp 2.070.717 | 3a Secao do STJ | Rel. Min. Rogerio Schietti Cruz | j. 13/11/2024 | pub. 25/03/2025', P);
+    bull('Tese I: Natureza juridica de tutela inibitoria — nao depende de BO, inquerito ou processo.');
+    bull('Tese II: Sem prazo fixo — vigem enquanto persistir o risco (art. 19, §6o, LMP — Lei 14.550/2023).');
+    bull('Tese III: Arquivamento, extincao de punibilidade ou absolvicao NAO extinguem automaticamente a medida.');
+    bull('Tese IV: Sem revisao periodica obrigatoria, mas reavalivael a pedido ou de oficio. Revogacao exige contraditorio com oitiva de ambas as partes. Vitima deve ser comunicada.');
+    y+=3;
+
+    sec('2. A regra rebus sic stantibus');
+    par('A medida protetiva vigora enquanto o risco que a fundamentou persistir. Art. 19, §6o (Lei 14.550/2023): medidas vigorarao enquanto persistir risco a integridade fisica, psicologica, sexual, patrimonial ou moral da ofendida.');
+    bull('Prazo fixo pelo juiz (30, 60, 90 dias) e ilegal — combater por Agravo de Instrumento ou MS.');
+    bull('Silencio da vitima NAO implica revogacao — presume-se continuidade do risco.');
+    bull('Exigir que a vitima compare periodicamente e revitimizacao e violencia institucional (STJ, Tema 1249).');
+    y+=3;
+
+    sec('3. Renovacao x Revisao x Revogacao');
+    bull('Renovacao: manter medida com prazo indevido se esgotando. Com o Tema 1249, torna-se dispensavel — a medida nao termina automaticamente.');
+    bull('Revisao: ajustar medida a nova realidade fática (agressor mudou de cidade, situacao de risco mudou parcialmente). Exige oitiva das partes.');
+    bull('Revogacao: extinguir a medida quando o risco cessou concretamente. Exige: (1) mudanca fática demonstrada; (2) oitiva previa da vitima e do agressor; (3) comunicacao da vitima apos a decisao.');
+    y+=3;
+
+    sec('4. Estrategias praticas por polo');
+    par('ADVOGADA DA VITIMA / MP:');
+    bull('Quando processo for arquivado ou agressor absolvido: peticione imediatamente para manter a medida com base na Tese III + art. 19, §6o.');
+    bull('Se situacao de risco se agravar: peca ampliacao ou inclusao de monitoracao eletronica (art. 22, VIII — Lei 15.383/2026, vigor 10/4/2026).');
+    bull('Se juiz revogar sem oitir a vitima: Agravo de Instrumento (STJ, REsp 2.214.127) ou Mandado de Seguranca.');
+    par('DEFESA:');
+    bull('Pedido de revogacao deve demonstrar mudanca fática concreta — nao basta o tempo ou o arquivamento.');
+    bull('Argumentar proporcionalidade: medida desproporcional ao risco concreto atual (STJ, AgRg no REsp 2.070.292/MG, j. 11/2/2025).');
+    bull('O que NAO funciona: so o decurso do tempo, silencio da vitima, arquivamento isolado ou declaracao de perdao da vitima.');
+
+    const tot=doc.getNumberOfPages();
+    for(let i=1;i<=tot;i++){ doc.setPage(i); doc.setFontSize(8); doc.setTextColor(...M); doc.text('Penha em Cena - Modulo 02 - Aula 7 - Material de apoio exclusivo do aluno',MG,290); doc.text(i+' / '+tot,W-MG,290,{align:'right'}); }
+    doc.save('PenhaEmCena_M02_A07_Resumo.pdf');
+    btn.innerHTML='✓ PDF baixado!'; btn.style.background='rgba(29,158,117,0.25)';
+    setTimeout(()=>{ btn.innerHTML=orig; btn.style.background=''; btn.disabled=false; },3000);
+  } catch(e) { console.error('Erro PDF:',e); btn.innerHTML='✗ Erro.'; btn.disabled=false; }
+}
+
+buildSteps(); buildQuiz(); buildRes();
+</script>
+</body>
+</html>
