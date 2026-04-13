@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Módulo 02 · Aula 3 — Pedido de Medida Protetiva · Penha em Cena</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --rosa: #D4537E; --rosa2: #A33360;
+  --fundo: #0E0B14; --fundo2: #17122A; --fundo3: #211A38;
+  --roxo: #7F77DD; --texto: #F0EAF8; --muted: #9B8FBC;
+  --borda: rgba(212,83,126,0.2); --verde: #1D9E75;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'DM Sans', sans-serif; background: var(--fundo); color: var(--texto); min-height: 100vh; font-size: 18px; line-height: 1.75; }
+.bg-p { position:fixed;inset:0;pointer-events:none;z-index:0; background: radial-gradient(ellipse 60% 40% at 20% 20%, rgba(127,119,221,0.07) 0%, transparent 60%), radial-gradient(ellipse 40% 60% at 80% 80%, rgba(212,83,126,0.06) 0%, transparent 60%); }
+.header { position:sticky;top:0;z-index:100;background:rgba(14,11,20,0.95);border-bottom:1px solid var(--borda);padding:16px 32px;display:flex;align-items:center;gap:14px;backdrop-filter:blur(16px); }
+.logo { font-family:'Playfair Display',serif;font-size:20px;color:var(--rosa);font-weight:700; }
+.sep { color:var(--muted); } .info { font-size:15px;color:var(--muted); }
+.main { max-width:860px;margin:0 auto;padding:44px 32px 100px;position:relative;z-index:1; }
+.badge { display:inline-flex;align-items:center;background:rgba(212,83,126,0.12);border:1px solid rgba(212,83,126,0.3);border-radius:20px;padding:6px 16px;font-size:13px;font-weight:500;color:var(--rosa);letter-spacing:.06em;text-transform:uppercase;margin-bottom:20px; }
+.titulo { font-family:'Playfair Display',serif;font-size:clamp(28px,5vw,44px);font-weight:900;line-height:1.15;color:var(--texto);margin-bottom:16px; }
+.titulo em { color:var(--rosa);font-style:italic; }
+.desc { font-size:18px;color:var(--muted);line-height:1.9;margin-bottom:12px; }
+.objetivos { background:var(--fundo2);border:1px solid var(--borda);border-radius:14px;padding:24px 28px;margin-bottom:48px; }
+.obj-titulo { font-size:13px;font-weight:600;color:var(--rosa);text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px; }
+.obj-item { display:flex;align-items:flex-start;gap:12px;margin-bottom:10px;font-size:17px;color:var(--muted);line-height:1.7; }
+.obj-ic { color:var(--rosa);font-size:16px;margin-top:2px;flex-shrink:0; }
+.secao { margin-bottom:52px; }
+.secao-header { display:flex;align-items:center;gap:12px;margin-bottom:24px;padding-bottom:16px;border-bottom:1px solid var(--borda); }
+.secao-num { width:40px;height:40px;border-radius:50%;background:var(--rosa);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:18px;flex-shrink:0; }
+.secao-titulo { font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:var(--texto); }
+.secao-sub { font-size:15px;color:var(--muted);margin-top:2px; }
+
+/* VÍDEO */
+.video-wrap { position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:16px;border:1px solid var(--borda);background:#000; }
+.video-wrap iframe { position:absolute;top:0;left:0;width:100%;height:100%;border:0; }
+.video-nota { margin-top:14px;font-size:15px;color:var(--muted);text-align:center; }
+
+/* CARDS INFORMATIVOS */
+.info-grid { display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:8px; }
+@media(max-width:600px) { .info-grid { grid-template-columns:1fr; } }
+.info-card { background:var(--fundo2);border:1px solid var(--borda);border-radius:14px;padding:24px 22px; }
+.info-card.dest { border-color:rgba(212,83,126,0.4);background:rgba(212,83,126,0.03); }
+.info-card.verde { border-color:rgba(29,158,117,0.35);background:rgba(29,158,117,0.03); }
+.info-card.roxo { border-color:rgba(127,119,221,0.35);background:rgba(127,119,221,0.03); }
+.info-ic { font-size:28px;margin-bottom:10px; }
+.info-label { font-size:12px;font-weight:700;color:var(--rosa);text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px; }
+.info-label.verde { color:#5DCAA5; }
+.info-label.roxo { color:#AFA9EC; }
+.info-tit { font-size:18px;font-weight:600;color:var(--texto);margin-bottom:8px; }
+.info-txt { font-size:15px;color:var(--muted);line-height:1.8; }
+.info-txt strong { color:var(--texto); }
+.info-txt ul { padding-left:16px;margin-top:6px; }
+.info-txt li { margin-bottom:5px; }
+
+/* ALERTA */
+.alerta { background:rgba(201,150,58,0.07);border:1px solid rgba(201,150,58,0.25);border-radius:12px;padding:18px 22px;font-size:16px;color:rgba(240,234,248,0.85);line-height:1.8;margin-top:20px; }
+.alerta strong { color:#E8C46A; }
+</style>
+</head>
+<body>
+<div class="bg-p"></div>
+<header class="header">
+  <span class="logo">PENHA em Cena</span>
+  <span class="sep">/</span>
+  <span class="info">Módulo 02 · Aula 3</span>
+</header>
+
+<div class="main">
+
+  <div class="badge">Módulo 02 · Aula 3 — Vídeo</div>
+  <h1 class="titulo">Pedido de medida protetiva:<br><em>Quem pode, prazo e procedimento</em></h1>
+  <p class="desc">Quem tem legitimidade para pedir a medida protetiva? Qual o prazo para o juiz decidir? O que acontece se o pedido for feito na delegacia? Nesta aula você entende o fluxo completo do pedido — da ocorrência à decisão judicial.</p>
+
+  <div class="objetivos">
+    <div class="obj-titulo">O que você vai aprender</div>
+    <div class="obj-item"><span class="obj-ic">▸</span>Quem tem legitimidade para requerer medidas protetivas: vítima, MP, delegado e juiz de ofício</div>
+    <div class="obj-item"><span class="obj-ic">▸</span>O prazo de 48 horas do art. 18 da LMP e o que fazer quando ele não é cumprido</div>
+    <div class="obj-item"><span class="obj-ic">▸</span>O procedimento: da delegacia ao juízo, com ou sem advogado</div>
+    <div class="obj-item"><span class="obj-ic">▸</span>A possibilidade de concessão pelo delegado e pelo policial (art. 12-C da LMP)</div>
+  </div>
+
+  <!-- VÍDEO -->
+  <div class="secao">
+    <div class="secao-header">
+      <div class="secao-num">▶</div>
+      <div>
+        <div class="secao-titulo">Videoaula</div>
+        <div class="secao-sub">Assista com atenção antes de avançar para o resumo</div>
+      </div>
+    </div>
+    <div class="video-wrap">
+      <iframe
+        src="https://player.vimeo.com/video/1182330995?badge=0&autopause=0&player_id=0&app_id=58479&dnt=1"
+        frameborder="0"
+        allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media"
+        referrerpolicy="strict-origin-when-cross-origin"
+        title="Pedido de medida protetiva: Quem pode, prazo e procedimento">
+      </iframe>
+    </div>
+    <p class="video-nota">💡 Assista em tela cheia para melhor visualização</p>
+  </div>
+
+  <!-- RESUMO -->
+  <div class="secao">
+    <div class="secao-header">
+      <div class="secao-num" style="background:var(--roxo);font-size:16px;">📋</div>
+      <div>
+        <div class="secao-titulo">Pontos-chave da aula</div>
+        <div class="secao-sub">Consulte para fixar o conteúdo</div>
+      </div>
+    </div>
+
+    <div class="info-grid">
+      <div class="info-card dest">
+        <div class="info-ic">👤</div>
+        <div class="info-label">Legitimidade</div>
+        <div class="info-tit">Quem pode pedir</div>
+        <div class="info-txt">
+          <ul>
+            <li><strong>A própria vítima</strong> — diretamente, sem advogado (art. 27 LMP)</li>
+            <li><strong>Ministério Público</strong> — em qualquer fase</li>
+            <li><strong>Delegado de polícia</strong> — encaminha ao juízo em 48h (art. 12, III)</li>
+            <li><strong>Juiz de ofício</strong> — pode conceder mesmo sem pedido</li>
+            <li><strong>Advogado da vítima</strong> — petição direta ao juízo</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="info-card verde">
+        <div class="info-ic">⏱️</div>
+        <div class="info-label verde">Prazo</div>
+        <div class="info-tit">48 horas — art. 18 da LMP</div>
+        <div class="info-txt">Recebido o expediente com o pedido de medida protetiva, o juiz deve decidir em <strong>48 horas</strong>. Esse prazo é impróprio — o descumprimento não invalida a decisão, mas autoriza representação por excesso de prazo e pode fundamentar habeas corpus ou mandado de segurança em casos urgentes.</div>
+      </div>
+
+      <div class="info-card roxo">
+        <div class="info-ic">🚔</div>
+        <div class="info-label roxo">Art. 12-C — Urgência máxima</div>
+        <div class="info-tit">Delegado e policial podem agir</div>
+        <div class="info-txt">Quando há <strong>risco atual ou iminente</strong> à vida ou integridade física/psicológica e o município não é sede de comarca: o delegado (ou policial, se não houver delegado disponível) pode determinar o afastamento imediato do agressor. O juiz é comunicado em 24h e decide em igual prazo.</div>
+      </div>
+
+      <div class="info-card">
+        <div class="info-ic">⚖️</div>
+        <div class="info-label">Procedimento</div>
+        <div class="info-tit">Fluxo do pedido na prática</div>
+        <div class="info-txt">
+          <ul>
+            <li><strong>Via delegacia:</strong> vítima registra BO → delegado encaminha ao juízo em 48h → juiz decide em 48h</li>
+            <li><strong>Via advogado:</strong> petição direta ao JVD → juiz decide em 48h</li>
+            <li><strong>Via MP:</strong> representação direta ao juízo → juiz decide em 48h</li>
+            <li>Medida pode ser concedida <strong>inaudita altera parte</strong> (sem ouvir o agressor)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="alerta">
+      <strong>⚠️ Atenção prática:</strong> a vítima pode pedir a medida protetiva <strong>sem advogado e sem BO prévio</strong> — basta a narrativa dos fatos que demonstre situação de risco. Com a Lei 14.550/2023 (art. 19, §5º), a medida pode ser concedida independentemente de inquérito policial, ação penal ou qualquer outro procedimento. A proteção não espera o processo.
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
