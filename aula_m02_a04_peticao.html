@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Módulo 02 · Aula 4 — Como redigir o pedido · Penha em Cena</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --rosa: #D4537E; --rosa2: #A33360;
+  --fundo: #0E0B14; --fundo2: #17122A; --fundo3: #211A38;
+  --roxo: #7F77DD; --texto: #F0EAF8; --muted: #9B8FBC;
+  --borda: rgba(212,83,126,0.2); --verde: #1D9E75;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'DM Sans', sans-serif; background: var(--fundo); color: var(--texto); min-height: 100vh; font-size: 18px; line-height: 1.75; }
+.bg-p { position:fixed;inset:0;pointer-events:none;z-index:0; background: radial-gradient(ellipse 60% 40% at 20% 20%, rgba(127,119,221,0.07) 0%, transparent 60%), radial-gradient(ellipse 40% 60% at 80% 80%, rgba(212,83,126,0.06) 0%, transparent 60%); }
+.header { position:sticky;top:0;z-index:100;background:rgba(14,11,20,0.95);border-bottom:1px solid var(--borda);padding:16px 32px;display:flex;align-items:center;gap:14px;backdrop-filter:blur(16px); }
+.logo { font-family:'Playfair Display',serif;font-size:20px;color:var(--rosa);font-weight:700; }
+.sep { color:var(--muted); } .info { font-size:15px;color:var(--muted); }
+.main { max-width:860px;margin:0 auto;padding:44px 32px 100px;position:relative;z-index:1; }
+.badge { display:inline-flex;align-items:center;background:rgba(212,83,126,0.12);border:1px solid rgba(212,83,126,0.3);border-radius:20px;padding:6px 16px;font-size:13px;font-weight:500;color:var(--rosa);letter-spacing:.06em;text-transform:uppercase;margin-bottom:20px; }
+.titulo { font-family:'Playfair Display',serif;font-size:clamp(28px,5vw,44px);font-weight:900;line-height:1.15;color:var(--texto);margin-bottom:16px; }
+.titulo em { color:var(--rosa);font-style:italic; }
+.desc { font-size:18px;color:var(--muted);line-height:1.9;margin-bottom:12px; }
+.objetivos { background:var(--fundo2);border:1px solid var(--borda);border-radius:14px;padding:24px 28px;margin-bottom:48px; }
+.obj-titulo { font-size:13px;font-weight:600;color:var(--rosa);text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px; }
+.obj-item { display:flex;align-items:flex-start;gap:12px;margin-bottom:10px;font-size:17px;color:var(--muted);line-height:1.7; }
+.obj-ic { color:var(--rosa);font-size:16px;margin-top:2px;flex-shrink:0; }
+.secao { margin-bottom:52px; }
+.secao-header { display:flex;align-items:center;gap:12px;margin-bottom:24px;padding-bottom:16px;border-bottom:1px solid var(--borda); }
+.secao-num { width:40px;height:40px;border-radius:50%;background:var(--rosa);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:18px;flex-shrink:0; }
+.secao-titulo { font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:var(--texto); }
+.secao-sub { font-size:15px;color:var(--muted);margin-top:2px; }
+.video-wrap { position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:16px;border:1px solid var(--borda);background:#000; }
+.video-wrap iframe { position:absolute;top:0;left:0;width:100%;height:100%;border:0; }
+.video-nota { margin-top:14px;font-size:15px;color:var(--muted);text-align:center; }
+.pecas-grid { display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:8px; }
+@media(max-width:600px) { .pecas-grid { grid-template-columns:1fr; } }
+.peca-card { background:var(--fundo2);border:1px solid rgba(29,158,117,0.3);border-radius:16px;padding:28px 26px;display:flex;flex-direction:column;gap:14px; }
+.peca-ic { font-size:36px; }
+.peca-tit { font-family:'Playfair Display',serif;font-size:19px;font-weight:700;color:var(--texto); }
+.peca-desc { font-size:15px;color:var(--muted);line-height:1.75; }
+.peca-btn { display:inline-flex;align-items:center;gap:10px;padding:14px 22px;background:rgba(29,158,117,0.15);border:1px solid rgba(29,158,117,0.4);border-radius:10px;color:#5DCAA5;font-size:16px;font-weight:500;text-decoration:none;transition:all .2s;margin-top:auto; }
+.peca-btn:hover { background:rgba(29,158,117,0.28);transform:translateY(-1px); }
+.aviso { background:rgba(127,119,221,0.07);border:1px solid rgba(127,119,221,0.2);border-radius:12px;padding:18px 22px;font-size:15px;color:var(--muted);line-height:1.8;margin-top:20px; }
+.aviso strong { color:#AFA9EC; }
+</style>
+</head>
+<body>
+<div class="bg-p"></div>
+<header class="header">
+  <span class="logo">PENHA em Cena</span>
+  <span class="sep">/</span>
+  <span class="info">Módulo 02 · Aula 4</span>
+</header>
+<div class="main">
+
+  <div class="badge">Módulo 02 · Aula 4 — Vídeo</div>
+  <h1 class="titulo">Como redigir o pedido —<br><em>Petição comentada ao vivo</em></h1>
+  <p class="desc">Nesta masterclass ao vivo você acompanha a redação comentada de uma petição de medidas protetivas do início ao fim — da qualificação das partes ao rol de medidas requeridas. Baixe as peças modelo ao final para usar nos seus casos.</p>
+
+  <div class="objetivos">
+    <div class="obj-titulo">O que você vai aprender</div>
+    <div class="obj-item"><span class="obj-ic">▸</span>Como estruturar a petição de medidas protetivas: do cabeçalho ao pedido final</div>
+    <div class="obj-item"><span class="obj-ic">▸</span>Quais fatos precisam constar na narrativa para garantir a concessão das medidas</div>
+    <div class="obj-item"><span class="obj-ic">▸</span>Como redigir o rol de medidas de forma objetiva e tecnicamente correta</div>
+    <div class="obj-item"><span class="obj-ic">▸</span>Modelo comentado de petição de revogação de medidas protetivas</div>
+  </div>
+
+  <!-- VÍDEO -->
+  <div class="secao">
+    <div class="secao-header">
+      <div class="secao-num">▶</div>
+      <div>
+        <div class="secao-titulo">Aula ao vivo — Masterclass</div>
+        <div class="secao-sub">Assista com atenção e baixe as peças abaixo para acompanhar</div>
+      </div>
+    </div>
+    <div class="video-wrap">
+      <iframe
+        src="https://player.vimeo.com/video/1182494158?badge=0&autopause=0&player_id=0&app_id=58479&dnt=1"
+        frameborder="0"
+        allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media"
+        referrerpolicy="strict-origin-when-cross-origin"
+        title="Como redigir o pedido — Petição comentada ao vivo">
+      </iframe>
+    </div>
+    <p class="video-nota">💡 Assista em tela cheia para melhor visualização</p>
+  </div>
+
+  <!-- DOWNLOADS -->
+  <div class="secao">
+    <div class="secao-header">
+      <div class="secao-num" style="background:var(--verde);font-size:16px;">📥</div>
+      <div>
+        <div class="secao-titulo">Peças para download</div>
+        <div class="secao-sub">Modelos timbrados comentados na aula — use nos seus casos</div>
+      </div>
+    </div>
+
+    <div class="pecas-grid">
+      <div class="peca-card">
+        <div class="peca-ic">📄</div>
+        <div class="peca-tit">Requerimento de Medidas Protetivas</div>
+        <div class="peca-desc">Modelo completo de requerimento de medidas protetivas de urgência, com qualificação das partes, narrativa dos fatos e rol de medidas dos arts. 22, 23 e 24 da LMP. Timbrado e pronto para adaptação.</div>
+        <a class="peca-btn" href="https://cdupret.github.io/arquivosLMP/Requerimento_MedidasProtetivas_Timbrado.docx" download>
+          ↓ Baixar Requerimento (.docx)
+        </a>
+      </div>
+
+      <div class="peca-card">
+        <div class="peca-ic">📄</div>
+        <div class="peca-tit">Petição de Revogação de Medidas Protetivas</div>
+        <div class="peca-desc">Modelo de petição de revogação de medidas protetivas com fundamento no Tema 1249 do STJ e demonstração de mudança fática. Inclui estrutura de argumentação para a defesa. Timbrado e pronto para adaptação.</div>
+        <a class="peca-btn" href="https://cdupret.github.io/arquivosLMP/Peticao_Timbrada_RevogacaoMedidasProtetivas.docx" download>
+          ↓ Baixar Petição de Revogação (.docx)
+        </a>
+      </div>
+    </div>
+
+    <div class="aviso">
+      <strong>📌 Como usar os modelos:</strong> os arquivos estão em formato Word (.docx). Abra no Word, Google Docs ou LibreOffice, substitua os dados destacados em colchetes pelos dados do seu caso e adapte a narrativa à situação concreta. Os modelos seguem a estrutura comentada na aula.
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
