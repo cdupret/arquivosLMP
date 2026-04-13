@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Módulo 01 · Aula 6 — Vedações da Lei Maria da Penha · Penha em Cena</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --rosa: #D4537E; --rosa2: #A33360;
+  --fundo: #0E0B14; --fundo2: #17122A; --fundo3: #211A38;
+  --roxo: #7F77DD; --texto: #F0EAF8; --muted: #9B8FBC;
+  --borda: rgba(212,83,126,0.2); --verde: #1D9E75;
+  --dourado: #C9963A;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'DM Sans', sans-serif; background: var(--fundo); color: var(--texto); min-height: 100vh; font-size: 18px; line-height: 1.75; }
+.bg-p { position:fixed;inset:0;pointer-events:none;z-index:0; background: radial-gradient(ellipse 60% 40% at 20% 20%, rgba(127,119,221,0.07) 0%, transparent 60%), radial-gradient(ellipse 40% 60% at 80% 80%, rgba(212,83,126,0.06) 0%, transparent 60%); }
+.header { position:sticky;top:0;z-index:100;background:rgba(14,11,20,0.95);border-bottom:1px solid var(--borda);padding:16px 32px;display:flex;align-items:center;gap:14px;backdrop-filter:blur(16px); }
+.logo { font-family:'Playfair Display',serif;font-size:20px;color:var(--rosa);font-weight:700; }
+.sep { color:var(--muted); } .info { font-size:15px;color:var(--muted); }
+.main { max-width:860px;margin:0 auto;padding:44px 32px 100px;position:relative;z-index:1; }
+
+/* INTRODUÇÃO */
+.badge { display:inline-flex;align-items:center;background:rgba(212,83,126,0.12);border:1px solid rgba(212,83,126,0.3);border-radius:20px;padding:6px 16px;font-size:13px;font-weight:500;color:var(--rosa);letter-spacing:.06em;text-transform:uppercase;margin-bottom:20px; }
+.titulo { font-family:'Playfair Display',serif;font-size:clamp(28px,5vw,44px);font-weight:900;line-height:1.15;color:var(--texto);margin-bottom:16px; }
+.titulo em { color:var(--rosa);font-style:italic; }
+.desc { font-size:18px;color:var(--muted);line-height:1.9;margin-bottom:12px; }
+.objetivos { background:var(--fundo2);border:1px solid var(--borda);border-radius:14px;padding:24px 28px;margin-bottom:48px; }
+.obj-titulo { font-size:13px;font-weight:600;color:var(--rosa);text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px; }
+.obj-item { display:flex;align-items:flex-start;gap:12px;margin-bottom:10px;font-size:17px;color:var(--muted);line-height:1.7; }
+.obj-ic { color:var(--rosa);font-size:16px;margin-top:2px;flex-shrink:0; }
+
+/* SEÇÃO */
+.secao { margin-bottom:48px; }
+.secao-header { display:flex;align-items:center;gap:12px;margin-bottom:24px;padding-bottom:16px;border-bottom:1px solid var(--borda); }
+.secao-num { width:40px;height:40px;border-radius:50%;background:var(--rosa);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:18px;flex-shrink:0; }
+.secao-titulo { font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:var(--texto); }
+.secao-sub { font-size:15px;color:var(--muted);margin-top:2px; }
+
+/* PLAYER DE ÁUDIO */
+.player-wrap { background:var(--fundo2);border:1px solid var(--borda);border-radius:20px;padding:36px 40px;text-align:center;position:relative;overflow:hidden; }
+.player-wrap::before { content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 0%, rgba(212,83,126,0.08) 0%, transparent 70%);pointer-events:none; }
+.player-ic { font-size:64px;margin-bottom:16px;display:block; }
+.player-titulo { font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:var(--texto);margin-bottom:6px; }
+.player-sub { font-size:15px;color:var(--muted);margin-bottom:28px; }
+.player-duracao { display:inline-flex;align-items:center;gap:6px;background:rgba(212,83,126,0.1);border:1px solid rgba(212,83,126,0.2);border-radius:20px;padding:4px 14px;font-size:13px;color:var(--rosa);margin-bottom:28px; }
+
+/* Player HTML5 customizado */
+.audio-container { width:100%;max-width:560px;margin:0 auto; }
+audio { width:100%;border-radius:12px;outline:none; }
+audio::-webkit-media-controls-panel { background:var(--fundo3); }
+
+/* Fallback: botão de abrir no Drive */
+.drive-btn { display:inline-flex;align-items:center;gap:10px;margin-top:20px;padding:14px 28px;background:var(--rosa);color:#fff;border-radius:12px;font-size:17px;font-weight:500;text-decoration:none;transition:all .2s;border:none;cursor:pointer;font-family:'DM Sans',sans-serif; }
+.drive-btn:hover { background:var(--rosa2);transform:translateY(-1px); }
+.drive-btn-alt { display:inline-flex;align-items:center;gap:8px;margin-top:12px;padding:10px 20px;background:transparent;color:var(--muted);border:1px solid rgba(155,143,188,0.25);border-radius:10px;font-size:15px;text-decoration:none;transition:all .2s; }
+.drive-btn-alt:hover { color:var(--texto);border-color:rgba(155,143,188,0.5); }
+.player-nota { margin-top:16px;font-size:14px;color:var(--muted); }
+
+/* CARDS DE VEDAÇÕES */
+.ved-grid { display:grid;grid-template-columns:1fr;gap:14px;margin-top:8px; }
+.ved-card { background:var(--fundo2);border:1px solid var(--borda);border-radius:14px;padding:22px 26px;display:flex;gap:18px;align-items:flex-start; }
+.ved-card.dest { border-color:rgba(212,83,126,0.4);background:rgba(212,83,126,0.03); }
+.ved-ic { font-size:28px;flex-shrink:0;margin-top:2px; }
+.ved-titulo { font-size:18px;font-weight:600;color:var(--texto);margin-bottom:6px; }
+.ved-desc { font-size:16px;color:var(--muted);line-height:1.8; }
+.ved-desc strong { color:var(--texto); }
+.ved-art { display:inline-flex;align-items:center;background:rgba(212,83,126,0.1);border-radius:6px;padding:2px 10px;font-size:13px;color:var(--rosa);font-weight:600;margin-bottom:8px; }
+</style>
+</head>
+<body>
+<div class="bg-p"></div>
+<header class="header">
+  <span class="logo">PENHA em Cena</span>
+  <span class="sep">/</span>
+  <span class="info">Módulo 01 · Aula 6</span>
+</header>
+
+<div class="main">
+
+  <!-- INTRODUÇÃO -->
+  <div class="badge">Módulo 01 · Aula 6 — Áudio</div>
+  <h1 class="titulo">Vedações da<br><em>Lei Maria da Penha</em></h1>
+  <p class="desc">A Lei Maria da Penha proíbe expressamente uma série de institutos que eram comumente aplicados em crimes de menor potencial ofensivo. Conhecer essas vedações é essencial para qualquer advogado que atua na área — seja como defensor, assistente de acusação ou advogado da vítima.</p>
+
+  <div class="objetivos">
+    <div class="obj-titulo">O que você vai aprender</div>
+    <div class="obj-item"><span class="obj-ic">▸</span>Por que a Lei 9.099/95 é integralmente afastada nos casos de violência doméstica</div>
+    <div class="obj-item"><span class="obj-ic">▸</span>A vedação de penas de cesta básica, multa isolada e serviços comunitários substitutivos</div>
+    <div class="obj-item"><span class="obj-ic">▸</span>A proibição de suspensão condicional do processo e composição civil de danos</div>
+    <div class="obj-item"><span class="obj-ic">▸</span>Como essas vedações impactam a estratégia da defesa e da acusação</div>
+  </div>
+
+  <!-- SEÇÃO 1: PLAYER DE ÁUDIO -->
+  <div class="secao">
+    <div class="secao-header">
+      <div class="secao-num">🎧</div>
+      <div>
+        <div class="secao-titulo">Audioaula</div>
+        <div class="secao-sub">Ouça com atenção — você pode pausar a qualquer momento</div>
+      </div>
+    </div>
+
+    <div class="player-wrap">
+      <span class="player-ic">🎙️</span>
+      <div class="player-titulo">O que a Lei Maria da Penha proíbe</div>
+      <div class="player-sub">Vedações expressas — arts. 17 e 41 da Lei 11.340/2006</div>
+      <div class="player-duracao">🕐 Aproximadamente 15 minutos</div>
+
+      <div class="audio-container">
+        <audio controls preload="metadata" id="player">
+          <source src="https://drive.google.com/uc?export=open&id=1IYJ025trVvPQfwU467t8jk729eexYWSa" type="audio/mp4">
+          <source src="https://drive.google.com/uc?export=download&id=1IYJ025trVvPQfwU467t8jk729eexYWSa" type="audio/mp4">
+          Seu navegador não suporta o player de áudio.
+        </audio>
+      </div>
+
+      <p class="player-nota" id="player-nota">⏳ Carregando áudio...</p>
+
+      <div style="margin-top:20px;">
+        <a href="https://drive.google.com/file/d/1IYJ025trVvPQfwU467t8jk729eexYWSa/view?usp=drive_link" target="_blank" class="drive-btn-alt">
+          🔗 Abrir no Google Drive
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- SEÇÃO 2: RESUMO DAS VEDAÇÕES -->
+  <div class="secao">
+    <div class="secao-header">
+      <div class="secao-num" style="background:var(--roxo);font-size:16px;">📋</div>
+      <div>
+        <div class="secao-titulo">Resumo das Vedações</div>
+        <div class="secao-sub">Consulte enquanto ouve ou após a aula para fixar o conteúdo</div>
+      </div>
+    </div>
+
+    <div class="ved-grid">
+      <div class="ved-card dest">
+        <div class="ved-ic">🚫</div>
+        <div>
+          <div class="ved-art">Art. 41 — Lei 9.099/95</div>
+          <div class="ved-titulo">Afastamento integral da Lei dos Juizados Especiais</div>
+          <div class="ved-desc">Aos crimes praticados com violência doméstica e familiar contra a mulher, <strong>independentemente da pena prevista</strong>, não se aplica a Lei 9.099/1995. Isso afasta todos os institutos despenalizadores daquela lei — não apenas alguns.</div>
+        </div>
+      </div>
+
+      <div class="ved-card">
+        <div class="ved-ic">🧺</div>
+        <div>
+          <div class="ved-art">Art. 17 — Penas alternativas vedadas</div>
+          <div class="ved-titulo">Proibição de penas de cesta básica e multa isolada</div>
+          <div class="ved-desc">É vedada a aplicação, nos casos de violência doméstica e familiar contra a mulher, de <strong>penas de cesta básica ou outras de prestação pecuniária</strong>, bem como a <strong>substituição de pena que implique o pagamento isolado de multa</strong>. Fundamento: evitar a banalização da violência doméstica com sanções de baixo impacto.</div>
+        </div>
+      </div>
+
+      <div class="ved-card">
+        <div class="ved-ic">🤝</div>
+        <div>
+          <div class="ved-art">Art. 41 c/c Lei 9.099/95, art. 74</div>
+          <div class="ved-titulo">Vedação de composição civil dos danos</div>
+          <div class="ved-desc">A composição civil dos danos prevista no art. 74 da Lei 9.099/95 — que implica renúncia ao direito de representação — <strong>não se aplica</strong> aos crimes de violência doméstica. A eventual composição civil entre as partes não extingue a punibilidade nem impede a ação penal.</div>
+        </div>
+      </div>
+
+      <div class="ved-card">
+        <div class="ved-ic">⏸️</div>
+        <div>
+          <div class="ved-art">Art. 41 c/c Lei 9.099/95, art. 89</div>
+          <div class="ved-titulo">Vedação de suspensão condicional do processo</div>
+          <div class="ved-desc">O sursis processual (suspensão condicional do processo) <strong>não é cabível</strong> nos crimes de violência doméstica. STJ Súmula 536: "A suspensão condicional do processo e a transação penal não se aplicam na hipótese de delitos sujeitos ao rito da Lei Maria da Penha."</div>
+        </div>
+      </div>
+
+      <div class="ved-card">
+        <div class="ved-ic">🔄</div>
+        <div>
+          <div class="ved-art">Art. 41 c/c Lei 9.099/95, art. 76</div>
+          <div class="ved-titulo">Vedação de transação penal</div>
+          <div class="ved-desc">A transação penal — acordo pelo qual o autor do fato aceita uma pena restritiva de direitos em troca do arquivamento — <strong>também é vedada</strong>. Mesmo que o crime seja de menor potencial ofensivo (pena máxima até 2 anos), o contexto de violência doméstica afasta esse benefício. (STJ, Súmula 536)</div>
+        </div>
+      </div>
+
+      <div class="ved-card dest">
+        <div class="ved-ic">⚖️</div>
+        <div>
+          <div class="ved-art">Impacto prático</div>
+          <div class="ved-titulo">Como isso afeta a estratégia processual</div>
+          <div class="ved-desc"><strong>Para a defesa:</strong> não há espaço para acordos que encerrem o processo rapidamente. A estratégia precisa ser construída para o mérito — atipicidade, excludentes, insuficiência probatória.<br><strong>Para a acusação/assistente:</strong> qualquer acordo proposto pelo juízo que contrarie essas vedações é nulo e pode ser impugnado — inclusive por mandado de segurança.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const audio = document.getElementById('player');
+const nota = document.getElementById('player-nota');
+
+audio.addEventListener('canplay', () => { nota.textContent = '✓ Áudio pronto para reprodução'; nota.style.color = '#5DCAA5'; });
+audio.addEventListener('error', () => {
+  nota.innerHTML = '⚠️ O áudio não carregou automaticamente. <a href="https://drive.google.com/file/d/1IYJ025trVvPQfwU467t8jk729eexYWSa/view?usp=drive_link" target="_blank" style="color:var(--rosa)">Clique aqui para ouvir no Google Drive</a>';
+});
+audio.addEventListener('playing', () => { nota.textContent = '▶ Reproduzindo...'; nota.style.color = '#5DCAA5'; });
+audio.addEventListener('pause', () => { nota.textContent = '⏸ Pausado'; nota.style.color = 'var(--muted)'; });
+audio.addEventListener('ended', () => { nota.textContent = '✓ Áudio concluído'; nota.style.color = '#5DCAA5'; });
+
+// Tenta carregar — se falhar em 5 segundos, mostra fallback
+setTimeout(() => {
+  if (audio.readyState === 0) {
+    nota.innerHTML = 'O áudio pode demorar para carregar. Se não aparecer, <a href="https://drive.google.com/file/d/1IYJ025trVvPQfwU467t8jk729eexYWSa/view?usp=drive_link" target="_blank" style="color:var(--rosa)">ouça no Google Drive</a>';
+  }
+}, 5000);
+</script>
+</body>
+</html>
