@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Módulo 03 · Aula 6 — Liberdade Provisória e Condições · Penha em Cena</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --rosa: #D4537E; --rosa2: #A33360;
+  --fundo: #0E0B14; --fundo2: #17122A; --fundo3: #211A38;
+  --roxo: #7F77DD; --texto: #F0EAF8; --muted: #9B8FBC;
+  --borda: rgba(212,83,126,0.2); --verde: #1D9E75;
+  --dourado: #C9963A; --azul: #3A8ADC;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'DM Sans', sans-serif; background: var(--fundo); color: var(--texto); min-height: 100vh; font-size: 17px; line-height: 1.75; }
+.bg-p { position:fixed;inset:0;pointer-events:none;z-index:0; background: radial-gradient(ellipse 60% 40% at 20% 20%, rgba(127,119,221,0.07) 0%, transparent 60%), radial-gradient(ellipse 40% 60% at 80% 80%, rgba(212,83,126,0.06) 0%, transparent 60%); }
+.header { position:sticky;top:0;z-index:100;background:rgba(14,11,20,0.95);border-bottom:1px solid var(--borda);padding:14px 28px;display:flex;align-items:center;gap:14px;backdrop-filter:blur(16px); }
+.logo { font-family:'Playfair Display',serif;font-size:19px;color:var(--rosa);font-weight:700; }
+.sep { color:var(--muted); } .info { font-size:14px;color:var(--muted); }
+.prog { background:var(--fundo2);border-bottom:1px solid var(--borda);padding:12px 28px;position:sticky;top:57px;z-index:99; }
+.steps { max-width:900px;margin:0 auto;display:flex;align-items:center; }
+.step { display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;cursor:pointer;border:none;background:none; }
+.dot { width:32px;height:32px;border-radius:50%;border:2px solid rgba(155,143,188,0.3);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;color:var(--muted);transition:all .3s; }
+.dot.a { background:var(--rosa);border-color:var(--rosa);color:#fff;box-shadow:0 0 18px rgba(212,83,126,0.5); }
+.dot.d { background:var(--verde);border-color:var(--verde);color:#fff; }
+.slbl { font-size:9px;color:var(--muted);white-space:nowrap;text-align:center; }
+.slbl.a { color:var(--rosa); } .slbl.d { color:var(--verde); }
+.sline { flex:1;height:2px;background:rgba(155,143,188,0.15);margin-bottom:14px;transition:background .4s; }
+.sline.d { background:var(--verde); }
+.main { max-width:900px;margin:0 auto;padding:40px 28px 120px;position:relative;z-index:1; }
+.tela { display:none;animation:up .4s ease; }
+.tela.on { display:block; }
+@keyframes up { from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);} }
+.badge { display:inline-flex;align-items:center;gap:6px;background:rgba(212,83,126,0.12);border:1px solid rgba(212,83,126,0.3);border-radius:20px;padding:5px 14px;font-size:12px;font-weight:500;color:var(--rosa);letter-spacing:.06em;text-transform:uppercase;margin-bottom:18px; }
+.titulo { font-family:'Playfair Display',serif;font-size:clamp(24px,4vw,40px);font-weight:900;line-height:1.15;color:var(--texto);margin-bottom:14px; }
+.titulo em { color:var(--rosa);font-style:italic; }
+.desc { font-size:17px;color:var(--muted);line-height:1.9;margin-bottom:28px; }
+.card { background:var(--fundo2);border:1px solid var(--borda);border-radius:14px;padding:24px 26px;margin-bottom:16px; }
+.card.dest { border-color:rgba(212,83,126,0.45);background:rgba(212,83,126,0.04); }
+.card.verde { border-color:rgba(29,158,117,0.4);background:rgba(29,158,117,0.04); }
+.card.roxo { border-color:rgba(127,119,221,0.4);background:rgba(127,119,221,0.04); }
+.card.dourado { border-color:rgba(201,150,58,0.4);background:rgba(201,150,58,0.04); }
+.card.azul { border-color:rgba(58,138,220,0.35);background:rgba(58,138,220,0.04); }
+.card.alerta { border-color:rgba(220,80,80,0.4);background:rgba(220,80,80,0.04); }
+.card-label { font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:7px;color:var(--rosa); }
+.card-label.verde { color:#5DCAA5; } .card-label.roxo { color:#AFA9EC; }
+.card-label.dourado { color:#E8C46A; } .card-label.azul { color:#7BBAF0; }
+.card-label.alerta { color:#E87070; }
+.card-h { font-family:'Playfair Display',serif;font-size:19px;font-weight:700;color:var(--texto);margin-bottom:12px; }
+.card-p { font-size:16px;color:var(--muted);line-height:1.85;margin-bottom:10px; }
+.card-p:last-child { margin-bottom:0; }
+.card-p strong { color:var(--texto); }
+.card-p em { color:var(--rosa);font-style:normal; }
+.card-p a { color:var(--rosa);text-decoration:none; }
+.card-p a:hover { text-decoration:underline; }
+.lei { font-size:15px;color:var(--muted);border-left:3px solid var(--rosa);padding-left:15px;margin:12px 0;font-style:italic;line-height:1.85; }
+.lei.verde { border-left-color:var(--verde); }
+.lei.roxo { border-left-color:var(--roxo); }
+.lei.dourado { border-left-color:var(--dourado); }
+.julgado { background:var(--fundo3);border:1px solid rgba(127,119,221,0.25);border-radius:10px;padding:16px 18px;margin:12px 0;font-size:14px;color:var(--muted);line-height:1.85; }
+.julgado strong { color:#AFA9EC; }
+.julgado a { color:#AFA9EC;text-decoration:none; }
+.julgado a:hover { text-decoration:underline; }
+.tese-box { background:rgba(201,150,58,0.06);border:1px solid rgba(201,150,58,0.3);border-radius:12px;padding:18px 20px;margin:12px 0; }
+.tese-label { font-size:11px;font-weight:700;color:var(--dourado);text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px; }
+.tese-txt { font-size:15px;color:var(--muted);line-height:1.85;font-style:italic; }
+.tese-txt strong { color:var(--texto);font-style:normal; }
+.g2 { display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px; }
+@media(max-width:600px){ .g2{grid-template-columns:1fr;} }
+.cautelar-grid { display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0; }
+@media(max-width:600px){ .cautelar-grid{grid-template-columns:1fr;} }
+.cautelar-item { background:var(--fundo3);border:1px solid rgba(29,158,117,0.25);border-radius:12px;padding:16px 18px; }
+.cautelar-ic { font-size:22px;margin-bottom:8px; }
+.cautelar-tit { font-size:14px;font-weight:700;color:#5DCAA5;margin-bottom:5px; }
+.cautelar-art { font-size:11px;color:var(--muted);margin-bottom:6px;font-style:italic; }
+.cautelar-txt { font-size:13px;color:var(--muted);line-height:1.75; }
+.cautelar-txt strong { color:var(--texto); }
+.passo { display:flex;gap:16px;margin-bottom:14px;align-items:flex-start; }
+.passo-num { width:36px;height:36px;border-radius:50%;background:var(--rosa);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;flex-shrink:0;margin-top:2px; }
+.passo-num.verde { background:var(--verde); }
+.passo-num.dourado { background:var(--dourado); }
+.passo-corpo { flex:1; }
+.passo-tit { font-size:16px;font-weight:600;color:var(--texto);margin-bottom:5px; }
+.passo-txt { font-size:15px;color:var(--muted);line-height:1.8; }
+.passo-txt strong { color:var(--texto); }
+.modelo { background:var(--fundo3);border:1px solid rgba(127,119,221,0.2);border-radius:10px;padding:18px 20px;font-size:14px;color:var(--muted);line-height:1.95;font-style:italic;margin-top:10px; }
+.modelo strong { color:#AFA9EC;font-style:normal; }
+/* QUIZ */
+.qcard { background:var(--fundo2);border:1px solid var(--borda);border-radius:14px;padding:26px;margin-bottom:16px; }
+.qnum { font-size:12px;font-weight:600;color:var(--rosa);letter-spacing:.07em;text-transform:uppercase;margin-bottom:10px; }
+.qp { font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:var(--texto);margin-bottom:18px;line-height:1.5; }
+.qop { background:rgba(255,255,255,0.03);border:1px solid rgba(155,143,188,0.2);border-radius:9px;padding:13px 15px;margin-bottom:8px;cursor:pointer;font-size:15px;color:var(--muted);transition:all .2s;font-family:'DM Sans',sans-serif;line-height:1.65;text-align:left;width:100%; }
+.qop:hover:not(.bl) { border-color:var(--rosa);color:var(--texto);background:rgba(212,83,126,0.07); }
+.qop.ok { background:rgba(29,158,117,0.12);border-color:var(--verde);color:#9FE1CB;cursor:default; }
+.qop.er { background:rgba(212,83,126,0.1);border-color:var(--rosa);color:#EDB0C5;cursor:default; }
+.qop.bl { cursor:default; }
+.qfb { display:none;margin-top:10px;padding:13px 16px;border-radius:9px;font-size:14px;line-height:1.8; }
+.qfb.on { display:block; }
+.qfb.ok { background:rgba(29,158,117,0.1);border:1px solid rgba(29,158,117,0.25);color:#9FE1CB; }
+.qfb.er { background:rgba(212,83,126,0.08);border:1px solid rgba(212,83,126,0.2);color:#EDB0C5; }
+/* RESUMO */
+.rgrid { display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px;margin-bottom:26px; }
+.rcard { background:var(--fundo2);border:1px solid var(--borda);border-radius:12px;padding:20px; }
+.ric { font-size:22px;margin-bottom:8px; }
+.rtit { font-size:15px;font-weight:600;color:var(--texto);margin-bottom:6px; }
+.rtxt { font-size:13px;color:var(--muted);line-height:1.8; }
+.conclusao { background:linear-gradient(135deg,rgba(212,83,126,0.08),rgba(127,119,221,0.05));border:1px solid rgba(212,83,126,0.2);border-radius:16px;padding:32px;text-align:center;margin-top:20px; }
+.c-ic { font-size:44px;margin-bottom:10px; }
+.c-tit { font-family:'Playfair Display',serif;font-size:22px;font-weight:900;color:var(--verde);margin-bottom:8px; }
+.c-txt { font-size:16px;color:var(--muted);line-height:1.85; }
+.nav { display:flex;align-items:center;justify-content:space-between;margin-top:40px;padding-top:24px;border-top:1px solid var(--borda); }
+.btn { display:inline-flex;align-items:center;gap:8px;padding:12px 22px;border-radius:10px;font-size:16px;font-weight:500;cursor:pointer;transition:all .2s;border:none;font-family:'DM Sans',sans-serif; }
+.btn-s { background:rgba(255,255,255,0.05);color:var(--muted);border:1px solid rgba(155,143,188,0.2); }
+.btn-s:hover { background:rgba(255,255,255,0.09);color:var(--texto); }
+.btn-p { background:var(--rosa);color:#fff;box-shadow:0 4px 18px rgba(212,83,126,0.35); }
+.btn-p:hover { background:var(--rosa2);transform:translateY(-1px); }
+</style>
+</head>
+<body>
+<div class="bg-p"></div>
+<header class="header">
+  <span class="logo">PENHA em Cena</span>
+  <span class="sep">/</span>
+  <span class="info">Módulo 03 · Aula 6</span>
+</header>
+<div class="prog"><div class="steps" id="stps"></div></div>
+<div class="main">
+
+<!-- ═══ TELA 0 — FUNDAMENTOS ═══ -->
+<div class="tela on" id="t0">
+  <div class="badge">Módulo 03 · Aula 6</div>
+  <h1 class="titulo">Liberdade provisória<br>e <em>condições cautelares</em></h1>
+  <p class="desc">A liberdade é a regra. A prisão, a exceção. Mas em casos de violência doméstica, o sistema cautelar tem particularidades importantes que moldam como a defesa deve atuar — desde a audiência de custódia até muito depois do encerramento da instrução. Esta aula trata do arsenal de cautelares alternativas, como propô-las de forma eficaz e o que acontece quando elas são descumpridas.</p>
+
+  <div class="card dest">
+    <div class="card-label">Princípio basilar — art. 282 CPP + art. 5º, LIV e LVII, CF</div>
+    <div class="card-h">A liberdade como regra: proporcionalidade e necessidade</div>
+    <div class="lei">"As medidas cautelares previstas neste Título deverão ser aplicadas observando-se a: I – necessidade para aplicação da lei penal, para a investigação ou a instrução criminal e, nos casos expressamente previstos, para evitar a prática de infrações penais; II – adequação da medida à gravidade do crime, às circunstâncias do fato e às condições pessoais do indiciado ou acusado." (art. 282, I e II, CPP)</div>
+    <p class="card-p">O sistema cautelar brasileiro parte de uma lógica de gradação: a prisão preventiva é a medida mais gravosa e só pode ser decretada quando as cautelares diversas do art. 319 do CPP se mostrarem inadequadas ou insuficientes (art. 310, II, CPP). Isso vale também em violência doméstica.</p>
+    <div class="julgado">
+      <strong>STJ, HC 611.262/SP</strong> — 6ª Turma, j. 23/03/2021:<br>
+      "A prisão preventiva possui natureza excepcional, sempre sujeita a reavaliação, de modo que a decisão judicial que a impõe ou a mantém, para compatibilizar-se com a presunção de não culpabilidade e com o Estado Democrático de Direito — o qual se ocupa de proteger tanto a liberdade individual quanto a segurança e a paz públicas —, deve ser suficientemente motivada, com indicação concreta das razões fáticas e jurídicas que justificam a cautela, nos termos dos arts. 312, 313 e 282, I e II, do Código de Processo Penal."
+    </div>
+    <p class="card-p"><strong>Mas atenção — vedação à substituição da pena (não confundir com cautelar):</strong> a Súmula 588 do STJ trata de substituição de pena privativa de liberdade por restritiva de direitos na sentença condenatória — não de medidas cautelares durante o processo. As cautelares do art. 319 continuam plenamente aplicáveis durante a persecução penal em violência doméstica.</p>
+    <div class="tese-box">
+      <div class="tese-label">Súmula 588/STJ</div>
+      <div class="tese-txt">"<strong>A prática de crime ou contravenção penal contra a mulher com violência ou grave ameaça no ambiente doméstico impossibilita a substituição da pena privativa de liberdade por restritiva de direitos.</strong>" (Terceira Seção, aprovada em 13/09/2017, DJe 18/09/2017)<br><strong>Atenção:</strong> esta súmula trata de substituição de PENA na sentença — não impede a aplicação de cautelares alternativas durante o processo.</div>
+    </div>
+  </div>
+
+  <div class="card azul">
+    <div class="card-label azul">O que é a liberdade provisória em violência doméstica</div>
+    <div class="card-h">Liberdade provisória ≠ liberdade plena</div>
+    <p class="card-p">A liberdade provisória é a situação em que o acusado responde ao processo em liberdade, mas sujeito a condições impostas pelo juízo. Pode ser:</p>
+    <p class="card-p"><strong>① Liberdade provisória com fiança:</strong> o acusado paga um valor (fiança) como garantia de comparecimento aos atos processuais. Em violência doméstica, a concessão de fiança pela autoridade policial geralmente não é cabível — seja em razão das penas mais elevadas dos crimes praticados (que ultrapassam o limite do art. 322 do CPP para a fiança policial), seja em razão de proibições legais específicas. É o caso do crime de descumprimento de medidas protetivas de urgência (art. 24-A da Lei Maria da Penha), cujo §2º dispõe expressamente que "na hipótese de prisão em flagrante, apenas a autoridade judicial poderá conceder fiança". Na prática, a fiança em violência doméstica é quase sempre concedida ou negada pelo juízo — não pelo delegado.</p>
+    <p class="card-p"><strong>② Liberdade provisória sem fiança, com cautelares do art. 319:</strong> o acusado é liberado mediante cumprimento de condições impostas pelo juiz. É a modalidade mais comum em violência doméstica.</p>
+    <p class="card-p"><strong>③ Liberdade provisória sem fiança e sem outras cautelares:</strong> caso raro em violência doméstica — reservado para situações em que não há qualquer risco demonstrado.</p>
+    <p class="card-p"><strong>Importante para a defesa — art. 12-C, §2º, Lei Maria da Penha:</strong> "Nos casos de risco à integridade física da ofendida ou à efetividade da medida protetiva de urgência, não será concedida liberdade provisória ao preso." Este dispositivo exige demonstração concreta do risco — não é uma vedação automática.</p>
+  </div>
+
+  <div class="nav"><span></span>
+    <button class="btn btn-p" onclick="ir(1)">Próximo: As cautelares do art. 319 →</button>
+  </div>
+</div>
+
+<!-- ═══ TELA 1 — ART. 319 CPP ═══ -->
+<div class="tela" id="t1">
+  <div class="badge">Etapa 2 de 5</div>
+  <h1 class="titulo">As cautelares do <em>art. 319 do CPP</em><br>em violência doméstica</h1>
+  <p class="desc">O art. 319 do CPP lista as medidas cautelares diversas da prisão. Em violência doméstica, algumas delas têm aplicação rotineira; outras são raramente usadas. Saber qual propor — e como combinar — é o que separa um pedido eficaz de um genérico.</p>
+
+  <div class="card roxo">
+    <div class="card-label roxo">As 9 medidas do art. 319 CPP — aplicação em violência doméstica</div>
+    <div class="card-h">Quais usar, quando e como combinar</div>
+    <div class="cautelar-grid">
+      <div class="cautelar-item">
+        <div class="cautelar-ic">📅</div>
+        <div class="cautelar-tit">I — Comparecimento periódico</div>
+        <div class="cautelar-art">Art. 319, I, CPP</div>
+        <div class="cautelar-txt">Comparecer ao juízo periodicamente para informar atividades. <strong>Uso em violência doméstica:</strong> muito comum. Demonstra controle sobre o acusado e garante que o juízo saberá de qualquer mudança de situação.</div>
+      </div>
+      <div class="cautelar-item">
+        <div class="cautelar-ic">🚫</div>
+        <div class="cautelar-tit">II — Proibição de acesso a lugares</div>
+        <div class="cautelar-art">Art. 319, II, CPP</div>
+        <div class="cautelar-txt">Impede o acusado de frequentar locais ligados ao crime. <strong>Uso em violência doméstica:</strong> proibição de frequentar o entorno da residência, trabalho ou escola da vítima.</div>
+      </div>
+      <div class="cautelar-item">
+        <div class="cautelar-ic">📵</div>
+        <div class="cautelar-tit">III — Proibição de contato com pessoa</div>
+        <div class="cautelar-art">Art. 319, III, CPP</div>
+        <div class="cautelar-txt">Proibição de manter contato com a vítima, familiares e testemunhas por qualquer meio. <strong>Uso em violência doméstica:</strong> essencial. Frequentemente combinada com a proibição de aproximação.</div>
+      </div>
+      <div class="cautelar-item">
+        <div class="cautelar-ic">🗺️</div>
+        <div class="cautelar-tit">IV — Proibição de ausentar-se da comarca</div>
+        <div class="cautelar-art">Art. 319, IV, CPP</div>
+        <div class="cautelar-txt">Proibição de deixar a comarca sem autorização judicial. <strong>Uso em violência doméstica:</strong> útil quando há risco de fuga ou quando a instrução criminal exige a presença do acusado.</div>
+      </div>
+      <div class="cautelar-item">
+        <div class="cautelar-ic">🏠</div>
+        <div class="cautelar-tit">V — Recolhimento domiciliar noturno</div>
+        <div class="cautelar-art">Art. 319, V, CPP</div>
+        <div class="cautelar-txt">Recolhimento em residência no período noturno e dias de folga. <strong>Uso em violência doméstica:</strong> adequado quando o risco se concentra no período noturno. Exige residência e trabalho fixos.</div>
+      </div>
+      <div class="cautelar-item">
+        <div class="cautelar-ic">🔒</div>
+        <div class="cautelar-tit">VI — Suspensão de função pública</div>
+        <div class="cautelar-art">Art. 319, VI, CPP</div>
+        <div class="cautelar-txt">Suspensão de função pública ou atividade econômica. <strong>Uso em violência doméstica:</strong> raro. Pode ser relevante quando o acusado usa cargo de autoridade para intimidar a vítima.</div>
+      </div>
+      <div class="cautelar-item">
+        <div class="cautelar-ic">🔫</div>
+        <div class="cautelar-tit">VII — Internação provisória</div>
+        <div class="cautelar-art">Art. 319, VII, CPP</div>
+        <div class="cautelar-txt">Para inimputáveis ou semi-imputáveis. <strong>Uso em violência doméstica:</strong> raro. Aplicável quando o acusado tem transtorno mental que contribuiu para a violência.</div>
+      </div>
+      <div class="cautelar-item">
+        <div class="cautelar-ic">💰</div>
+        <div class="cautelar-tit">VIII — Fiança</div>
+        <div class="cautelar-art">Art. 319, VIII, CPP</div>
+        <div class="cautelar-txt">Pagamento de valor como garantia. <strong>Uso em violência doméstica:</strong> possível, mas apenas por decisão judicial (vedada ao delegado). Pode ser combinada com outras cautelares.</div>
+      </div>
+      <div class="cautelar-item">
+        <div class="cautelar-ic">📡</div>
+        <div class="cautelar-tit">IX — Monitoração eletrônica</div>
+        <div class="cautelar-art">Art. 319, IX, CPP + art. 22, VIII, Lei Maria da Penha (Lei 15.383/2026)</div>
+        <div class="cautelar-txt">Uso de tornozeleira ou dispositivo similar. <strong>Uso em violência doméstica:</strong> muito eficaz e muito usado. Permite monitorar o cumprimento das proibições de aproximação em tempo real.<br><br><strong>Novidade — Lei 15.383/2026:</strong> a monitoração eletrônica foi incluída como medida protetiva autônoma no art. 22, VIII da Lei Maria da Penha, com previsão de dispositivo de segurança para a <em>vítima</em> que alerte sobre aproximação do agressor. Pode ser aplicada pelo delegado (em município sem sede de comarca), mesmo antes de qualquer processo penal instaurado, nos termos do novo art. 12-D da Lei Maria da Penha.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card verde">
+    <div class="card-label verde">O pacote ideal para a defesa em violência doméstica</div>
+    <div class="card-h">Como propor um conjunto de cautelares convincente</div>
+    <p class="card-p">Na audiência de custódia, a defesa deve propor um conjunto de cautelares robusto o suficiente para que o juiz não sinta necessidade da prisão. Um pacote bem elaborado ataca diretamente cada fundamento que poderia justificar a preventiva.</p>
+    <div class="passo">
+      <div class="passo-num verde">1</div>
+      <div class="passo-corpo">
+        <div class="passo-tit">Identifique o risco específico do caso</div>
+        <div class="passo-txt">O risco é de reiteração? De ameaça à vítima? De intimidação de testemunhas? Cada tipo de risco tem a cautelar adequada. Não proponha cautelares genéricas — proponha as que efetivamente neutralizam o risco apontado.</div>
+      </div>
+    </div>
+    <div class="passo">
+      <div class="passo-num verde">2</div>
+      <div class="passo-corpo">
+        <div class="passo-tit">Combine no mínimo 3 cautelares</div>
+        <div class="passo-txt">Um pacote sólido em violência doméstica geralmente inclui: <strong>proibição de contato + proibição de aproximação (com distância específica em metros) + comparecimento periódico ao juízo + monitoração eletrônica</strong>. Quanto mais específico o pacote, mais difícil o juiz justificar a prisão.</div>
+      </div>
+    </div>
+    <div class="passo">
+      <div class="passo-num verde">3</div>
+      <div class="passo-corpo">
+        <div class="passo-tit">Apresente elementos concretos de cumprimento</div>
+        <div class="passo-txt">Demonstre que seu cliente TEM condições de cumprir as cautelares: residência fixa (endereço comprovado), trabalho fixo, família presente, ausência de antecedentes, inexistência de descumprimentos anteriores. O juiz precisa de confiança no cumprimento.</div>
+      </div>
+    </div>
+    <div class="passo">
+      <div class="passo-num verde">4</div>
+      <div class="passo-corpo">
+        <div class="passo-tit">Cita a subsidiariedade da prisão</div>
+        <div class="passo-txt">Cite o art. 310, II CPP: a conversão em preventiva só é cabível quando as cautelares diversas "se revelarem inadequadas ou insuficientes". Se o pacote que você propõe é adequado e suficiente para o risco concreto do caso, a prisão é desproporcional.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card dourado">
+    <div class="card-label dourado">Como o STJ estrutura a liberdade com cautelares em violência doméstica</div>
+    <div class="card-h">O padrão das decisões que concedem liberdade provisória com condições</div>
+    <p class="card-p">Quando o STJ ou os tribunais concedem a liberdade provisória em casos de violência doméstica, o padrão das decisões inclui um conjunto específico de condições cumulativas. A fórmula consolidada na jurisprudência costuma reunir:</p>
+    <p class="card-p">① proibição de aproximação da vítima, com fixação de distância mínima específica em metros;<br>
+    ② proibição de qualquer contato com a vítima por qualquer meio de comunicação;<br>
+    ③ proibição de frequentar locais habitualmente frequentados pela vítima;<br>
+    ④ proibição de ausentar-se da comarca sem autorização judicial;<br>
+    ⑤ comparecimento periódico ao Juízo de Violência Doméstica e Familiar para informar e justificar atividades.</p>
+    <p class="card-p">A decisão sempre ressalva que o descumprimento de qualquer das condições poderá ensejar a imediata decretação da prisão preventiva (art. 282, §4º CPP). O pacote é construído para demonstrar que as cautelares são suficientes para neutralizar o risco específico do caso — o que é exatamente o argumento que a defesa deve apresentar na audiência de custódia.</p>
+    <div class="julgado">
+      <strong>STJ — posição consolidada (art. 310, II c/c art. 319 CPP):</strong><br>
+      A conversão do flagrante em preventiva só é legítima quando as cautelares diversas "se revelarem inadequadas ou insuficientes". O STJ reiteradamente afirma que a prisão preventiva só se justifica quando demonstrada concretamente a insuficiência das cautelares do art. 319 para tutelar o risco existente.
+    </div>
+    <div class="julgado">
+      <strong>STJ, AgRg no HC 741.105/SP — 6ª Turma, j. 19/12/2022 — exemplo de liberdade provisória concedida com cautelares em violência doméstica:</strong><br>
+      "Embora o decreto preventivo certamente indique algum nível de periculosidade, a medida extrema revela-se inadequada para a finalidade de acautelar a ordem pública, visto que a primeira decisão não só suspendeu a autorização para possuir arma, como registrou 'que o autuado, em audiência, não revelou qualquer oposição quanto a evitar a aquisição de novas armas de fogo, enquanto pendente a apuração do presente caso', além do fato de a ação penal em comento ser o primeiro registro criminal do réu. Com base nessas premissas, é o caso de considerar-se adequado o restabelecimento da primeira decisão, que concedera a liberdade provisória do paciente, condicionado à imposição de medidas cautelares e protetivas diversas da prisão."<br>
+      <em>Este julgado mostra exatamente o que a defesa precisa construir: ausência de antecedentes + colaboração do réu + inadequação da prisão para o risco concreto = liberdade com cautelares.</em>
+    </div>
+  </div>
+
+  <div class="card alerta">
+    <div class="card-label alerta">A rigorosidade da jurisprudência — e o que isso muda na sua atuação</div>
+    <div class="card-h">Por que conseguir liberdade em violência doméstica é difícil: os julgados revelam</div>
+    <p class="card-p">Os tribunais brasileiros aplicam entendimentos consolidados que tornam a conquista da liberdade provisória em casos de violência doméstica um desafio real. Conhecer essa jurisprudência é fundamental para duas coisas: saber quando a prisão tem sustentação concreta e orientar o cliente desde o início sobre a importância de não descumprir medidas protetivas.</p>
+    <div class="julgado">
+      <strong>STJ, RHC 194.882/SP — 5ª Turma:</strong><br>
+      "A jurisprudência desta Corte firma que a gravidade concreta do delito e a periculosidade do agente, especialmente em casos de violência doméstica, justificam a prisão preventiva, mesmo quando presentes condições pessoais favoráveis, como primariedade e residência fixa."
+    </div>
+    <div class="julgado">
+      <strong>STJ, RHC 225.592/MG — 6ª Turma, j. 03/12/2025:</strong><br>
+      "1. A prisão preventiva foi fundamentada na gravidade concreta do delito, evidenciada pelo flagrante do recorrente aplicando golpe de estrangulamento na vítima, sua companheira, além de relatos de agressões anteriores e ameaças com faca. 2. Os requisitos do art. 312 do Código de Processo Penal foram considerados presentes, com demonstração da necessidade da custódia cautelar para garantia da ordem pública e proteção da integridade física e psicológica da vítima. 3. O art. 313, III, do Código de Processo Penal autoriza a decretação da prisão preventiva em casos de violência doméstica e familiar contra a mulher, para garantir a execução de medidas protetivas de urgência. 4. As condições pessoais favoráveis do recorrente, como primariedade e residência fixa, não são suficientes para afastar a necessidade da prisão preventiva, diante da gravidade concreta da conduta e do risco à integridade da vítima. 5. Recurso em habeas corpus improvido."
+    </div>
+    <div class="julgado">
+      <strong>STJ, RHC 204.948/MG — 5ª Turma, j. 10/12/2024:</strong><br>
+      "A jurisprudência do STJ admite a prisão preventiva nos casos de violência doméstica em que o acusado descumpre medidas protetivas, em razão da necessidade de proteger a vítima e garantir a execução das medidas de urgência, conforme o art. 313, III, do CPP e o art. 12-C, §2º, da Lei nº 11.340/2006."
+    </div>
+    <p class="card-p"><strong>O que essa jurisprudência significa na prática:</strong></p>
+    <p class="card-p">① <strong>A audiência de custódia é o momento decisivo.</strong> Depois que a preventiva se consolida e há histórico de descumprimentos, reverter torna-se exponencialmente mais difícil. O argumento mais eficaz é apresentado antes que o cliente dê qualquer razão ao tribunal para manter a prisão.</p>
+    <p class="card-p">② <strong>Oriente o cliente com firmeza sobre o descumprimento.</strong> O STJ é categórico: descumprimento de medida protetiva é o argumento mais forte para a manutenção da preventiva. Um único descumprimento pode destruir meses de esforço da defesa. A orientação preventiva ao cliente vale mais do que qualquer peça posterior.</p>
+    <p class="card-p">③ <strong>Trabalhe com o que é factível.</strong> Em casos com modus operandi grave (estrangulamento, arma, ameaças de morte) e histórico de agressões, a jurisprudência será muito difícil de superar. Nessas situações, proponha cautelares que demonstrem ao juízo que o risco específico está controlado — e prepare sempre o argumento subsidiário de eventualidade.</p>
+  </div>
+
+  <div class="nav">
+    <button class="btn btn-s" onclick="ir(0)">← Voltar</button>
+    <button class="btn btn-p" onclick="ir(2)">Próximo: Descumprimento das cautelares →</button>
+  </div>
+</div>
+
+<!-- ═══ TELA 2 — DESCUMPRIMENTO DAS CAUTELARES ═══ -->
+<div class="tela" id="t2">
+  <div class="badge">Etapa 3 de 5</div>
+  <h1 class="titulo">Descumprimento<br>das <em>cautelares</em></h1>
+  <p class="desc">O descumprimento das condições impostas na liberdade provisória é o momento mais crítico para a defesa. O que acontece, quais são as consequências e como atuar quando o cliente descumpriu — ou quando a acusação alega que descumpriu.</p>
+
+  <div class="card dest">
+    <div class="card-label">Art. 282, §4º CPP — consequências do descumprimento</div>
+    <div class="card-h">O que pode acontecer quando as cautelares são descumpridas</div>
+    <div class="lei">"No caso de descumprimento de qualquer das obrigações impostas, o juiz, mediante requerimento do Ministério Público, de seu assistente ou do querelante, poderá substituir a medida, impor outra em cumulação, ou, em último caso, decretar a prisão preventiva, nos termos do parágrafo único do art. 312 deste Código." (art. 282, §4º, CPP — redação da Lei 13.964/2019)</div>
+    <p class="card-p">O descumprimento não leva automaticamente à prisão. Há uma gradação:</p>
+    <p class="card-p"><strong>1ª reação possível:</strong> substituição da medida descumprida por outra mais eficaz.</p>
+    <p class="card-p"><strong>2ª reação possível:</strong> cumulação de novas condições às já existentes.</p>
+    <p class="card-p"><strong>Último recurso:</strong> decretação da prisão preventiva — somente se as demais respostas forem insuficientes e estiverem presentes os requisitos do art. 312 do CPP.</p>
+    <p class="card-p"><strong>Importante:</strong> o juiz não pode decretar a prisão de ofício pelo descumprimento — é necessário requerimento do Ministério Público, do querelante ou do assistente (art. 282, §4º, CPP).</p>
+  </div>
+
+  <div class="card alerta">
+    <div class="card-label alerta">Descumprimento + crime de violência doméstica = preventiva mais difícil de evitar</div>
+    <div class="card-h">O cenário mais difícil para a defesa</div>
+    <p class="card-p">Quando o descumprimento da cautelar envolve um novo ato de violência contra a vítima — e não apenas um contato indevido —, a jurisprudência é dura com a defesa:</p>
+    <div class="julgado">
+      <strong>STJ, 5ª Turma, j. 13/02/2025 a 19/02/2025 (Sessão Virtual)</strong>:<br>
+      "São inaplicáveis quaisquer medidas cautelares alternativas previstas no art. 319 do CPP, uma vez que as circunstâncias do delito evidenciam a insuficiência das providências menos graves." — Aplicado quando há descumprimento com reiteração de violência e histórico de descumprimentos anteriores.<br>
+      <a href="https://processo.stj.jus.br/SCON/pesquisar.jsp?b=ACOR&livre=descumprimento+medida+protetiva+art+319+insuficiencia+violencia+domestica" target="_blank">Pesquisa — STJ</a>
+    </div>
+    <p class="card-p"><strong>Estratégia para a defesa quando o cliente descumpriu:</strong></p>
+    <p class="card-p">① <strong>Atipicidade do descumprimento:</strong> se o contato foi iniciado pela vítima sem coação, o STJ admite atipicidade do crime de descumprimento (AgRg no AREsp 2.330.912/DF, Min. Ribeiro Dantas, 5ª Turma, j. 22/08/2023).</p>
+    <p class="card-p">② <strong>Descumprimento único vs. reiterado:</strong> um único descumprimento não necessariamente justifica a preventiva. A gradação do art. 282, §4º CPP deve ser observada.</p>
+    <p class="card-p">③ <strong>Propor imediatamente um pacote mais robusto:</strong> ao invés de apenas contestar o descumprimento, proponha cautelares mais restritivas (com monitoração eletrônica, por exemplo) que tornem a prisão desnecessária.</p>
+  </div>
+
+  <div class="card roxo">
+    <div class="card-label roxo">Perspectiva da assistência de acusação ou advogado da vítima</div>
+    <div class="card-h">O que fazer quando o agressor descumpriu as condições</div>
+    <div class="passo">
+      <div class="passo-num">1</div>
+      <div class="passo-corpo">
+        <div class="passo-tit">Notifique imediatamente e documente</div>
+        <div class="passo-txt">Oriente a vítima a registrar boletim de ocorrência do descumprimento imediatamente. Documente: prints de mensagens, chamadas, fotos, testemunhas. A prova do descumprimento é essencial para o requerimento ao juízo.</div>
+      </div>
+    </div>
+    <div class="passo">
+      <div class="passo-num">2</div>
+      <div class="passo-corpo">
+        <div class="passo-tit">Protocole requerimento ao juízo</div>
+        <div class="passo-txt">Com fundamento no art. 282, §4º CPP, requeira ao Juízo de Violência Doméstica e Familiar: (1) a substituição das cautelares por outras mais eficazes; (2) a cumulação de novas condições; ou (3) em caso de risco iminente grave, a decretação da prisão preventiva pelo Ministério Público.</div>
+      </div>
+    </div>
+    <div class="passo">
+      <div class="passo-num">3</div>
+      <div class="passo-corpo">
+        <div class="passo-tit">Requeira monitoração eletrônica</div>
+        <div class="passo-txt">A Lei 15.383/2026 incluiu a monitoração eletrônica como medida protetiva que pode ser aplicada de forma autônoma (art. 22, VIII, Lei Maria da Penha). Requeira expressamente sua implementação ao Juízo — inclusive com dispositivo de segurança para a vítima que alerte sobre aproximação do agressor.</div>
+      </div>
+    </div>
+    <div class="passo">
+      <div class="passo-num">4</div>
+      <div class="passo-corpo">
+        <div class="passo-tit">Se houver risco imediato — art. 12-C da Lei Maria da Penha</div>
+        <div class="passo-txt">O art. 12-C permite que o delegado ou o policial (em município sem sede de comarca) afaste imediatamente o agressor do lar, independentemente de autorização judicial prévia, se há risco atual ou iminente à integridade física ou psicológica da vítima. O juiz deve ser comunicado em 24 horas.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="nav">
+    <button class="btn btn-s" onclick="ir(1)">← Voltar</button>
+    <button class="btn btn-p" onclick="ir(3)">Próximo: Como pedir a liberdade provisória →</button>
+  </div>
+</div>
+
+<!-- ═══ TELA 3 — COMO PEDIR A LIBERDADE PROVISÓRIA ═══ -->
+<div class="tela" id="t3">
+  <div class="badge">Etapa 4 de 5</div>
+  <h1 class="titulo">Como pedir a liberdade provisória<br>com <em>cautelares</em></h1>
+  <p class="desc">A audiência de custódia e o pedido de liberdade provisória são os momentos em que a preparação da defesa faz toda a diferença. Aqui está a estrutura de um pedido eficaz — e o modelo de petição para usar fora da audiência.</p>
+
+  <div class="card azul">
+    <div class="card-label azul">O momento oportuno — audiência de custódia</div>
+    <div class="card-h">Quando e como pedir a liberdade provisória frente a uma prisão legal</div>
+    <p class="card-p">O momento natural para requerer a liberdade provisória com cautelares é a <strong>audiência de custódia</strong>, quando o cliente foi preso em flagrante de forma legal. Diante de uma prisão ilegal, o pedido é de relaxamento (art. 310, I CPP) — não de liberdade provisória.</p>
+    <p class="card-p">Na audiência de custódia, a estratégia da defesa deve ser construída em dois argumentos complementares, apresentados em conjunto — o chamado <strong>argumento de eventualidade</strong>:</p>
+    <p class="card-p"><strong>Argumento principal:</strong> ausência dos requisitos e pressupostos do art. 312 do CPP. Demonstre que não há fumus comissi delicti suficiente, ou que não há periculum libertatis concreto (o perigo gerado pelo estado de liberdade do imputado). A vedação à gravidade abstrata do art. 312, §4º CPP (Lei 15.272/2025) é seu aliado central aqui.</p>
+    <p class="card-p"><strong>Argumento subsidiário (eventualidade):</strong> ainda que o juiz entenda presentes os requisitos do art. 312, as cautelares diversas do art. 319 CPP são adequadas e suficientes para neutralizar o risco. A conversão em preventiva só é legítima quando as cautelares se revelarem "inadequadas ou insuficientes" (art. 310, II CPP). Demonstre que seu cliente tem condições concretas de cumprir o pacote proposto de forma oportuna e segura — residência fixa, trabalho, família, ausência de antecedentes.</p>
+    <p class="card-p"><em>Nunca abandone o argumento principal por ter proposto cautelares. Apresente os dois, na ordem correta: primeiro demonstra que não há requisitos; segundo, que se o juiz entender diferente, as cautelares bastam. Isso não é contraditório — é técnica processual.</em></p>
+  </div>
+
+  <div class="card azul">
+    <div class="card-label azul">O momento oportuno — audiência de custódia</div>
+    <div class="card-h">Quando e como pedir a liberdade provisória frente a uma prisão legal</div>
+    <p class="card-p">O momento natural para requerer a liberdade provisória com cautelares é a <strong>audiência de custódia</strong>, quando o cliente foi preso em flagrante de forma legal. Diante de uma prisão ilegal, o pedido correto é o de relaxamento (art. 310, I CPP) — não de liberdade provisória.</p>
+    <p class="card-p">Na audiência de custódia, a estratégia da defesa deve ser construída em dois argumentos complementares — o chamado <strong>argumento de eventualidade</strong>:</p>
+    <p class="card-p"><strong>Argumento principal:</strong> ausência dos requisitos e pressupostos do art. 312 do CPP. Demonstre que não há fumus comissi delicti suficiente, ou que não há periculum libertatis concreto. A vedação à gravidade abstrata do art. 312, §4º CPP (Lei 15.272/2025) é seu aliado central.</p>
+    <p class="card-p"><strong>Argumento subsidiário (eventualidade):</strong> ainda que o juiz entenda presentes os requisitos do art. 312, as cautelares diversas do art. 319 CPP são adequadas e suficientes para neutralizar o risco. A conversão em preventiva só é legítima quando as cautelares se revelarem "inadequadas ou insuficientes" (art. 310, II CPP). Demonstre que seu cliente tem condições concretas de cumprir o pacote proposto de forma oportuna e segura.</p>
+    <p class="card-p" style="font-style:italic;color:var(--rosa);"><em>Nunca abandone o argumento principal por ter proposto cautelares. Apresente os dois na ordem correta: primeiro demonstra que não há requisitos; segundo, que se o juiz entender diferente, as cautelares bastam. Isso não é contraditório — é técnica processual.</em></p>
+  </div>
+
+  <div class="card verde">
+    <div class="card-label verde">Na audiência de custódia — roteiro da defesa</div>
+    <div class="card-h">Os 5 pontos que devem ser abordados</div>
+    <div class="passo">
+      <div class="passo-num dourado">I</div>
+      <div class="passo-corpo">
+        <div class="passo-tit">Verificar ilegalidades do flagrante — pedir relaxamento primeiro</div>
+        <div class="passo-txt">Antes de qualquer pedido de liberdade provisória, verifique se há vícios no flagrante. Se houver, requeira o relaxamento (art. 310, I CPP). Só se o flagrante for legal avance para o pedido de liberdade provisória.</div>
+      </div>
+    </div>
+    <div class="passo">
+      <div class="passo-num dourado">II</div>
+      <div class="passo-corpo">
+        <div class="passo-tit">Atacar o periculum libertatis com concretude</div>
+        <div class="passo-txt">Argua que não há perigo concreto: episódio isolado, sem reiteração prévia, partes que vivem separadas, ausência de ameaças, contexto de discussão específica. Cite o art. 312, §4º CPP (vedação à gravidade abstrata — Lei 15.272/2025).</div>
+      </div>
+    </div>
+    <div class="passo">
+      <div class="passo-num dourado">III</div>
+      <div class="passo-corpo">
+        <div class="passo-tit">Apresentar o pacote de cautelares</div>
+        <div class="passo-txt">Proponha o conjunto específico de cautelares do art. 319 CPP. Seja detalhado: "proibição de aproximação a 200 metros da residência da vítima localizada na Rua X, nº Y + proibição de qualquer contato + monitoração eletrônica + comparecimento mensal ao Juízo de Violência Doméstica e Familiar". Especificidade é credibilidade.</div>
+      </div>
+    </div>
+    <div class="passo">
+      <div class="passo-num dourado">IV</div>
+      <div class="passo-corpo">
+        <div class="passo-tit">Apresentar documentos e condições pessoais favoráveis</div>
+        <div class="passo-txt">Leve documentação: comprovante de residência fixa, vínculo empregatício, certidão de antecedentes limpos, família dependente. Lembre: condições pessoais favoráveis sozinhas não bastam (STJ), mas reforçam o argumento das cautelares.</div>
+      </div>
+    </div>
+    <div class="passo">
+      <div class="passo-num dourado">V</div>
+      <div class="passo-corpo">
+        <div class="passo-tit">Subsidiariedade como argumento final</div>
+        <div class="passo-txt">Encerre argumentando a subsidiariedade: o art. 310, II CPP exige que as cautelares diversas sejam "inadequadas ou insuficientes" para justificar a prisão. Demonstre que o pacote proposto é adequado e suficiente para o risco concreto existente.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-label">Modelo — petição de liberdade provisória com cautelares</div>
+    <div class="card-h">Se o pedido for feito por escrito, deve seguir o modelo abaixo</div>
+    <div class="modelo">
+      <strong>Exmo. Sr. Dr. Juiz do [X]º Juízo de Violência Doméstica e Familiar de [Cidade/UF]</strong><br><br>
+      [Nome], OAB/[UF] nº [nº], advogado(a) de [nome do réu], vem respeitosamente requerer a <strong>CONCESSÃO DE LIBERDADE PROVISÓRIA COM IMPOSIÇÃO DE MEDIDAS CAUTELARES DIVERSAS DA PRISÃO</strong>, com fundamento nos arts. 282 e 319 do CPP, pelos fundamentos que expõe:<br><br>
+      <strong>I — Dos fatos</strong><br>
+      O paciente foi preso em flagrante em [data] pela suposta prática do crime previsto no art. [X] do CP, em contexto de violência doméstica e familiar. Convertida a prisão em preventiva na audiência de custódia, vem a defesa demonstrar que as cautelares diversas são adequadas e suficientes para tutelar a situação.<br><br>
+      <strong>II — Da ausência de periculum libertatis concreto</strong><br>
+      Nos termos do art. 312, §4º do CPP (Lei 15.272/2025), é vedada a manutenção da prisão com base em gravidade abstrata. No caso, [descrever concretamente: episódio isolado, sem reiteração, partes separadas, ausência de ameaças posteriores, etc.].<br><br>
+      <strong>III — Das cautelares diversas adequadas e suficientes</strong><br>
+      As seguintes medidas cautelares do art. 319 do CPP são suficientes para neutralizar o risco existente:<br>
+      (i) proibição de aproximação a [X] metros da residência, local de trabalho e escola da ofendida;<br>
+      (ii) proibição de qualquer contato com a ofendida, seus familiares e as testemunhas, por qualquer meio;<br>
+      (iii) monitoração eletrônica;<br>
+      (iv) comparecimento mensal ao Juízo de Violência Doméstica e Familiar para informar e justificar atividades;<br>
+      (v) proibição de ausentar-se da comarca sem autorização judicial.<br><br>
+      <strong>IV — Da subsidiariedade da prisão preventiva</strong><br>
+      O art. 310, II do CPP exige que a conversão em preventiva ocorra apenas quando as cautelares se "revelarem inadequadas ou insuficientes". O pacote acima é adequado e suficiente para o risco concreto do caso.<br><br>
+      <strong>V — Das condições pessoais do requerente</strong><br>
+      O requerente é primário, [possui residência fixa em...], [é empregado em...], [tem família dependente], sendo pessoa integrada ao tecido social e com plenas condições de cumprir as cautelares.<br><br>
+      Ante o exposto, requer a concessão de liberdade provisória com imposição das cautelares acima indicadas, com revogação da prisão preventiva, nos termos do art. 316, caput, do CPP.<br><br>
+      [Cidade], [data]. [Assinatura/OAB]
+    </div>
+  </div>
+
+  <div class="nav">
+    <button class="btn btn-s" onclick="ir(2)">← Voltar</button>
+    <button class="btn btn-p" onclick="ir(4)">Próximo: Quiz →</button>
+  </div>
+</div>
+
+<!-- ═══ TELA 4 — QUIZ ═══ -->
+<div class="tela" id="t4">
+  <div class="badge">Etapa 5 de 5 — Fixação</div>
+  <h1 class="titulo">Teste seu <em>domínio</em></h1>
+  <p class="desc">Cinco casos práticos com gabarito comentado e fundamento legal.</p>
+  <div id="quiz"></div>
+  <div class="conclusao">
+    <div class="c-ic">✓</div>
+    <div class="c-tit">Módulo 03 concluído!</div>
+    <div class="c-txt">Você finalizou todas as aulas do Módulo 03 — Flagrante, Prisão e Audiência de Custódia.<br>Continue para o <strong>Módulo 04</strong>.</div>
+  </div>
+  <div class="nav">
+    <button class="btn btn-s" onclick="ir(3)">← Voltar</button>
+    <button class="btn btn-p" onclick="ir(0)">↺ Rever do início</button>
+  </div>
+</div>
+
+</div>
+
+<script>
+const ETAPAS = ['Fundamentos','Art. 319 CPP','Descumprimento','Como pedir','Quiz'];
+let cur = 0;
+const respostas = {};
+
+function buildSteps() {
+  const el = document.getElementById('stps'); el.innerHTML = '';
+  ETAPAS.forEach((n,i) => {
+    if(i>0){ const l=document.createElement('div'); l.className='sline'+(i<=cur?' d':''); el.appendChild(l); }
+    const btn=document.createElement('button'); btn.className='step'; btn.onclick=()=>ir(i);
+    const dot=document.createElement('div'); dot.className='dot'+(i===cur?' a':i<cur?' d':''); dot.textContent=i<cur?'✓':i+1;
+    const lbl=document.createElement('div'); lbl.className='slbl'+(i===cur?' a':i<cur?' d':''); lbl.textContent=n;
+    btn.appendChild(dot); btn.appendChild(lbl); el.appendChild(btn);
+  });
+}
+
+function ir(n) {
+  document.querySelectorAll('.tela').forEach(t=>t.classList.remove('on'));
+  document.getElementById('t'+n).classList.add('on');
+  cur=n; buildSteps(); window.scrollTo({top:0,behavior:'smooth'});
+}
+
+const QS = [
+  {
+    p: 'Na audiência de custódia de um caso de lesão corporal doméstica, o MP requereu apenas a aplicação de medidas cautelares do art. 319 CPP. O juiz, entendendo que as cautelares eram insuficientes, converteu o flagrante em prisão preventiva. A defesa alega que o juiz agiu de ofício. Está correta?',
+    ops: [
+      'Sim — como o MP pediu cautelares diversas, e não a prisão, o juiz agiu de ofício ao decretar a preventiva',
+      'Não — o STJ firmou que se o MP requereu qualquer medida cautelar, o juiz pode decretar a preventiva, pois já houve provocação. A escolha da medida mais adequada é do juízo, não representa atuação de ofício',
+      'Sim — após a Lei 13.964/2019, o juiz está absolutamente vinculado ao pedido do MP e não pode decretar medida mais grave',
+      'Depende — se o MP pediu cautelares leves, o juiz só pode impor cautelares de mesma intensidade'
+    ],
+    c: 1,
+    fb: 'O STJ firmou que a determinação do magistrado pela cautelar máxima, em sentido diverso do requerido pelo MP, não pode ser considerada como atuação ex officio (posição consolidada, reiterada em inúmeros julgados da 5ª e 6ª Turmas). Uma vez provocado pelo MP a determinar alguma restrição à liberdade, o juiz pode escolher qual medida melhor se adequa ao caso concreto. O que é vedado é a atuação completamente sem qualquer provocação.'
+  },
+  {
+    p: 'Carlos foi solto com medidas cautelares: proibição de contato, proibição de aproximação a 300 metros e comparecimento mensal ao juízo. Após 2 meses, sem qualquer descumprimento, a vítima procura a advogada dizendo que quer que Carlos seja preso novamente pois ainda tem medo. Qual o efeito da vontade da vítima sobre as cautelares?',
+    ops: [
+      'A vítima pode requerer diretamente a revogação das cautelares ou a decretação da preventiva, tendo sua vontade força vinculante',
+      'A manifestação da vítima pela prisão do agressor é relevante mas não determinante — o juízo avaliará se há elementos concretos novos',
+      'A vontade da vítima é irrelevante para a manutenção das cautelares ou para a decretação da preventiva — a custódia cautelar não está na esfera de disponibilidade da vítima',
+      'A vítima pode requerer diretamente ao delegado a prisão preventiva de Carlos'
+    ],
+    c: 2,
+    fb: 'O STJ (Jurisprudência em Teses, Edição 231/2024, Tese 9) é categórico: "A manifestação da ofendida sobre a revogação de medidas protetivas de urgência é irrelevante para a manutenção da prisão preventiva do acusado, pois a custódia cautelar, fundada na gravidade concreta da conduta, não está na esfera de disponibilidade da vítima de violência doméstica." O mesmo raciocínio se aplica inversamente: a vítima não pode "pedir" a prisão de forma vinculante. Sem elementos concretos novos, o juízo não deve decretar a preventiva apenas pela vontade da vítima. Acesso: stj.jus.br — Jurisprudência em Teses'
+  },
+  {
+    p: 'Pedro foi liberado com 5 medidas cautelares. Descumpriu uma delas: enviou uma única mensagem de texto à vítima. O MP requereu imediatamente a decretação da prisão preventiva. A prisão preventiva é a resposta obrigatória ao descumprimento?',
+    ops: [
+      'Sim — qualquer descumprimento de medida cautelar gera automaticamente a decretação da prisão preventiva',
+      'Não — o art. 282, §4º CPP prevê uma gradação: substituição da medida, cumulação de novas condições e, apenas em último caso, a prisão preventiva. Um único descumprimento não necessariamente justifica a prisão se medidas mais brandas forem suficientes',
+      'Sim — em violência doméstica, qualquer descumprimento, por menor que seja, deve resultar em prisão preventiva para garantir a integridade da vítima',
+      'Não — o juiz não pode decretar a preventiva pelo descumprimento sem prévia audiência de justificação do acusado'
+    ],
+    c: 1,
+    fb: 'O art. 282, §4º CPP (Lei 13.964/2019) estabelece uma gradação de respostas ao descumprimento: (1) substituição da medida; (2) cumulação de novas condições; (3) apenas em último caso, decretação da prisão preventiva. Um único descumprimento de baixa gravidade (uma mensagem) pode ser respondido com a imposição de monitoração eletrônica ou outra cautelar mais restritiva, sem necessidade da prisão. A defesa deve propor imediatamente medidas mais eficazes como alternativa à prisão. Acesso: planalto.gov.br — CPP'
+  },
+  {
+    p: 'João está em liberdade provisória com 4 medidas cautelares. A instrução criminal foi encerrada e a sentença condenatória foi proferida, mantendo as cautelares. A defesa apela e o processo vai ao Tribunal. Alguém tem o dever de rever as cautelares periodicamente nessa fase?',
+    ops: [
+      'Não — com a sentença condenatória, as cautelares se tornam definitivas e não precisam mais de revisão',
+      'Sim — o juiz de 1ª instância deve continuar revisando as cautelares a cada 90 dias mesmo após a sentença',
+      'Sim — o desembargador relator do recurso de apelação no Tribunal tem o dever de revisar periodicamente as cautelares impostas, nos termos do art. 316, §único CPP (conforme STF, ADIs 6581 e 6582)',
+      'Não — o art. 316, §único CPP não se aplica a cautelares diversas, apenas à prisão preventiva'
+    ],
+    c: 2,
+    fb: 'O STF (ADIs 6581 e 6582, Plenário, j. 08/03/2022) decidiu que o dever de revisão periódica se aplica a todas as instâncias ordinárias até o encerramento da cognição plena pelo Tribunal de 2º grau. Em 2ª instância, o dever de revisão cabe ao desembargador relator. A defesa pode e deve cobrar essa revisão — e se ela não ocorrer, pode peticionar requerendo a revisão e, se ignorada, impetrar habeas corpus. Acesso: portal.stf.jus.br — ADI 6581'
+  },
+  {
+    p: 'A Lei 15.383/2026 incluiu a monitoração eletrônica no art. 22 da Lei Maria da Penha como medida protetiva. Como isso se diferencia da monitoração eletrônica como cautelar do art. 319, IX do CPP?',
+    ops: [
+      'São iguais — a monitoração eletrônica tem o mesmo regime jurídico independentemente de qual artigo a fundamenta',
+      'A monitoração do art. 22 (medida protetiva) pode ser deferida de forma autônoma pelo juízo de violência doméstica, pelo delegado (em municípios sem comarca) e em qualquer fase, inclusive antes de qualquer processo penal. A do art. 319 (cautelar processual) exige inquérito ou processo penal em curso',
+      'A monitoração do art. 319 é mais rígida e não pode ser revogada; a do art. 22 é mais flexível',
+      'Apenas a monitoração do art. 319 permite o uso de dispositivo de segurança para a vítima'
+    ],
+    c: 1,
+    fb: 'A Lei 15.383/2026 incluiu a monitoração eletrônica como medida protetiva autônoma no art. 22, VIII da Lei Maria da Penha, inclusive com previsão de dispositivo de segurança para a vítima que alerte sobre aproximação do agressor (art. 22, VIII). Isso amplia significativamente o alcance da medida: pode ser aplicada pelo delegado (em município sem sede de comarca) mesmo antes de qualquer processo penal, nos termos do art. 12-D da Lei Maria da Penha (incluído pela Lei 15.383/2026). A cautelar do art. 319, IX CPP, por sua vez, só pode ser aplicada no âmbito de investigação ou processo penal em curso.'
+  }
+];
+
+function buildQuiz() {
+  const el = document.getElementById('quiz');
+  QS.forEach((q,qi) => {
+    const c = document.createElement('div'); c.className='qcard';
+    c.innerHTML=`<div class="qnum">Questão ${qi+1} de ${QS.length}</div>
+      <div class="qp">${q.p}</div>
+      ${q.ops.map((op,oi)=>`<button class="qop" id="qo${qi}_${oi}" onclick="ans(${qi},${oi})">${String.fromCharCode(65+oi)}) ${op}</button>`).join('')}
+      <div class="qfb" id="qf${qi}"></div>`;
+    el.appendChild(c);
+  });
+}
+
+function ans(qi,oi) {
+  if(respostas[qi]!==undefined) return;
+  respostas[qi]=oi;
+  const q=QS[qi];
+  for(let j=0;j<q.ops.length;j++){
+    const e=document.getElementById(`qo${qi}_${j}`); e.classList.add('bl');
+    if(j===q.c) e.classList.add('ok'); else if(j===oi) e.classList.add('er');
+  }
+  const fb=document.getElementById('qf'+qi); const ok=oi===q.c;
+  fb.className='qfb on '+(ok?'ok':'er');
+  fb.innerHTML=`<strong>${ok?'✓ Correto!':'✗ Atenção.'}</strong> ${q.fb}`;
+}
+
+buildSteps(); buildQuiz();
+</script>
+</body>
+</html>
