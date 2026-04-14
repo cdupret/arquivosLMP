@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Módulo 03 · Aula 5 — Habeas Corpus em Violência Doméstica · Penha em Cena</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --rosa: #D4537E; --rosa2: #A33360;
+  --fundo: #0E0B14; --fundo2: #17122A; --fundo3: #211A38;
+  --roxo: #7F77DD; --texto: #F0EAF8; --muted: #9B8FBC;
+  --borda: rgba(212,83,126,0.2); --verde: #1D9E75;
+  --dourado: #C9963A; --azul: #3A8ADC;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'DM Sans', sans-serif; background: var(--fundo); color: var(--texto); min-height: 100vh; font-size: 17px; line-height: 1.75; }
+.bg-p { position:fixed;inset:0;pointer-events:none;z-index:0; background: radial-gradient(ellipse 60% 40% at 20% 20%, rgba(127,119,221,0.07) 0%, transparent 60%), radial-gradient(ellipse 40% 60% at 80% 80%, rgba(212,83,126,0.06) 0%, transparent 60%); }
+.header { position:sticky;top:0;z-index:100;background:rgba(14,11,20,0.95);border-bottom:1px solid var(--borda);padding:14px 28px;display:flex;align-items:center;gap:14px;backdrop-filter:blur(16px); }
+.logo { font-family:'Playfair Display',serif;font-size:19px;color:var(--rosa);font-weight:700; }
+.sep { color:var(--muted); } .info { font-size:14px;color:var(--muted); }
+.prog { background:var(--fundo2);border-bottom:1px solid var(--borda);padding:12px 28px;position:sticky;top:57px;z-index:99; }
+.steps { max-width:900px;margin:0 auto;display:flex;align-items:center; }
+.step { display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;cursor:pointer;border:none;background:none; }
+.dot { width:32px;height:32px;border-radius:50%;border:2px solid rgba(155,143,188,0.3);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;color:var(--muted);transition:all .3s; }
+.dot.a { background:var(--rosa);border-color:var(--rosa);color:#fff;box-shadow:0 0 18px rgba(212,83,126,0.5); }
+.dot.d { background:var(--verde);border-color:var(--verde);color:#fff; }
+.slbl { font-size:9px;color:var(--muted);white-space:nowrap;text-align:center; }
+.slbl.a { color:var(--rosa); } .slbl.d { color:var(--verde); }
+.sline { flex:1;height:2px;background:rgba(155,143,188,0.15);margin-bottom:14px;transition:background .4s; }
+.sline.d { background:var(--verde); }
+.main { max-width:900px;margin:0 auto;padding:40px 28px 120px;position:relative;z-index:1; }
+.tela { display:none;animation:up .4s ease; }
+.tela.on { display:block; }
+@keyframes up { from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);} }
+.badge { display:inline-flex;align-items:center;gap:6px;background:rgba(212,83,126,0.12);border:1px solid rgba(212,83,126,0.3);border-radius:20px;padding:5px 14px;font-size:12px;font-weight:500;color:var(--rosa);letter-spacing:.06em;text-transform:uppercase;margin-bottom:18px; }
+.titulo { font-family:'Playfair Display',serif;font-size:clamp(24px,4vw,40px);font-weight:900;line-height:1.15;color:var(--texto);margin-bottom:14px; }
+.titulo em { color:var(--rosa);font-style:italic; }
+.desc { font-size:17px;color:var(--muted);line-height:1.9;margin-bottom:28px; }
+.card { background:var(--fundo2);border:1px solid var(--borda);border-radius:14px;padding:24px 26px;margin-bottom:16px; }
+.card.dest { border-color:rgba(212,83,126,0.45);background:rgba(212,83,126,0.04); }
+.card.verde { border-color:rgba(29,158,117,0.4);background:rgba(29,158,117,0.04); }
+.card.roxo { border-color:rgba(127,119,221,0.4);background:rgba(127,119,221,0.04); }
+.card.dourado { border-color:rgba(201,150,58,0.4);background:rgba(201,150,58,0.04); }
+.card.azul { border-color:rgba(58,138,220,0.35);background:rgba(58,138,220,0.04); }
+.card.alerta { border-color:rgba(220,80,80,0.4);background:rgba(220,80,80,0.04); }
+.card-label { font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:7px;color:var(--rosa); }
+.card-label.verde { color:#5DCAA5; } .card-label.roxo { color:#AFA9EC; }
+.card-label.dourado { color:#E8C46A; } .card-label.azul { color:#7BBAF0; }
+.card-label.alerta { color:#E87070; }
+.card-h { font-family:'Playfair Display',serif;font-size:19px;font-weight:700;color:var(--texto);margin-bottom:12px; }
+.card-p { font-size:16px;color:var(--muted);line-height:1.85;margin-bottom:10px; }
+.card-p:last-child { margin-bottom:0; }
+.card-p strong { color:var(--texto); }
+.card-p em { color:var(--rosa);font-style:normal; }
+.card-p a { color:var(--rosa);text-decoration:none; }
+.card-p a:hover { text-decoration:underline; }
+.lei { font-size:15px;color:var(--muted);border-left:3px solid var(--rosa);padding-left:15px;margin:12px 0;font-style:italic;line-height:1.85; }
+.lei.verde { border-left-color:var(--verde); }
+.lei.roxo { border-left-color:var(--roxo); }
+.lei.dourado { border-left-color:var(--dourado); }
+.julgado { background:var(--fundo3);border:1px solid rgba(127,119,221,0.25);border-radius:10px;padding:16px 18px;margin:12px 0;font-size:14px;color:var(--muted);line-height:1.85; }
+.julgado strong { color:#AFA9EC; }
+.julgado a { color:#AFA9EC;text-decoration:none; }
+.julgado a:hover { text-decoration:underline; }
+.tese-box { background:rgba(201,150,58,0.06);border:1px solid rgba(201,150,58,0.3);border-radius:12px;padding:18px 20px;margin:12px 0; }
+.tese-label { font-size:11px;font-weight:700;color:var(--dourado);text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px; }
+.tese-txt { font-size:15px;color:var(--muted);line-height:1.85;font-style:italic; }
+.tese-txt strong { color:var(--texto);font-style:normal; }
+.g2 { display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px; }
+@media(max-width:600px){ .g2{grid-template-columns:1fr;} }
+.comp-tab { width:100%;border-collapse:collapse;margin:14px 0;font-size:15px; }
+.comp-tab th { background:rgba(212,83,126,0.12);color:var(--rosa);font-weight:600;padding:11px 14px;text-align:left;font-size:12px;letter-spacing:.05em;text-transform:uppercase; }
+.comp-tab td { padding:11px 14px;border-bottom:1px solid rgba(155,143,188,0.1);color:var(--muted);vertical-align:top;line-height:1.7; }
+.comp-tab td strong { color:var(--texto); }
+.comp-tab tr:last-child td { border-bottom:none; }
+/* CASOS */
+.caso-real { background:var(--fundo2);border:1px solid var(--borda);border-radius:16px;overflow:hidden;margin-bottom:24px; }
+.caso-header { padding:24px 28px 0; }
+.caso-num-badge { display:inline-flex;align-items:center;gap:6px;background:rgba(201,150,58,0.12);border:1px solid rgba(201,150,58,0.3);border-radius:20px;padding:4px 12px;font-size:11px;font-weight:700;color:var(--dourado);letter-spacing:.06em;text-transform:uppercase;margin-bottom:12px; }
+.caso-titulo-real { font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:var(--texto);margin-bottom:14px; }
+.autos-real { background:var(--fundo3);border-radius:10px;padding:16px 18px;font-size:15px;color:var(--muted);line-height:1.9;margin-bottom:14px; }
+.autos-real strong { color:var(--texto); }
+.pergunta-caso { background:rgba(212,83,126,0.05);border:1px solid rgba(212,83,126,0.2);border-radius:10px;padding:16px 18px;font-size:16px;color:var(--texto);font-weight:500;margin-bottom:14px; }
+.opcoes-caso { display:flex;flex-direction:column;gap:8px;padding:0 28px 24px; }
+.opcao-caso { background:rgba(255,255,255,0.03);border:1px solid rgba(155,143,188,0.2);border-radius:10px;padding:13px 16px;cursor:pointer;font-size:15px;color:var(--muted);text-align:left;transition:all .2s;font-family:'DM Sans',sans-serif;line-height:1.6; }
+.opcao-caso:hover:not(.respondida) { border-color:var(--rosa);color:var(--texto);background:rgba(212,83,126,0.07); }
+.opcao-caso.correta { background:rgba(29,158,117,0.1);border-color:var(--verde);color:#9FE1CB;cursor:default; }
+.opcao-caso.errada { background:rgba(212,83,126,0.08);border-color:var(--rosa);color:#EDB0C5;cursor:default; }
+.opcao-caso.respondida { cursor:default; }
+.gabarito { display:none;margin:0 28px 24px;background:var(--fundo3);border:1px solid rgba(127,119,221,0.2);border-radius:12px;padding:20px 22px;animation:up .4s ease; }
+.gabarito.show { display:block; }
+.gabarito-tit { font-weight:700;color:#AFA9EC;margin-bottom:10px;font-size:16px; }
+.gabarito-txt { font-size:15px;color:var(--muted);line-height:1.85; }
+.gabarito-txt strong { color:var(--texto); }
+.gabarito-txt a { color:#AFA9EC;text-decoration:none; }
+/* ÁRVORE */
+.pergunta-box { background:var(--fundo2);border:2px solid rgba(212,83,126,0.4);border-radius:16px;padding:24px 28px;margin-bottom:16px; }
+.pergunta-tit { font-family:'Playfair Display',serif;font-size:19px;font-weight:700;color:var(--texto);margin-bottom:18px; }
+.opcoes-arv { display:flex;flex-direction:column;gap:10px; }
+.opcao-arv { background:rgba(255,255,255,0.03);border:1px solid rgba(155,143,188,0.25);border-radius:10px;padding:14px 18px;cursor:pointer;font-size:16px;color:var(--muted);text-align:left;transition:all .2s;font-family:'DM Sans',sans-serif;line-height:1.6; }
+.opcao-arv:hover { border-color:var(--rosa);color:var(--texto);background:rgba(212,83,126,0.07); }
+.resultado-arvore { display:none;background:var(--fundo2);border-radius:16px;padding:28px;margin-top:16px;animation:up .4s ease; }
+.resultado-arvore.show { display:block; }
+.res-instrumento { font-family:'Playfair Display',serif;font-size:22px;font-weight:900;margin-bottom:16px; }
+.res-instrumento.hc { color:var(--rosa); }
+.res-instrumento.revog { color:#5DCAA5; }
+.res-instrumento.relax { color:#E87070; }
+.res-instrumento.peticao { color:#E8C46A; }
+.btn-reiniciar { display:inline-flex;align-items:center;gap:8px;padding:12px 20px;background:rgba(255,255,255,0.06);border:1px solid rgba(155,143,188,0.2);border-radius:10px;color:var(--muted);font-size:15px;cursor:pointer;transition:all .2s;font-family:'DM Sans',sans-serif;margin-top:14px; }
+.btn-reiniciar:hover { color:var(--texto);background:rgba(255,255,255,0.1); }
+/* NAV */
+.nav { display:flex;align-items:center;justify-content:space-between;margin-top:40px;padding-top:24px;border-top:1px solid var(--borda); }
+.btn { display:inline-flex;align-items:center;gap:8px;padding:12px 22px;border-radius:10px;font-size:16px;font-weight:500;cursor:pointer;transition:all .2s;border:none;font-family:'DM Sans',sans-serif; }
+.btn-s { background:rgba(255,255,255,0.05);color:var(--muted);border:1px solid rgba(155,143,188,0.2); }
+.btn-s:hover { background:rgba(255,255,255,0.09);color:var(--texto); }
+.btn-p { background:var(--rosa);color:#fff;box-shadow:0 4px 18px rgba(212,83,126,0.35); }
+.btn-p:hover { background:var(--rosa2);transform:translateY(-1px); }
+.conclusao { background:linear-gradient(135deg,rgba(212,83,126,0.08),rgba(127,119,221,0.05));border:1px solid rgba(212,83,126,0.2);border-radius:16px;padding:32px;text-align:center;margin-top:20px; }
+.c-ic { font-size:44px;margin-bottom:10px; }
+.c-tit { font-family:'Playfair Display',serif;font-size:22px;font-weight:900;color:var(--verde);margin-bottom:8px; }
+.c-txt { font-size:16px;color:var(--muted);line-height:1.85; }
+</style>
+</head>
+<body>
+<div class="bg-p"></div>
+<header class="header">
+  <span class="logo">PENHA em Cena</span>
+  <span class="sep">/</span>
+  <span class="info">Módulo 03 · Aula 5</span>
+</header>
+<div class="prog"><div class="steps" id="stps"></div></div>
+<div class="main">
+
+<!-- ═══════════════════════════════════════════════════
+     TELA 0 — FUNDAMENTOS E COMPETÊNCIA
+════════════════════════════════════════════════════ -->
+<div class="tela on" id="t0">
+  <div class="badge">Módulo 03 · Aula 5</div>
+  <h1 class="titulo">Habeas Corpus em<br><em>violência doméstica</em></h1>
+  <p class="desc">O habeas corpus é o instrumento mais poderoso e imediato para combater prisões ilegais. Em casos de violência doméstica, tem características próprias, limitações específicas firmadas pelo STJ e STF, e hipóteses peculiares de cabimento e incabimento que todo advogado criminalista precisa dominar com precisão.</p>
+
+  <div class="card dest">
+    <div class="card-label">Base legal — art. 5º, LXVIII, CF + arts. 647-667 CPP</div>
+    <div class="card-h">O que é o habeas corpus e suas modalidades</div>
+    <div class="lei">"Conceder-se-á habeas corpus sempre que alguém sofrer ou se achar ameaçado de sofrer violência ou coação em sua liberdade de locomoção, por ilegalidade ou abuso de poder." (art. 5º, LXVIII, CF)</div>
+    <p class="card-p">Ação constitucional de natureza mandamental que protege o direito de locomoção contra ilegalidades ou abusos de poder — reais ou iminentes. <strong>Qualquer pessoa pode impetrar, sem necessidade de capacidade postulatória.</strong> Pessoas jurídicas não podem ser pacientes. O MP pode impetrar em favor de terceiros.</p>
+    <div class="g2">
+      <div class="card roxo" style="margin-bottom:0;">
+        <div class="card-label roxo">HC Liberatório (repressivo)</div>
+        <p class="card-p" style="font-size:15px;">Coação já consumada — paciente já está preso ilegalmente. Objetivo: fazer cessar imediatamente a coação. É o mais comum em violência doméstica — quando a preventiva foi decretada sem fundamentação concreta.</p>
+      </div>
+      <div class="card verde" style="margin-bottom:0;">
+        <div class="card-label verde">HC Preventivo (salvo-conduto)</div>
+        <p class="card-p" style="font-size:15px;">Ameaça à liberdade ainda não concretizada. Objetivo: evitar que a violação ocorra. Cabível em violência doméstica quando há iminência de prisão sem fundamento — ex: mandado de prisão baseado em decisão nula.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card dourado">
+    <div class="card-label dourado">Competência para impetrar o HC — onde apresentar</div>
+    <div class="card-h">Qual tribunal recebe o HC em cada situação</div>
+    <table class="comp-tab">
+      <thead><tr><th>Autoridade coatora</th><th>Competência para o HC</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Juízo de 1ª instância</strong> (Juízo de violência doméstica)</td><td>Tribunal de Justiça do Estado</td></tr>
+        <tr><td><strong>Turma Recursal</strong> dos Juizados Especiais</td><td>Tribunal de Justiça do Estado (não mais o STF — súmula 690/STF superada)</td></tr>
+        <tr><td><strong>Tribunal de Justiça</strong> (TJ)</td><td>Superior Tribunal de Justiça (STJ)</td></tr>
+        <tr><td><strong>STJ</strong></td><td>Supremo Tribunal Federal (STF)</td></tr>
+        <tr><td><strong>Juiz Federal de 1ª instância</strong></td><td>Tribunal Regional Federal (TRF)</td></tr>
+      </tbody>
+    </table>
+    <div class="julgado">
+      <strong>STJ, HC 369.717/MS</strong> — Min. Reynaldo Soares da Fonseca, 5ª Turma, j. 25/04/2017, DJe 03/05/2017:<br>
+      Compete aos Tribunais de Justiça o julgamento dos pedidos de habeas corpus quando a autoridade coatora for Turma Recursal dos Juizados Especiais — superando a Súmula 690 do STF.<br>
+      <a href="https://processo.stj.jus.br/SCON/pesquisar.jsp?b=ACOR&livre=HC+437535" target="_blank">Pesquisa — STJ</a>
+    </div>
+  </div>
+
+  <div class="card alerta">
+    <div class="card-label alerta">HC como substitutivo de recurso — restrição firmada pelo STJ e STF</div>
+    <div class="card-h">A limitação mais importante na prática</div>
+    <p class="card-p">O STJ e o STF pacificaram que <strong>o habeas corpus não pode substituir o recurso ordinariamente cabível</strong> — salvo flagrante ilegalidade, quando a ordem pode ser concedida de ofício.</p>
+    <div class="tese-box">
+      <div class="tese-label">Jurisprudência em Teses STJ — Edição 41 (Violência Doméstica) — Tese 16</div>
+      <div class="tese-txt">"<strong>O habeas corpus não constitui meio idôneo para se pleitear a revogação de medidas protetivas previstas no art. 22 da Lei n. 11.340/2006 que não implicam constrangimento ao direito de ir e vir do paciente.</strong>"<br>Precedentes: RHC 31.984/PI (Min. Jorge Mussi, 5ª Turma, DJe 06/08/2013); RHC 57.814/SP (Min. Sebastião Reis Júnior, DJe 11/05/2015).<br><a href="https://scon.stj.jus.br/SCON/jt/doc.jsp?livre=%2741%27.tit." target="_blank">STJ — Jurisprudência em Teses, Ed. 41</a></div>
+    </div>
+    <p class="card-p"><strong>Consequência prática:</strong> o HC para questionar medida protetiva que apenas proíbe aproximação ou contato NÃO É admitido — pois essa medida não restringe o direito de locomoção em sentido estrito. A via adequada é o mandado de segurança ou o recurso processual específico.</p>
+    <div class="julgado">
+      <strong>STJ, AgRg no HC 1.011.096/RS</strong> — Min. Rogerio Schietti Cruz, j. 23/09/2025:<br>
+      O HC pode ser admitido mesmo após o trânsito em julgado quando busca sanar ilegalidade flagrante e não há necessidade de reexame probatório — mas não substitui a revisão criminal nem recursos ordinários como regra.<br>
+      <a href="https://processo.stj.jus.br/SCON/pesquisar.jsp?b=ACOR&livre=HC+1011096" target="_blank">Buscar julgado — STJ</a>
+    </div>
+  </div>
+
+  <div class="nav"><span></span>
+    <button class="btn btn-p" onclick="ir(1)">Próximo: Quando cabe e quando não cabe →</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     TELA 1 — CABIMENTO E INCABIMENTO ESPECÍFICOS EM violência doméstica
+════════════════════════════════════════════════════ -->
+<div class="tela" id="t1">
+  <div class="badge">Etapa 2 de 5</div>
+  <h1 class="titulo">Quando cabe e quando<br><em>não cabe</em> o HC em violência doméstica</h1>
+  <p class="desc">Este é o mapa que todo advogado criminalista precisa ter memorizado. A linha entre o cabimento e o incabimento é tênue — e errar aqui pode custar a liberdade do cliente.</p>
+
+  <div class="card dest">
+    <div class="card-label">HC PARA PRISÃO PREVENTIVA — casos de cabimento</div>
+    <div class="card-h">Hipóteses em que o HC deve ser impetrado imediatamente</div>
+
+    <p class="card-p"><strong>① Preventiva decretada sem fundamentação concreta</strong></p>
+    <p class="card-p">A decisão que invoca apenas a gravidade abstrata do delito, reproduz o texto legal ou usa motivos genéricos viola o art. 315, §2º CPP e o art. 312, §4º CPP (Lei 15.272/2025). HC liberatório ao Tribunal.</p>
+    <div class="tese-box">
+      <div class="tese-label">STJ, 2025 — Informativo STJ 2025</div>
+      <div class="tese-txt">"No julgamento de habeas corpus, <strong>não cabe ao Tribunal acrescer fundamentos para justificar a prisão preventiva mantida na sentença condenatória sem qualquer fundamentação concreta.</strong>" O vício de fundamentação não se sana no julgamento do HC.</div>
+    </div>
+
+    <p class="card-p" style="margin-top:16px;"><strong>② A manifestação da vítima pela revogação da preventiva é IRRELEVANTE</strong></p>
+    <div class="tese-box">
+      <div class="tese-label">STJ, Jurisprudência em Teses — Edição 231/2024 — Tese 9</div>
+      <div class="tese-txt">"<strong>A manifestação da ofendida sobre a revogação de medidas protetivas de urgência é irrelevante para a manutenção da prisão preventiva do acusado, pois a custódia cautelar, fundada na gravidade concreta da conduta, não está na esfera de disponibilidade da vítima de violência doméstica.</strong>"<br>Precedente: STJ, AgRg HC 768.265 (Min. Rogerio Schietti Cruz, 6ª Turma).<br><a href="https://www.stj.jus.br/sites/portalp/Paginas/Jurisprudencia/Jurisprudencia-em-Teses.aspx" target="_blank">STJ — Jurisprudência em Teses, Ed. 231/2024</a></div>
+    </div>
+    <p class="card-p"><strong>Impacto prático:</strong> se o cliente apresentar no HC uma declaração da vítima dizendo que quer que ele seja solto, isso NÃO é argumento válido para revogar a preventiva. O juízo de necessidade da prisão é exclusivamente do Poder Judiciário.</p>
+
+    <p class="card-p" style="margin-top:16px;"><strong>③ Preventiva por contravenção penal — STJ veda</strong></p>
+    <p class="card-p">Não cabe preventiva para autor de contravenção penal em violência doméstica, mesmo com descumprimento de medida protetiva (STJ, HC 589.544/SC, Min. Laurita Vaz, 6ª Turma, j. 08/09/2020). HC liberatório com pedido de relaxamento.</p>
+
+    <p class="card-p" style="margin-top:16px;"><strong>④ Preventiva decretada de ofício sem provocação</strong></p>
+    <p class="card-p">Após a Lei 13.964/2019, o juiz não pode decretar preventiva sem requerimento do MP ou representação do delegado. Se o fez, a prisão é ilegal. HC ao Tribunal. Atenção: se o MP pediu qualquer cautelar, não é "de ofício" (STJ, RHC 145.225-RO, j. 15/02/2022).</p>
+
+    <p class="card-p" style="margin-top:16px;"><strong>⑤ Falta de revisão em 90 dias + manutenção sem nova fundamentação</strong></p>
+    <p class="card-p">O descumprimento do prazo do art. 316, §único CPP não gera revogação automática (STF, ADIs 6581/6582, j. 08/03/2022), mas a manutenção sem nova fundamentação concreta é constrangimento ilegal — HC ao Tribunal.</p>
+  </div>
+
+  <div class="card alerta">
+    <div class="card-label alerta">HC NÃO É CABÍVEL EM violência doméstica — hipóteses de incabimento</div>
+    <div class="card-h">Armadilhas frequentes que levam o HC ao não conhecimento</div>
+
+    <p class="card-p"><strong>① HC para reexame de fatos e provas</strong></p>
+    <div class="julgado">
+      <strong>STJ, <a href="https://processo.stj.jus.br/SCON/GetInteiroTeorDoAcordao?num_registro=202304168150&dt_publicacao=17/02/2025" target="_blank">AgRg no HC 955.849/SP</a></strong> — Min. Daniela Teixeira, 5ª Turma, j. 12/02/2025, DJEN 17/02/2025:<br>
+      "O exame do alegado descumprimento das medidas protetivas e a análise das circunstâncias fáticas demandariam revolvimento de provas, procedimento <strong>incompatível com o habeas corpus</strong>."<br>
+      <a href="https://processo.stj.jus.br/SCON/GetInteiroTeorDoAcordao?num_registro=202304168150&dt_publicacao=17/02/2025" target="_blank">Inteiro teor — STJ</a>
+    </div>
+
+    <p class="card-p" style="margin-top:12px;"><strong>② HC para questionar medidas protetivas que não restringem locomoção</strong></p>
+    <p class="card-p">Proibição de aproximação, afastamento do lar, proibição de contato — essas medidas não restringem o direito de ir e vir em sentido estrito. O HC não é cabível. Via adequada: mandado de segurança ou recurso específico.</p>
+    <div class="tese-box">
+      <div class="tese-label">STJ, Jurisprudência em Teses — Edição 41 — Tese 16</div>
+      <div class="tese-txt">"O habeas corpus <strong>não constitui meio idôneo</strong> para se pleitear a revogação de medidas protetivas previstas no art. 22 da Lei n. 11.340/2006 que não implicam constrangimento ao direito de ir e vir do paciente."</div>
+    </div>
+
+    <p class="card-p" style="margin-top:12px;"><strong>③ HC quando há recurso específico disponível e não há flagrante ilegalidade</strong></p>
+    <p class="card-p">Se cabe apelação, agravo regimental ou recurso ordinário, use o recurso. O HC não substitui o sistema recursal.</p>
+
+    <p class="card-p" style="margin-top:12px;"><strong>④ HC para questionar a aplicabilidade da Lei Maria da Penha ao caso</strong></p>
+    <p class="card-p">Se o tribunal de origem já reconheceu o contexto de violência doméstica, desconstituir esse entendimento exige reexame de provas — incompatível com o HC. (STJ, AgRg no HC 682.283/MG, Min. Ribeiro Dantas, 5ª Turma, 2021)</p>
+
+    <p class="card-p" style="margin-top:12px;"><strong>⑤ HC com supressão de instância</strong></p>
+    <p class="card-p">O STJ não analisa questões que não foram debatidas no tribunal de origem. Se você levantou a tese apenas no STJ sem tê-la apresentado ao TJ, há supressão de instância e o HC não é conhecido.</p>
+  </div>
+
+  <div class="nav">
+    <button class="btn btn-s" onclick="ir(0)">← Voltar</button>
+    <button class="btn btn-p" onclick="ir(2)">Próximo: HC para trancamento da ação penal →</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     TELA 2 — HC PARA TRANCAMENTO DA AÇÃO PENAL
+════════════════════════════════════════════════════ -->
+<div class="tela" id="t2">
+  <div class="badge">Etapa 3 de 5</div>
+  <h1 class="titulo">HC para trancamento<br>da <em>ação penal</em> em violência doméstica</h1>
+  <p class="desc">O trancamento da ação penal via habeas corpus é medida excepcional em qualquer caso — e ainda mais restrita em violência doméstica, onde os tribunais aplicam o princípio da proteção integral à mulher. Mas há situações em que é a tese correta.</p>
+
+  <div class="card dest">
+    <div class="card-label">A regra — trancamento é medida excepcional</div>
+    <div class="card-h">As três únicas hipóteses admitidas</div>
+    <div class="tese-box">
+      <div class="tese-label">STJ — posição consolidada</div>
+      <div class="tese-txt">"O trancamento da ação penal por meio do habeas corpus é medida excepcional, que somente deve ser adotada quando houver <strong>inequívoca comprovação da atipicidade da conduta, da incidência de causa de extinção da punibilidade ou da ausência de indícios de autoria e prova da materialidade do delito.</strong>" (REsp 1.046.892/CE, Min. Laurita Vaz, 5ª Turma, DJe 27/08/2012, e pacificado em inúmeros julgados posteriores)</div>
+    </div>
+
+    <p class="card-p"><strong>Ou seja — o HC só tranca a ação penal em violência doméstica quando:</strong></p>
+    <p class="card-p">① <strong>Atipicidade manifesta:</strong> a conduta narrada na denúncia não é crime. Ex: o fato descrito não se enquadra em nenhum tipo penal — identificado de plano, sem análise probatória.</p>
+    <p class="card-p">② <strong>Extinção da punibilidade:</strong> prescrição reconhecível de plano, morte do agente, abolitio criminis.</p>
+    <p class="card-p">③ <strong>Ausência manifesta de justa causa:</strong> inexistência de indícios de autoria ou prova da materialidade — visível sem dilação probatória.</p>
+  </div>
+
+  <div class="card roxo">
+    <div class="card-label roxo">Casos específicos em violência doméstica</div>
+    <div class="card-h">Quando o trancamento pode funcionar em violência doméstica</div>
+
+    <p class="card-p"><strong>① Denúncia inepta — ausência de requisitos do art. 41 CPP</strong></p>
+    <p class="card-p">Se a denúncia não descreve minimamente o fato criminoso com suas circunstâncias, é inepta e pode ser atacada por HC. Exemplo real: denúncia por dano qualificado que não narra que a violência foi o meio para destruir os objetos — o STJ reconheceu a inépcia e trancou a ação (STJ, julgado de 2023).</p>
+
+    <p class="card-p" style="margin-top:12px;"><strong>② Ameaça em contexto de discussão — atipicidade arguível</strong></p>
+    <p class="card-p">A defesa pode tentar o trancamento argumentando que palavras proferidas em momento de cólera, sem real intenção de intimidar, não configuram ameaça. Mas atenção:</p>
+    <div class="tese-box">
+      <div class="tese-label">STJ, Informativo Extraordinário nº 21 — julho/2024 (Corte Especial, j. 10/06/2024)</div>
+      <div class="tese-txt">"O fato de a promessa de mal injusto e grave ter sido proferida em momento de <strong>cólera ou ira não exclui, per se, o escopo de amedrontar a vítima</strong> nem enfraquece a sobriedade da ameaça." Em contexto de violência doméstica, a vulnerabilidade da mulher é presumida e a palavra da vítima tem especial relevância.<br><a href="https://processo.stj.jus.br/jurisprudencia/externo/informativo/?livre=@CNOT%3D020872" target="_blank">Acesso: STJ — Informativo Extraordinário nº 21</a></div>
+    </div>
+
+    <p class="card-p" style="margin-top:12px;"><strong>③ Escusa absolutória no crime patrimonial — art. 181, I, CP</strong></p>
+    <p class="card-p">Caso real: se o agressor praticou estelionato contra a cônjuge na <em>constância do casamento</em>, incide a escusa absolutória do art. 181, I do CP (isento de pena o cônjuge). A separação de corpos NÃO extingue o vínculo matrimonial — apenas a separação judicial ou divórcio. O STJ, em RHC/RS, trancou a ação penal pelo reconhecimento da escusa absolutória, que a Lei Maria da Penha não revogou expressamente.</p>
+    <p class="card-p"><strong>Atenção:</strong> esta tese não se aplica a roubo, extorsão ou dano — crimes contra o patrimônio com violência não têm escusa absolutória.</p>
+
+    <p class="card-p" style="margin-top:12px;"><strong>④ Ausência de representação em crime que a exige</strong></p>
+    <p class="card-p">O HC para trancamento pode funcionar quando o crime imputado exige representação e ela não foi feita. Mas em violência doméstica quase tudo é ação penal pública incondicionada — lesão corporal, ameaça com violência de gênero, descumprimento de medida protetiva. Crimes contra a honra (calúnia, difamação, injúria simples) ainda exigem queixa-crime.</p>
+  </div>
+
+  <div class="card azul">
+    <div class="card-label azul">O que o HC NÃO consegue fazer em violência doméstica — erros comuns</div>
+    <div class="card-h">Teses que serão rapidamente rejeitadas</div>
+    <p class="card-p"><strong>✗ "O réu é primário e tem bons antecedentes"</strong> — primariedade, por si só, não impede preventiva nem trancamento (STF, RHC 124.486/DF).</p>
+    <p class="card-p"><strong>✗ "A vítima se retratou e não quer prosseguir"</strong> — em ação penal pública incondicionada (lesão corporal doméstica, ameaça com violência de gênero), a retratação é irrelevante. A vítima não tem disponibilidade sobre a persecução penal.</p>
+    <p class="card-p"><strong>✗ "O agressor não tem vínculo familiar recente com a vítima"</strong> — contestar o enquadramento na Lei Maria da Penha exige reexame fático, incompatível com o HC (STJ, AgRg no HC 682.283/MG, 2021).</p>
+    <p class="card-p"><strong>✗ "A lesão foi leve e não merece ação penal"</strong> — o princípio da insignificância não se aplica em violência doméstica (Súmula 589/STJ). Nenhum grau de lesão é insignificante no contexto da Lei Maria da Penha.</p>
+    <div class="tese-box">
+      <div class="tese-label">Súmula 589/STJ</div>
+      <div class="tese-txt">"É inaplicável o princípio da insignificância nos crimes ou contravenções penais praticados contra a mulher no âmbito das relações domésticas."</div>
+    </div>
+  </div>
+
+  <div class="nav">
+    <button class="btn btn-s" onclick="ir(1)">← Voltar</button>
+    <button class="btn btn-p" onclick="ir(3)">Próximo: Casos reais com decisão revelada →</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     TELA 3 — CASOS REAIS COM DECISÃO REVELADA
+════════════════════════════════════════════════════ -->
+<div class="tela" id="t3">
+  <div class="badge">Etapa 4 de 5 — Casos reais</div>
+  <h1 class="titulo">Casos reais:<br><em>como o tribunal decidiu?</em></h1>
+  <p class="desc">Três casos baseados em jurisprudência recente do STJ e STF — 2024 e 2025. Analise os fatos, escolha sua resposta e veja a decisão real com o raciocínio do tribunal.</p>
+
+  <!-- CASO 1 -->
+  <div class="caso-real">
+    <div class="caso-header">
+      <div class="caso-num-badge">Caso 01 — STF, 2025 (HC 249.130/PE)</div>
+      <div class="caso-titulo-real">Preventiva em violência doméstica — contemporaneidade do risco vs. data do crime</div>
+      <div class="autos-real">
+        <strong>Fatos:</strong> Pedro foi preso preventivamente após descumprir medida protetiva de forma reiterada, ameaçando gravemente a ex-companheira. O crime que originou a medida protetiva ocorreu há 8 meses, mas os descumprimentos e as ameaças eram recentes.<br><br>
+        <strong>Tese da defesa no STF:</strong> a contemporaneidade exigida para a preventiva estaria ausente, pois o crime original havia ocorrido há muito tempo — portanto, o periculum libertatis não seria atual.
+      </div>
+      <div class="pergunta-caso">Como o STF decidiu?</div>
+    </div>
+    <div class="opcoes-caso" id="op1">
+      <button class="opcao-caso" onclick="responder(1,0,false)">A) Concedeu o HC — a contemporaneidade exige que o risco esteja próximo ao crime original; 8 meses seria tempo suficiente para afastar a preventiva</button>
+      <button class="opcao-caso" onclick="responder(1,1,true)">B) Denegou o HC — a contemporaneidade não está necessariamente ligada à data do crime, mas à continuidade do risco evidenciado pelos descumprimentos reiterados e pelas ameaças recentes</button>
+      <button class="opcao-caso" onclick="responder(1,2,false)">C) Concedeu parcialmente — substituiu a preventiva por monitoração eletrônica e proibição de aproximação</button>
+      <button class="opcao-caso" onclick="responder(1,3,false)">D) Não conheceu o HC por ser substitutivo de recurso, sem analisar o mérito</button>
+    </div>
+    <div class="gabarito" id="gab1">
+      <div class="gabarito-tit">⚖️ Como o STF decidiu — e por quê</div>
+      <div class="gabarito-txt">
+        <strong>Decisão: HC denegado.</strong><br><br>
+        O STF (HC 249.130/PE, Min. André Mendonça, 2ª Turma, 2025) fixou que <strong>a contemporaneidade exigida para justificar a preventiva não está necessariamente relacionada à data do crime, mas à continuidade do risco representado pelo agressor para a integridade da vítima</strong>, evidenciado pelos descumprimentos reiterados e pelas ameaças recentes.<br><br>
+        <strong>Impacto prático:</strong> a defesa não pode alegar ausência de contemporaneidade com base apenas na data do crime original, se há comportamentos recentes que demonstram o risco atual. O periculum libertatis é verificado no momento presente, não no passado.<br><br>
+        <a href="https://portal.stf.jus.br/processos/detalhe.asp?incidente=6568503" target="_blank">Processo — STF</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- CASO 2 -->
+  <div class="caso-real">
+    <div class="caso-header">
+      <div class="caso-num-badge">Caso 02 — STJ, 2025 (AgRg no HC 955.849/SP)</div>
+      <div class="caso-titulo-real">HC para questionar a versão dos fatos — reexame probatório</div>
+      <div class="autos-real">
+        <strong>Fatos:</strong> Marcos foi preso preventivamente após descumprimento de medida protetiva, com fundamentação concreta no risco à integridade física da vítima. A defesa impetrou HC no STJ alegando que o descumprimento não teria ocorrido da forma descrita no boletim de ocorrência, que a vítima havia consentido com o contato e que os fatos estariam sendo exagerados pela acusação.<br><br>
+        <strong>Tese:</strong> o HC deveria ser concedido para que o paciente respondesse ao processo em liberdade, pois os fatos que embasaram a preventiva estariam incorretos.
+      </div>
+      <div class="pergunta-caso">Como o STJ decidiu?</div>
+    </div>
+    <div class="opcoes-caso" id="op2">
+      <button class="opcao-caso" onclick="responder(2,0,false)">A) Concedeu o HC — o consentimento da vítima afasta automaticamente o descumprimento e, portanto, o periculum libertatis</button>
+      <button class="opcao-caso" onclick="responder(2,1,false)">B) Determinou dilação probatória para verificar se os fatos ocorreram antes de decidir</button>
+      <button class="opcao-caso" onclick="responder(2,2,true)">C) Denegou o HC — o exame do alegado descumprimento e a análise das circunstâncias fáticas demandam revolvimento de provas, incompatível com o habeas corpus. A preventiva estava devidamente fundamentada no risco concreto à vítima</button>
+      <button class="opcao-caso" onclick="responder(2,3,false)">D) Concedeu parcialmente — substituiu a preventiva por monitoração eletrônica</button>
+    </div>
+    <div class="gabarito" id="gab2">
+      <div class="gabarito-tit">⚖️ Como o STJ decidiu — e por quê</div>
+      <div class="gabarito-txt">
+        <strong>Decisão: HC denegado.</strong><br><br>
+        O STJ (AgRg no HC 955.849/SP, Min. Daniela Teixeira, 5ª Turma, j. 12/02/2025, DJEN 17/02/2025) denegou o HC com dois fundamentos:<br><br>
+        <strong>1.</strong> O exame do alegado descumprimento e a análise das circunstâncias fáticas demandariam revolvimento de provas — "procedimento incompatível com o habeas corpus".<br><br>
+        <strong>2.</strong> A preventiva estava devidamente fundamentada no risco concreto à integridade física da vítima — fundamentação idônea nos termos do art. 312 CPP.<br><br>
+        <strong>Lição crucial:</strong> o HC NÃO é a via para contestar a versão dos fatos da acusação. Se o cliente alega que o descumprimento não ocorreu como descrito, essa discussão pertence ao processo principal — depoimentos, provas, instrução criminal. O HC serve para ilegalidades formais e jurídicas, não para disputar narrativas fáticas.<br><br>
+        <a href="https://processo.stj.jus.br/SCON/GetInteiroTeorDoAcordao?num_registro=202304168150&dt_publicacao=17/02/2025" target="_blank">Inteiro teor — STJ</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- CASO 3 -->
+  <div class="caso-real">
+    <div class="caso-header">
+      <div class="caso-num-badge">Caso 03 — STJ, 2025 (Informativos 2025)</div>
+      <div class="caso-titulo-real">Tribunal não pode acrescer fundamentos no HC para salvar preventiva sem fundamentação</div>
+      <div class="autos-real">
+        <strong>Fatos:</strong> Ricardo foi condenado por lesão corporal doméstica grave. Na sentença condenatória, o juiz manteve a prisão preventiva com a fundamentação: "Mantém-se a prisão preventiva pelos fundamentos já expostos no decreto prisional." — ou seja, remissão genérica sem nova fundamentação. O TJ, ao julgar o HC da defesa, negou a ordem mas acresceu novos fundamentos que não constavam da sentença para justificar a prisão.<br><br>
+        <strong>Tese da defesa no STJ:</strong> o TJ não poderia criar fundamentos inexistentes na sentença para salvar a preventiva ilegal.
+      </div>
+      <div class="pergunta-caso">Como o STJ decidiu?</div>
+    </div>
+    <div class="opcoes-caso" id="op3">
+      <button class="opcao-caso" onclick="responder(3,0,false)">A) Denegou o HC — o TJ tem plena competência para acrescer fundamentos e sanar vícios de fundamentação da sentença</button>
+      <button class="opcao-caso" onclick="responder(3,1,true)">B) Concedeu o HC — no julgamento de habeas corpus, não cabe ao Tribunal acrescer fundamentos para justificar a prisão preventiva mantida na sentença sem fundamentação concreta. O vício não se sana no julgamento do HC</button>
+      <button class="opcao-caso" onclick="responder(3,2,false)">C) Não conheceu o HC por ser substitutivo do recurso de apelação, que seria a via adequada</button>
+      <button class="opcao-caso" onclick="responder(3,3,false)">D) Determinou que o TJ reanalisasse o caso sem se pronunciar sobre o mérito</button>
+    </div>
+    <div class="gabarito" id="gab3">
+      <div class="gabarito-tit">⚖️ Como o STJ decidiu — e por quê</div>
+      <div class="gabarito-txt">
+        <strong>Decisão: HC concedido.</strong><br><br>
+        O STJ (2025 — Informativos STJ, Processo Penal 2025) consolidou que <strong>no julgamento de habeas corpus, não cabe ao Tribunal acrescer fundamentos para justificar a prisão preventiva mantida na sentença condenatória sem qualquer fundamentação concreta.</strong><br><br>
+        A lógica é precisa: se a sentença não fundamentou concretamente a manutenção da preventiva (violação ao art. 315 CPP), essa ilegalidade não pode ser sanada pelo Tribunal no julgamento do HC com fundamentos que o juiz simplesmente não usou. Isso seria criar uma fundamentação retroativa, violando o devido processo legal e o art. 93, IX da CF.<br><br>
+        <strong>Estratégia prática:</strong> quando a sentença mantiver a preventiva por mera remissão ("pelos fundamentos já expostos" ou similar), sem nova análise concreta das circunstâncias atuais, impetre HC ao Tribunal apontando a violação ao art. 315, §1º CPP. O Tribunal não pode criar fundamentos para salvar a omissão do juiz.<br><br>
+        <a href="https://processo.stj.jus.br/SCON/pesquisar.jsp?b=ACOR&livre=HC+437535" target="_blank">Pesquisa — STJ</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="nav">
+    <button class="btn btn-s" onclick="ir(2)">← Voltar</button>
+    <button class="btn btn-p" onclick="ir(4)">Próximo: Árvore de decisão →</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     TELA 4 — ÁRVORE DE DECISÃO
+════════════════════════════════════════════════════ -->
+<div class="tela" id="t4">
+  <div class="badge">Etapa 5 de 5 — Árvore de decisão</div>
+  <h1 class="titulo">Qual instrumento usar?<br><em>Árvore de decisão</em></h1>
+  <p class="desc">Responda as perguntas sobre o caso do seu cliente e descubra o instrumento correto, os artigos a citar e o precedente aplicável.</p>
+
+  <div id="arvore">
+    <div class="pergunta-box" id="p0">
+      <div class="pergunta-tit">1. O seu cliente está preso neste momento?</div>
+      <div class="opcoes-arv">
+        <button class="opcao-arv" onclick="respArv('preso')">✅ Sim, está preso</button>
+        <button class="opcao-arv" onclick="respArv('livre')">❌ Não, mas há risco iminente de prisão ilegal</button>
+        <button class="opcao-arv" onclick="respArv('acao')">📋 Não — quero trancar a ação penal</button>
+      </div>
+    </div>
+
+    <div class="pergunta-box" id="p1" style="display:none;">
+      <div class="pergunta-tit">2. Por que a prisão é ilegal?</div>
+      <div class="opcoes-arv">
+        <button class="opcao-arv" onclick="respArv('sem_fund')">📄 Decisão genérica, gravidade abstrata, sem fatos concretos (art. 315 CPP)</button>
+        <button class="opcao-arv" onclick="respArv('contravencao')">⚠️ A infração imputada é uma contravenção penal (vias de fato etc.)</button>
+        <button class="opcao-arv" onclick="respArv('oficio')">🚫 Preventiva decretada de ofício sem qualquer provocação do MP ou delegado</button>
+        <button class="opcao-arv" onclick="respArv('motivo_cessou')">🔄 A prisão era legítima, mas as circunstâncias mudaram</button>
+        <button class="opcao-arv" onclick="respArv('90dias')">⏱️ Não foi revisada em 90 dias e manutenção está sem nova fundamentação</button>
+      </div>
+    </div>
+
+    <div class="pergunta-box" id="p2" style="display:none;">
+      <div class="pergunta-tit">3. Qual é o fundamento do trancamento?</div>
+      <div class="opcoes-arv">
+        <button class="opcao-arv" onclick="respArv('atipicidade')">✗ Atipicidade manifesta da conduta — o fato descrito na denúncia não é crime</button>
+        <button class="opcao-arv" onclick="respArv('sem_justa')">✗ Ausência manifesta de justa causa — sem indícios de autoria ou materialidade visíveis de plano</button>
+        <button class="opcao-arv" onclick="respArv('versao_fatos')">❓ Os fatos foram distorcidos pela acusação — quero provar que não ocorreram assim</button>
+      </div>
+    </div>
+
+    <div id="resultado" class="resultado-arvore"></div>
+  </div>
+
+  <div class="conclusao" style="margin-top:32px;">
+    <div class="c-ic">✓</div>
+    <div class="c-tit">Aula concluída!</div>
+    <div class="c-txt">Continue para a <strong>Aula 6 — Liberdade provisória e condições</strong> (Caso Clínico IA).</div>
+  </div>
+
+  <div class="nav">
+    <button class="btn btn-s" onclick="ir(3)">← Voltar aos casos</button>
+    <button class="btn btn-p" onclick="ir(0)">↺ Rever do início</button>
+  </div>
+</div>
+
+</div>
+
+<script>
+const ETAPAS = ['Fundamentos e competência','Cabimento e incabimento','Trancamento da ação penal','Casos reais','Árvore de decisão'];
+let cur = 0;
+
+function buildSteps() {
+  const el = document.getElementById('stps'); el.innerHTML = '';
+  ETAPAS.forEach((n,i) => {
+    if(i>0){ const l=document.createElement('div'); l.className='sline'+(i<=cur?' d':''); el.appendChild(l); }
+    const btn=document.createElement('button'); btn.className='step'; btn.onclick=()=>ir(i);
+    const dot=document.createElement('div'); dot.className='dot'+(i===cur?' a':i<cur?' d':''); dot.textContent=i<cur?'✓':i+1;
+    const lbl=document.createElement('div'); lbl.className='slbl'+(i===cur?' a':i<cur?' d':''); lbl.textContent=n;
+    btn.appendChild(dot); btn.appendChild(lbl); el.appendChild(btn);
+  });
+}
+
+function ir(n) {
+  document.querySelectorAll('.tela').forEach(t=>t.classList.remove('on'));
+  document.getElementById('t'+n).classList.add('on');
+  cur=n; buildSteps(); window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// CASOS REAIS
+function responder(casoNum, opcaoIdx, correta) {
+  const container = document.getElementById('op'+casoNum);
+  if(container.querySelector('.respondida')) return;
+  const btns = container.querySelectorAll('.opcao-caso');
+  btns.forEach((btn, i) => {
+    btn.classList.add('respondida');
+    const isCorreta = btn.getAttribute('onclick').includes('true');
+    if(isCorreta) btn.classList.add('correta');
+    else if(i === opcaoIdx && !correta) btn.classList.add('errada');
+  });
+  document.getElementById('gab'+casoNum).classList.add('show');
+}
+
+// ÁRVORE DE DECISÃO
+const RES = {
+  livre: {
+    classe:'hc', instrumento:'🛡️ Habeas Corpus Preventivo (Salvo-Conduto)',
+    artigos:['Art. 5º, LXVIII, CF','Art. 647 e 660, §2º, CPP'],
+    quando:'Quando há ameaça concreta e iminente de prisão ilegal, mas o cliente ainda está em liberdade — ex: mandado de prisão baseado em decisão nula.',
+    como:'Peticione ao Tribunal competente com pedido liminar de expedição de salvo-conduto. Demonstre concretamente a ameaça e sua ilegalidade. Não precisa esperar a prisão se consumar.',
+    precedente:'STJ, AgRg no HC 1.011.096/RS (Min. Rogerio Schietti Cruz, j. 23/09/2025): o HC mantém sua vocação de remédio constitucional e pode ser impetrado quando há ameaça à liberdade.',
+    link:'https://processo.stj.jus.br/SCON/pesquisar.jsp?b=ACOR&livre=HC+1011096'
+  },
+  sem_fund: {
+    classe:'relax', instrumento:'🚨 Habeas Corpus liberatório pedindo RELAXAMENTO',
+    artigos:['Art. 5º, LXV, CF','Art. 315, §1º e §2º, CPP','Art. 312, §4º, CPP (Lei 15.272/2025)','Art. 648, I, CPP'],
+    quando:'A prisão foi decretada sem fundamentação concreta — decisão genérica, baseada em gravidade abstrata, que não indica fatos novos ou contemporâneos.',
+    como:'Impetre HC ao Tribunal (TJ ou STJ, conforme o caso) com pedido liminar de relaxamento. Fundamente: (1) violação ao art. 315, §2º CPP — decisão não fundamentada concretamente; (2) vedação à gravidade abstrata (art. 312, §4º CPP). NÃO peticione ao mesmo juízo — o HC ao Tribunal é a via efetiva. O Tribunal não pode acrescer fundamentos ausentes na decisão original (STJ, 2025).',
+    precedente:'STJ, 2025: não cabe ao Tribunal acrescer fundamentos para justificar preventiva sem fundamentação concreta. STF, ADI 6581/DF (j. 08/03/2022): revisão nonagesimal não gera revogação automática, mas manutenção sem fundamentação é ilegal.',
+    link:'https://processo.stj.jus.br/SCON/GetInteiroTeorDoAcordao?num_registro=202304168150&dt_publicacao=17/02/2025'
+  },
+  contravencao: {
+    classe:'relax', instrumento:'🚨 Habeas Corpus liberatório — preventiva indevida por contravenção',
+    artigos:['Art. 313, CPP (não alcança contravenções)','Art. 5º, LXV, CF','Art. 648, I, CPP'],
+    quando:'A infração imputada é contravenção penal (vias de fato, perturbação etc.) e o juiz decretou preventiva com base no art. 313, III CPP.',
+    como:'Impetre HC ao Tribunal com pedido liminar de relaxamento. Argua que o art. 313 CPP, ao usar a palavra "crime", não abrange contravenções penais — a cautela extrema não admite interpretação extensiva em matéria de privação da liberdade.',
+    precedente:'STJ, HC 589.544/SC (Min. Laurita Vaz, 6ª Turma, j. 08/09/2020): não cabe preventiva para autor de contravenção penal em violência doméstica, mesmo com descumprimento de medida protetiva.',
+    link:'https://processo.stj.jus.br/SCON/pesquisar.jsp?b=ACOR&livre=HC+437535'
+  },
+  oficio: {
+    classe:'relax', instrumento:'🚨 Habeas Corpus — preventiva de ofício (atenção: verifique se há provocação do MP)',
+    artigos:['Art. 311, CPP (Lei 13.964/2019)','Art. 282, §2º, CPP','Art. 5º, LXV, CF'],
+    quando:'O juiz decretou preventiva sem qualquer requerimento do MP ou representação do delegado.',
+    como:'ATENÇÃO: verifique antes se o MP pediu alguma medida cautelar (mesmo diversa da prisão). Se pediu, o juiz pode decretar a preventiva sem ser "de ofício" (STJ, RHC 145.225-RO). Somente se não houve qualquer provocação, impetre HC ao Tribunal argumentando a vedação do art. 311 CPP (Lei 13.964/2019).',
+    precedente:'STJ, RHC 145.225-RO (Min. Rogerio Schietti, 6ª Turma, j. 15/02/2022): se o MP requereu qualquer cautelar, a escolha da preventiva pelo juiz não é decretação de ofício.',
+    link:'https://processo.stj.jus.br/SCON/GetInteiroTeorDoAcordao?num_registro=202100088800&dt_publicacao=18/02/2022'
+  },
+  motivo_cessou: {
+    classe:'revog', instrumento:'📋 Pedido de REVOGAÇÃO ao Juízo de Violência Doméstica e Familiar',
+    artigos:['Art. 316, caput, CPP','Art. 282, §5º, CPP'],
+    quando:'A prisão era legítima quando decretada, mas houve mudança fática concreta — separação definitiva, ausência de novos incidentes, tratamento psicossocial, mudança de cidade etc.',
+    como:'Peticione ao Juízo de Violência Doméstica e Familiar demonstrando: (1) os fundamentos originais; (2) a mudança fática concreta e documentada; (3) proposta de cautelares alternativas do art. 319 CPP. Se negada sem fundamentação adequada, impetre HC ao Tribunal. Lembre: a manifestação da vítima favorável NÃO é argumento suficiente (STJ, Ed. Teses 231/2024, Tese 9).',
+    precedente:'STJ, Jurisprudência em Teses, Edição 231/2024, Tese 9: manifestação da ofendida sobre revogação é irrelevante — a custódia não está na esfera de disponibilidade da vítima.',
+    link:'https://www.stj.jus.br/sites/portalp/Paginas/Jurisprudencia/Jurisprudencia-em-Teses.aspx'
+  },
+  '90dias': {
+    classe:'peticao', instrumento:'⏱️ Petição de revisão + HC se ignorada ou mantida sem fundamentação',
+    artigos:['Art. 316, §único, CPP','Art. 315, §1º e §2º, CPP'],
+    quando:'A preventiva não foi revisada no prazo de 90 dias e/ou foi mantida sem nova fundamentação concreta e atualizada.',
+    como:'Passo 1: petição ao juízo requerendo a revisão com fundamento no art. 316, §único CPP. Passo 2: se mantida sem nova fundamentação, HC ao Tribunal apontando: (a) manutenção sem fundamentação atualizada viola o art. 315, §1º CPP; (b) o Tribunal não pode criar fundamentos que o juiz não usou (STJ, 2025). CUIDADO: o STF fixou que o descumprimento do prazo NÃO gera revogação automática (ADIs 6581/6582, j. 08/03/2022).',
+    precedente:'STF, ADI 6581/DF (Plenário, j. 08/03/2022): inobservância do prazo não gera revogação automática — mas manutenção sem nova fundamentação concreta é constrangimento ilegal.',
+    link:'https://portal.stf.jus.br/processos/detalhe.asp?incidente=5964739'
+  },
+  acao: { _goto: 'p2' },
+  atipicidade: {
+    classe:'hc', instrumento:'🎯 HC para trancamento da ação penal — atipicidade manifesta',
+    artigos:['Art. 5º, LXVIII, CF','Art. 648, I, CPP','Art. 647 CPP'],
+    quando:'A conduta descrita na denúncia não configura crime — reconhecível de plano, sem necessidade de análise probatória. Ex: denúncia inepta que não descreve os elementos do tipo penal.',
+    como:'Impetre HC ao Tribunal com pedido liminar de trancamento. Demonstre que a atipicidade é manifesta e não requer dilação probatória. Atenção: não confunda atipicidade manifesta (o fato não é crime) com discussão fática (o fato não ocorreu como descrito — essa última não cabe em HC).',
+    precedente:'STJ, posição consolidada: trancamento só cabe quando há "inequívoca comprovação da atipicidade da conduta, da extinção da punibilidade ou da ausência de indícios de autoria e materialidade" — de plano, sem dilação probatória. STJ, Jurisprudência em Teses Ed. 231/2024, Tese 4: em violência doméstica, é possível dispensar o exame de corpo de delito se há outras provas idôneas.',
+    link:'https://www.stj.jus.br/sites/portalp/Paginas/Jurisprudencia/Jurisprudencia-em-Teses.aspx'
+  },
+  sem_justa: {
+    classe:'hc', instrumento:'🎯 HC para trancamento — ausência manifesta de justa causa',
+    artigos:['Art. 648, I, CPP','Art. 5º, LXVIII, CF'],
+    quando:'Ausência total e visível de indícios de autoria ou de prova da materialidade — reconhecível sem análise aprofundada do conjunto probatório.',
+    como:'Impetre HC ao Tribunal demonstrando que os autos não contêm sequer indícios mínimos do crime imputado. É uma tese difícil em violência doméstica, pois os tribunais são muito restritivos e tendem a entender que a instrução criminal deve prosseguir. Verifique antes se a atipicidade não é o argumento mais forte.',
+    precedente:'STJ — consolidado: o trancamento por ausência de justa causa exige que a falta seja "inequívoca e patente" — verificável de plano, sem incursão probatória. Em violência doméstica, a palavra da vítima já é suficiente para afastar esse argumento na maioria dos casos (STJ, Jurisprudência em Teses Ed. 231/2024).',
+    link:'https://processo.stj.jus.br/SCON/pesquisar.jsp?b=ACOR&livre=trancamento+acao+penal+atipicidade+violencia+domestica'
+  },
+  versao_fatos: {
+    classe:'hc', instrumento:'❌ HC NÃO é a via adequada — reexame probatório',
+    artigos:[],
+    quando:'Situação: você quer provar que os fatos ocorreram de forma diferente da narrada na denúncia.',
+    como:'O HC NÃO é a via para essa discussão. O STJ é categórico: "o exame de circunstâncias fáticas é incompatível com o habeas corpus" (AgRg no HC 955.849/SP, j. 12/02/2025). A discussão sobre como os fatos ocorreram pertence ao processo principal — depoimentos, provas, instrução criminal, debates nas alegações finais, apelação. Use o HC apenas para ilegalidades formais e jurídicas, não para disputar a narrativa fática.',
+    precedente:'STJ, AgRg no HC 955.849/SP (Min. Daniela Teixeira, 5ª Turma, j. 12/02/2025): incompatibilidade entre HC e revolvimento de provas.',
+    link:'https://www.stj.jus.br/sites/portalp/Paginas/Jurisprudencia/Jurisprudencia-em-Teses.aspx'
+  }
+};
+
+function respArv(resp) {
+  const r = RES[resp];
+  if(r && r._goto) {
+    ['p0','p1','p2'].forEach(id => document.getElementById(id).style.display='none');
+    document.getElementById(r._goto).style.display='block';
+    document.getElementById(r._goto).scrollIntoView({behavior:'smooth',block:'nearest'});
+    return;
+  }
+  if(resp === 'preso') {
+    ['p0','p1','p2'].forEach(id => document.getElementById(id).style.display='none');
+    document.getElementById('p1').style.display='block';
+    document.getElementById('p1').scrollIntoView({behavior:'smooth',block:'nearest'});
+    return;
+  }
+  if(r) mostrarRes(r);
+}
+
+function mostrarRes(r) {
+  ['p0','p1','p2'].forEach(id => document.getElementById(id).style.display='none');
+  const el = document.getElementById('resultado');
+  const artList = r.artigos.length > 0
+    ? `<div class="card" style="margin-bottom:14px;"><div class="card-label">Artigos a citar</div><ul style="padding-left:18px;margin-top:8px;">${r.artigos.map(a=>`<li style="color:var(--muted);font-size:15px;margin-bottom:6px;line-height:1.7;">${a}</li>`).join('')}</ul></div>`
+    : '';
+  el.innerHTML = `
+    <div class="res-instrumento ${r.classe}">${r.instrumento}</div>
+    <p style="font-size:16px;color:var(--muted);margin-bottom:16px;line-height:1.8;">${r.quando}</p>
+    ${artList}
+    <div class="card verde" style="margin-bottom:14px;">
+      <div class="card-label verde">Como agir na prática</div>
+      <p class="card-p" style="font-size:15px;">${r.como}</p>
+    </div>
+    <div class="julgado">
+      <strong>Precedente aplicável:</strong><br>${r.precedente}<br>
+      <a href="${r.link}" target="_blank">Acesso: ${r.link.replace('https://','').split('/')[0]}</a>
+    </div>
+    <button class="btn-reiniciar" onclick="reiniciarArv()">↺ Analisar outro caso</button>
+  `;
+  el.classList.add('show');
+  el.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+function reiniciarArv() {
+  ['p1','p2'].forEach(id => document.getElementById(id).style.display='none');
+  document.getElementById('p0').style.display='block';
+  const res = document.getElementById('resultado');
+  res.classList.remove('show'); res.innerHTML='';
+  document.getElementById('p0').scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+buildSteps();
+</script>
+</body>
+</html>
