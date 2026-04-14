@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Módulo 03 · Aula 2 — Vedação de Fiança · Penha em Cena</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --rosa: #D4537E; --rosa2: #A33360;
+  --fundo: #0E0B14; --fundo2: #17122A; --fundo3: #211A38;
+  --roxo: #7F77DD; --texto: #F0EAF8; --muted: #9B8FBC;
+  --borda: rgba(212,83,126,0.2); --verde: #1D9E75;
+  --dourado: #C9963A; --azul: #3A8ADC;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'DM Sans', sans-serif; background: var(--fundo); color: var(--texto); min-height: 100vh; font-size: 18px; line-height: 1.75; }
+.bg-p { position:fixed;inset:0;pointer-events:none;z-index:0; background: radial-gradient(ellipse 60% 40% at 20% 20%, rgba(127,119,221,0.07) 0%, transparent 60%), radial-gradient(ellipse 40% 60% at 80% 80%, rgba(212,83,126,0.06) 0%, transparent 60%); }
+.header { position:sticky;top:0;z-index:100;background:rgba(14,11,20,0.95);border-bottom:1px solid var(--borda);padding:16px 32px;display:flex;align-items:center;gap:14px;backdrop-filter:blur(16px); }
+.logo { font-family:'Playfair Display',serif;font-size:20px;color:var(--rosa);font-weight:700; }
+.sep { color:var(--muted); } .info { font-size:15px;color:var(--muted); }
+.prog { background:var(--fundo2);border-bottom:1px solid var(--borda);padding:14px 32px;position:sticky;top:61px;z-index:99; }
+.steps { max-width:860px;margin:0 auto;display:flex;align-items:center; }
+.step { display:flex;flex-direction:column;align-items:center;gap:5px;flex:1;cursor:pointer;border:none;background:none; }
+.dot { width:34px;height:34px;border-radius:50%;border:2px solid rgba(155,143,188,0.3);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:500;color:var(--muted);transition:all .3s; }
+.dot.a { background:var(--rosa);border-color:var(--rosa);color:#fff;box-shadow:0 0 20px rgba(212,83,126,0.5); }
+.dot.d { background:var(--verde);border-color:var(--verde);color:#fff; }
+.slbl { font-size:10px;color:var(--muted);white-space:nowrap; }
+.slbl.a { color:var(--rosa); } .slbl.d { color:var(--verde); }
+.sline { flex:1;height:2px;background:rgba(155,143,188,0.15);margin-bottom:16px;transition:background .4s; }
+.sline.d { background:var(--verde); }
+.main { max-width:860px;margin:0 auto;padding:44px 32px 120px;position:relative;z-index:1; }
+.tela { display:none;animation:up .4s ease; }
+.tela.on { display:block; }
+@keyframes up { from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);} }
+.badge { display:inline-flex;align-items:center;gap:6px;background:rgba(212,83,126,0.12);border:1px solid rgba(212,83,126,0.3);border-radius:20px;padding:6px 16px;font-size:13px;font-weight:500;color:var(--rosa);letter-spacing:.06em;text-transform:uppercase;margin-bottom:20px; }
+.titulo { font-family:'Playfair Display',serif;font-size:clamp(26px,4.5vw,42px);font-weight:900;line-height:1.15;color:var(--texto);margin-bottom:16px; }
+.titulo em { color:var(--rosa);font-style:italic; }
+.desc { font-size:18px;color:var(--muted);line-height:1.9;margin-bottom:32px; }
+.card { background:var(--fundo2);border:1px solid var(--borda);border-radius:16px;padding:26px 28px;margin-bottom:18px; }
+.card.dest { border-color:rgba(212,83,126,0.45);background:rgba(212,83,126,0.04); }
+.card.verde { border-color:rgba(29,158,117,0.4);background:rgba(29,158,117,0.04); }
+.card.roxo { border-color:rgba(127,119,221,0.4);background:rgba(127,119,221,0.04); }
+.card.dourado { border-color:rgba(201,150,58,0.4);background:rgba(201,150,58,0.04); }
+.card.azul { border-color:rgba(58,138,220,0.35);background:rgba(58,138,220,0.04); }
+.card.alerta { border-color:rgba(220,80,80,0.4);background:rgba(220,80,80,0.04); }
+.card-label { font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;color:var(--rosa); }
+.card-label.verde { color:#5DCAA5; }
+.card-label.roxo { color:#AFA9EC; }
+.card-label.dourado { color:#E8C46A; }
+.card-label.azul { color:#7BBAF0; }
+.card-label.alerta { color:#E87070; }
+.card-h { font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:var(--texto);margin-bottom:12px; }
+.card-p { font-size:17px;color:var(--muted);line-height:1.85;margin-bottom:10px; }
+.card-p:last-child { margin-bottom:0; }
+.card-p strong { color:var(--texto); }
+.card-p em { color:var(--rosa);font-style:normal; }
+.lei { font-size:16px;color:var(--muted);border-left:3px solid var(--rosa);padding-left:16px;margin:12px 0;font-style:italic;line-height:1.85; }
+.lei.verde { border-left-color:var(--verde); }
+.lei.roxo { border-left-color:var(--roxo); }
+.lei.dourado { border-left-color:var(--dourado); }
+.tabela { width:100%;border-collapse:collapse;margin:14px 0;font-size:15px; }
+.tabela th { background:rgba(212,83,126,0.12);color:var(--rosa);font-weight:600;padding:11px 14px;text-align:left;font-size:12px;letter-spacing:.05em;text-transform:uppercase; }
+.tabela td { padding:11px 14px;border-bottom:1px solid rgba(155,143,188,0.1);color:var(--muted);vertical-align:top;line-height:1.7; }
+.tabela td strong { color:var(--texto); }
+.tabela tr:last-child td { border-bottom:none; }
+.passo { display:flex;gap:18px;margin-bottom:16px;align-items:flex-start; }
+.passo-num { width:40px;height:40px;border-radius:50%;background:var(--rosa);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:16px;flex-shrink:0;margin-top:2px; }
+.passo-num.verde { background:var(--verde); }
+.passo-num.roxo { background:var(--roxo); }
+.passo-corpo { flex:1; }
+.passo-tit { font-size:17px;font-weight:600;color:var(--texto);margin-bottom:6px; }
+.passo-txt { font-size:16px;color:var(--muted);line-height:1.8; }
+.passo-txt strong { color:var(--texto); }
+.modelo { background:var(--fundo3);border:1px solid rgba(127,119,221,0.2);border-radius:12px;padding:20px 22px;font-size:15px;color:var(--muted);line-height:1.9;font-style:italic;margin-top:10px; }
+.modelo strong { color:#AFA9EC;font-style:normal; }
+.qcard { background:var(--fundo2);border:1px solid var(--borda);border-radius:16px;padding:28px;margin-bottom:18px; }
+.qnum { font-size:13px;font-weight:600;color:var(--rosa);letter-spacing:.07em;text-transform:uppercase;margin-bottom:10px; }
+.qp { font-family:'Playfair Display',serif;font-size:19px;font-weight:700;color:var(--texto);margin-bottom:20px;line-height:1.5; }
+.qop { background:rgba(255,255,255,0.03);border:1px solid rgba(155,143,188,0.2);border-radius:10px;padding:14px 16px;margin-bottom:9px;cursor:pointer;font-size:16px;color:var(--muted);transition:all .2s;line-height:1.65; }
+.qop:hover:not(.bl) { border-color:var(--rosa);color:var(--texto);background:rgba(212,83,126,0.07); }
+.qop.ok { background:rgba(29,158,117,0.12);border-color:var(--verde);color:#9FE1CB; }
+.qop.er { background:rgba(212,83,126,0.1);border-color:var(--rosa);color:#EDB0C5; }
+.qop.bl { cursor:default; }
+.qfb { display:none;margin-top:10px;padding:14px 18px;border-radius:10px;font-size:15px;line-height:1.8; }
+.qfb.on { display:block; }
+.qfb.ok { background:rgba(29,158,117,0.1);border:1px solid rgba(29,158,117,0.25);color:#9FE1CB; }
+.qfb.er { background:rgba(212,83,126,0.08);border:1px solid rgba(212,83,126,0.2);color:#EDB0C5; }
+.rgrid { display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:13px;margin-bottom:28px; }
+.rcard { background:var(--fundo2);border:1px solid var(--borda);border-radius:13px;padding:22px; }
+.ric { font-size:24px;margin-bottom:9px; }
+.rtit { font-size:16px;font-weight:600;color:var(--texto);margin-bottom:7px; }
+.rtxt { font-size:14px;color:var(--muted);line-height:1.8; }
+.conclusao { background:linear-gradient(135deg,rgba(212,83,126,0.08),rgba(127,119,221,0.05));border:1px solid rgba(212,83,126,0.2);border-radius:18px;padding:34px;text-align:center;margin-top:22px; }
+.c-ic { font-size:46px;margin-bottom:10px; }
+.c-tit { font-family:'Playfair Display',serif;font-size:24px;font-weight:900;color:var(--verde);margin-bottom:8px; }
+.c-txt { font-size:17px;color:var(--muted);line-height:1.85; }
+.nav { display:flex;align-items:center;justify-content:space-between;margin-top:44px;padding-top:26px;border-top:1px solid var(--borda); }
+.btn { display:inline-flex;align-items:center;gap:8px;padding:13px 24px;border-radius:10px;font-size:16px;font-weight:500;cursor:pointer;transition:all .2s;border:none;font-family:'DM Sans',sans-serif; }
+.btn-s { background:rgba(255,255,255,0.05);color:var(--muted);border:1px solid rgba(155,143,188,0.2); }
+.btn-s:hover { background:rgba(255,255,255,0.09);color:var(--texto); }
+.btn-p { background:var(--rosa);color:#fff;box-shadow:0 4px 18px rgba(212,83,126,0.35); }
+.btn-p:hover { background:var(--rosa2);transform:translateY(-1px); }
+</style>
+</head>
+<body>
+<div class="bg-p"></div>
+<header class="header">
+  <span class="logo">PENHA em Cena</span>
+  <span class="sep">/</span>
+  <span class="info">Módulo 03 · Aula 2</span>
+</header>
+<div class="prog"><div class="steps" id="stps"></div></div>
+<div class="main">
+
+<!-- TELA 0: INTRODUÇÃO -->
+<div class="tela on" id="t0">
+  <div class="badge">Módulo 03 · Aula 2</div>
+  <h1 class="titulo">Vedação de fiança pela<br><em>autoridade policial</em></h1>
+  <p class="desc">Na delegacia, após o flagrante em violência doméstica, uma das primeiras perguntas do agressor é: "Posso pagar fiança e ir embora?" A resposta depende do crime, da pena e de uma controvérsia que todo advogado criminalista precisa dominar — especialmente porque o Congresso está debatendo mudanças legislativas importantes.</p>
+
+  <div class="card dest">
+    <div class="card-label">A regra geral — art. 322 do CPP</div>
+    <div class="card-h">Quando o delegado pode arbitrar fiança</div>
+    <div class="lei">"A autoridade policial somente poderá conceder fiança nos casos de infração cuja pena privativa de liberdade máxima não seja superior a 4 (quatro) anos." (art. 322, CPP)</div>
+    <p class="card-p">Essa é a regra: delegado arbitra fiança apenas quando a pena máxima não ultrapassa 4 anos. Acima disso — ou nos crimes inafiançáveis — <strong>somente o juiz pode conceder fiança</strong> (art. 322, parágrafo único, CPP).</p>
+    <p class="card-p">Na violência doméstica, a análise exige três camadas. Errar qualquer uma delas compromete a orientação ao cliente.</p>
+  </div>
+
+  <div class="nav"><span></span>
+    <button class="btn btn-p" onclick="ir(1)">Próximo: As 3 camadas de análise →</button>
+  </div>
+</div>
+
+<!-- TELA 1: AS 3 CAMADAS -->
+<div class="tela" id="t1">
+  <div class="badge">Etapa 2 de 6</div>
+  <h1 class="titulo">As <em>3 camadas</em> de análise</h1>
+  <p class="desc">Aplique estas três camadas em sequência para qualquer crime de violência doméstica.</p>
+
+  <div class="card dest">
+    <div class="card-label">Camada 1 — Pena máxima do crime</div>
+    <div class="card-h">A pena máxima supera 4 anos?</div>
+    <p class="card-p">Se sim: delegado <strong>não pode</strong> arbitrar fiança. Apenas o juiz. Fim da análise.</p>
+    <p class="card-p"><strong>Atenção — Lei 14.994/2024 (Pacote Antifeminicídio):</strong> aumentou penas de vários crimes em contexto de VD:</p>
+    <p class="card-p">• <strong>Lesão corporal doméstica</strong> (art. 129, §9º, CP): pena máxima de 3 → <em>5 anos</em>. Delegado definitivamente sem competência para fiança.<br>
+    • <strong>Descumprimento de medida protetiva</strong> (art. 24-A, LMP): pena máxima de 2 → <em>5 anos</em>. Idem.<br>
+    • <strong>Ameaça com violência de gênero</strong> (art. 147, §1º, CP): trata-se de <strong>causa de aumento de pena</strong> que dobra a pena base. A pena base da ameaça é de 1 a 6 meses (art. 147, caput). Aplicada a causa de aumento (dobro), a pena máxima chega a <em>12 meses</em> — abaixo do limite de 4 anos. Este ponto é analisado na Camada 3.</p>
+  </div>
+
+  <div class="card roxo">
+    <div class="card-label roxo">Camada 2 — Vedação expressa na LMP</div>
+    <div class="card-h">Há proibição específica na lei?</div>
+    <div class="lei roxo">"Na hipótese de prisão em flagrante, apenas a autoridade judicial poderá conceder fiança." (art. 24-A, §2º, LMP — Lei 13.641/2018)</div>
+    <p class="card-p">Para o crime de <strong>descumprimento de medida protetiva</strong> (art. 24-A), a vedação é absoluta e expressa — independentemente da pena. Com a Lei 14.994/2024, a pena também passou a 5 anos, tornando o delegado duplamente incompetente.</p>
+    <p class="card-p">Para os demais crimes sem vedação expressa e cuja pena não supera 4 anos: vai para a Camada 3.</p>
+  </div>
+
+  <div class="card dourado">
+    <div class="card-label dourado">Camada 3 — Controvérsia: vedação implícita?</div>
+    <div class="card-h">Há vedação geral da fiança policial em VD?</div>
+    <p class="card-p"><strong>1ª Corrente — majoritária (GNDHM, Enunciado nº 6):</strong> em todos os casos de VD, é vedada a fiança pela autoridade policial, porque o art. 313, III do CPP autoriza preventiva nesses casos — se o juiz pode decretar a preventiva, o delegado não pode conceder fiança que impeça essa análise judicial.</p>
+    <p class="card-p"><strong>2ª Corrente — garantista:</strong> não há vedação genérica. A proibição só existe onde a lei é expressa (art. 24-A, §2º LMP). Para outros crimes com pena até 4 anos, o delegado pode arbitrar fiança, realizando análise precária dos pressupostos da preventiva.</p>
+    <p class="card-p">Na prática forense, a 1ª corrente predomina amplamente nas delegacias e JVDs.</p>
+  </div>
+
+  <div class="nav">
+    <button class="btn btn-s" onclick="ir(0)">← Voltar</button>
+    <button class="btn btn-p" onclick="ir(2)">Próximo: Tabela por crime →</button>
+  </div>
+</div>
+
+<!-- TELA 2: TABELA PRÁTICA -->
+<div class="tela" id="t2">
+  <div class="badge">Etapa 3 de 6</div>
+  <h1 class="titulo">Tabela prática:<br><em>crime por crime</em></h1>
+  <p class="desc">Consulte esta tabela na delegacia. Pós Lei 14.994/2024.</p>
+
+  <div class="card">
+    <table class="tabela">
+      <thead><tr><th>Crime</th><th>Pena máxima</th><th>Delegado arbitra fiança?</th><th>Fundamento</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>Lesão corporal doméstica</strong> — art. 129, §9º, CP</td>
+          <td><strong>5 anos</strong> (Lei 14.994/2024)</td>
+          <td style="color:#EDB0C5;"><strong>❌ NÃO</strong></td>
+          <td>Pena > 4 anos — art. 322 CPP. Apenas o juiz.</td>
+        </tr>
+        <tr>
+          <td><strong>Lesão corporal grave/gravíssima doméstica</strong> — §§1º, 2º e 10 c/c §11 CP</td>
+          <td><strong>até 12 anos</strong></td>
+          <td style="color:#EDB0C5;"><strong>❌ NÃO</strong></td>
+          <td>Pena > 4 anos — art. 322 CPP.</td>
+        </tr>
+        <tr>
+          <td><strong>Descumprimento de medida protetiva</strong> — art. 24-A, LMP</td>
+          <td><strong>5 anos</strong> (Lei 14.994/2024)</td>
+          <td style="color:#EDB0C5;"><strong>❌ NÃO</strong></td>
+          <td>Dupla vedação: pena > 4 anos + art. 24-A, §2º, LMP (vedação expressa).</td>
+        </tr>
+        <tr>
+          <td><strong>Ameaça com violência de gênero</strong> — art. 147, §1º, CP</td>
+          <td><strong>Causa de aumento:</strong> dobro da pena base. Pena base: 1 a 6 meses. Pena máxima com dobro: <strong>12 meses</strong></td>
+          <td style="color:#f0c060;"><strong>⚠️ CONTROVERSO</strong></td>
+          <td>Pena máxima < 4 anos. 1ª corrente: vedação implícita (art. 313, III CPP). 2ª corrente: delegado pode. Na prática, JVDs vedam.</td>
+        </tr>
+        <tr>
+          <td><strong>Ameaça simples</strong> — art. 147, caput, CP</td>
+          <td><strong>6 meses</strong></td>
+          <td style="color:#f0c060;"><strong>⚠️ CONTROVERSO</strong></td>
+          <td>Mesma controvérsia da Camada 3. Corrente majoritária veda pela polícia.</td>
+        </tr>
+        <tr>
+          <td><strong>Feminicídio</strong> — art. 121, §2º, VI, CP</td>
+          <td><strong>até 40 anos</strong> (Lei 14.994/2024)</td>
+          <td style="color:#EDB0C5;"><strong>❌ NÃO — inafiançável</strong></td>
+          <td>Crime hediondo. Inafiançável por força constitucional (art. 5º, XLIII, CF) e Lei 8.072/90.</td>
+        </tr>
+        <tr>
+          <td><strong>Crimes sexuais</strong> — arts. 213 e ss., CP</td>
+          <td><strong>até 10 anos+</strong></td>
+          <td style="color:#EDB0C5;"><strong>❌ NÃO — inafiançável</strong></td>
+          <td>Crime hediondo. Inafiançável constitucionalmente.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card alerta">
+    <div class="card-label alerta">⚠️ Atenção — art. 147, §1º: causa de aumento, não pena autônoma</div>
+    <div class="card-h">Como calcular corretamente a pena da ameaça qualificada</div>
+    <p class="card-p">O §1º do art. 147 do CP não fixa uma nova pena — ele determina que a pena seja aplicada <strong>em dobro</strong> quando a ameaça é cometida com violência de gênero, nos termos da Lei Maria da Penha. A pena base da ameaça simples (caput) é de <strong>1 a 6 meses de detenção</strong>. Com a causa de aumento do dobro: mínimo de 2 meses, <strong>máximo de 12 meses</strong>. Portanto, a pena máxima fica em 12 meses — bem abaixo do limite de 4 anos do art. 322 do CPP. Por isso, pelo critério da pena isolado, o delegado poderia arbitrar fiança. A discussão se resolve na Camada 3 (vedação implícita).</p>
+  </div>
+
+  <div class="nav">
+    <button class="btn btn-s" onclick="ir(1)">← Voltar</button>
+    <button class="btn btn-p" onclick="ir(3)">Próximo: PL 1168/2024 →</button>
+  </div>
+</div>
+
+<!-- TELA 3: PL 1168/2024 -->
+<div class="tela" id="t3">
+  <div class="badge">Etapa 4 de 6 — Legislação em debate</div>
+  <h1 class="titulo">PL 1168/2024:<br><em>o que está por vir</em></h1>
+  <p class="desc">O Congresso está debatendo a vedação expressa da fiança em casos de lesão corporal doméstica. Entender o estado atual desse debate é essencial para antecipar mudanças legislativas.</p>
+
+  <div class="card azul">
+    <div class="card-label azul">PL 1.168/2024 — Sen. Jorge Seif (PL-SC)</div>
+    <div class="card-h">Tornar inafiançável a lesão corporal doméstica</div>
+    <p class="card-p">O projeto altera o Código de Processo Penal para incluir a <strong>lesão corporal em contexto de violência doméstica e familiar contra a mulher</strong> no rol dos crimes inafiançáveis.</p>
+    <p class="card-p"><strong>Tramitação até abril/2026:</strong> aprovado pela Comissão de Direitos Humanos (CDH) do Senado em dezembro de 2024, com parecer favorável do Sen. Márcio Bittar. Seguiu para análise terminativa na Comissão de Constituição e Justiça (CCJ) do Senado e depois vai à Câmara dos Deputados.</p>
+    <p class="card-p"><strong>Argumento central do projeto:</strong> dados do Fórum Brasileiro de Segurança Pública apontam crescimento de 9,8% das agressões em VD em 2023. Mulheres que, após o pagamento de fiança e soltura do agressor, voltam a sofrer violência — inclusive com desfechos fatais.</p>
+  </div>
+
+  <div class="card dourado">
+    <div class="card-label dourado">Por que isso importa para o advogado</div>
+    <div class="card-h">Impacto prático se o PL for aprovado</div>
+    <p class="card-p"><strong>Para a defesa:</strong> se o PL for aprovado, nem o delegado nem o juiz poderão conceder fiança em casos de lesão corporal doméstica — o agressor permanecerá preso até a audiência de custódia, e mesmo ali o juiz não poderá usar a fiança como instrumento de liberdade. A estratégia passará a depender exclusivamente de liberdade provisória sem fiança (art. 310, §1º, CPP) ou de habeas corpus.</p>
+    <p class="card-p"><strong>Para a acusação/assistente:</strong> o PL resolve legislativamente a controvérsia da Camada 3 — elimina o debate sobre vedação implícita para o crime mais frequente em VD, tornando a inafiançabilidade expressa e absoluta.</p>
+    <p class="card-p"><strong>Estado atual (abril/2026):</strong> o PL ainda não foi aprovado. A Lei 14.994/2024 já tornou a pena da lesão corporal doméstica em 5 anos, o que afasta a competência do delegado para arbitrar fiança por força do art. 322 do CPP. O PL, se aprovado, adicionaria a inafiançabilidade absoluta — impedindo também que o juiz conceda fiança.</p>
+  </div>
+
+  <div class="nav">
+    <button class="btn btn-s" onclick="ir(2)">← Voltar</button>
+    <button class="btn btn-p" onclick="ir(4)">Próximo: Como requerer fiança →</button>
+  </div>
+</div>
+
+<!-- TELA 4: COMO REQUERER FIANÇA -->
+<div class="tela" id="t4">
+  <div class="badge">Etapa 5 de 6 — Prática</div>
+  <h1 class="titulo">Como requerer fiança:<br><em>sede policial e judicial</em></h1>
+  <p class="desc">Saber quando e como requerer fiança é tão importante quanto saber se ela é cabível. O momento e o destinatário do pedido variam.</p>
+
+  <div class="card verde">
+    <div class="card-label verde">Fiança em sede policial — quando e como</div>
+    <div class="card-h">Requerimento ao delegado de polícia</div>
+    <p class="card-p"><strong>Quando é cabível (e controverso):</strong> crimes com pena máxima até 4 anos, sem vedação expressa, em que o delegado ainda não formalizou o auto de prisão em flagrante ou já o formalizou mas ainda não encaminhou ao juízo. Na prática, aplica-se sobretudo à ameaça simples e à contravenção de vias de fato — com as ressalvas da Camada 3.</p>
+    <p class="card-p"><strong>Momento:</strong> imediatamente após a lavratura do auto de prisão em flagrante (APF), ainda na delegacia, antes do encaminhamento ao juízo. Após o juiz receber o APF, a competência para fiança migra para o Poder Judiciário.</p>
+
+    <div class="passo">
+      <div class="passo-num">1</div>
+      <div class="passo-corpo">
+        <div class="passo-tit">Identificação e apresentação</div>
+        <div class="passo-txt">Apresente-se ao delegado como advogado(a) constituído(a). Exija acesso ao preso e ao auto de prisão em flagrante — direito garantido pelo art. 7º, XIV, do EOAB.</div>
+      </div>
+    </div>
+    <div class="passo">
+      <div class="passo-num">2</div>
+      <div class="passo-corpo">
+        <div class="passo-tit">Análise imediata da pena</div>
+        <div class="passo-txt">Verifique o crime imputado e sua pena máxima. Se inferior a 4 anos e sem vedação expressa: há base legal para requerer fiança ao delegado.</div>
+      </div>
+    </div>
+    <div class="passo">
+      <div class="passo-num">3</div>
+      <div class="passo-corpo">
+        <div class="passo-tit">Requerimento verbal ou escrito</div>
+        <div class="passo-txt">O requerimento pode ser verbal, mas é recomendável fazer por escrito para documentar o pedido e eventual negativa. Use o modelo abaixo.</div>
+        <div class="modelo">
+          <strong>Modelo de requerimento de fiança ao delegado:</strong><br><br>
+          Exmo. Sr. Delegado de Polícia da [X]ª Delegacia de Polícia de [Cidade/UF]<br><br>
+          [Nome do advogado(a)], OAB/[UF] nº [nº], advogado(a) constituído(a) de [nome do preso], preso em flagrante nesta Unidade Policial por suposta prática do crime previsto no art. [X] do [diploma legal], vem, com fundamento no art. 322 do Código de Processo Penal, REQUERER o arbitramento de FIANÇA em favor de seu constituinte, pelos seguintes fundamentos:<br><br>
+          1. O crime imputado tem pena privativa de liberdade máxima de [X meses/anos], inferior ao limite de 4 anos estabelecido pelo art. 322 do CPP;<br>
+          2. Não há vedação legal expressa ao arbitramento de fiança pela autoridade policial neste caso;<br>
+          3. O autuado não se enquadra em nenhuma das hipóteses de crime inafiançável previstas no art. 5º, XLIII da CF e na Lei 8.072/90.<br><br>
+          Requer, portanto, o arbitramento de fiança no valor que V. Exa. entender adequado, nos termos do art. 325 do CPP.<br><br>
+          [Cidade], [data]. [Assinatura]
+        </div>
+      </div>
+    </div>
+    <div class="passo">
+      <div class="passo-num">4</div>
+      <div class="passo-corpo">
+        <div class="passo-tit">Se o delegado negar</div>
+        <div class="passo-txt">Documente a negativa por escrito (peça certidão ou documento que comprove a recusa). Em seguida, acione o juiz plantonista com pedido de fiança judicial (próximo bloco) ou impetre <strong>habeas corpus</strong> se houver flagrante ilegalidade (ex: crime claramente com pena inferior a 4 anos e sem vedação expressa).</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card roxo">
+    <div class="card-label roxo">Fiança judicial — quando e como</div>
+    <div class="card-h">Requerimento ao juiz</div>
+    <p class="card-p"><strong>Momentos em que o juiz decide sobre fiança:</strong></p>
+
+    <div class="passo">
+      <div class="passo-num roxo">A</div>
+      <div class="passo-corpo">
+        <div class="passo-tit">Na audiência de custódia — art. 310 CPP</div>
+        <div class="passo-txt">O preso em flagrante deve ser apresentado ao juiz em até <strong>24 horas</strong> após a prisão (art. 310, caput, CPP — redação do Pacote Anticrime). Na audiência de custódia, o juiz deve:<br>
+        (i) relaxar a prisão ilegal;<br>
+        (ii) converter em preventiva, se presentes os requisitos (a pedido do MP ou delegado — nunca de ofício);<br>
+        (iii) conceder <strong>liberdade provisória com ou sem fiança</strong>.<br><br>
+        <strong>Este é o momento principal para requerer fiança judicial.</strong> O advogado deve comparecer à audiência de custódia e requerer oralmente, com argumentação sobre os requisitos do art. 312 CPP, proporcionalidade e cabimento da fiança.</div>
+      </div>
+    </div>
+    <div class="passo">
+      <div class="passo-num roxo">B</div>
+      <div class="passo-corpo">
+        <div class="passo-tit">Pedido autônomo após o flagrante</div>
+        <div class="passo-txt">Se o réu está preso preventivamente e as circunstâncias mudaram (ex: provas surgiram em seu favor, risco à ordem pública diminuiu), é possível peticionar ao juízo pedindo a concessão de fiança como substitutivo da preventiva, com fundamento no art. 334 do CPP e no art. 319 (medidas cautelares alternativas).</div>
+      </div>
+    </div>
+    <div class="passo">
+      <div class="passo-num roxo">C</div>
+      <div class="passo-corpo">
+        <div class="passo-tit">Via habeas corpus</div>
+        <div class="passo-txt">Se o juiz plantonista negar a fiança de forma ilegal (ex: nega fiança em crime com pena de 6 meses sem justificativa concreta), cabe <strong>habeas corpus</strong> ao Tribunal de Justiça com pedido liminar de concessão de fiança. É a via mais rápida quando o cliente está preso e há flagrante ilegalidade.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="nav">
+    <button class="btn btn-s" onclick="ir(3)">← Voltar</button>
+    <button class="btn btn-p" onclick="ir(5)">Próximo: Quiz →</button>
+  </div>
+</div>
+
+<!-- TELA 5: QUIZ -->
+<div class="tela" id="t5">
+  <div class="badge">Etapa 6 de 6 — Fixação</div>
+  <h1 class="titulo">Teste seu <em>domínio</em></h1>
+  <p class="desc">Quatro casos práticos com gabarito comentado.</p>
+  <div id="quiz"></div>
+  <div class="nav">
+    <button class="btn btn-s" onclick="ir(4)">← Voltar</button>
+    <button class="btn btn-p" onclick="ir(0)">↺ Rever do início</button>
+  </div>
+</div>
+
+</div><!-- /main -->
+
+<script>
+const ETAPAS = ['Introdução','3 Camadas','Tabela','PL 1168/24','Como requerer','Quiz'];
+let cur = 0;
+const respostas = {};
+
+function buildSteps() {
+  const el = document.getElementById('stps'); el.innerHTML = '';
+  ETAPAS.forEach((n,i) => {
+    if(i>0){ const l=document.createElement('div'); l.className='sline'+(i<=cur?' d':''); el.appendChild(l); }
+    const btn=document.createElement('button'); btn.className='step'; btn.onclick=()=>ir(i);
+    const dot=document.createElement('div'); dot.className='dot'+(i===cur?' a':i<cur?' d':''); dot.textContent=i<cur?'✓':i+1;
+    const lbl=document.createElement('div'); lbl.className='slbl'+(i===cur?' a':i<cur?' d':''); lbl.textContent=n;
+    btn.appendChild(dot); btn.appendChild(lbl); el.appendChild(btn);
+  });
+}
+
+function ir(n) {
+  document.querySelectorAll('.tela').forEach(t=>t.classList.remove('on'));
+  document.getElementById('t'+n).classList.add('on');
+  cur=n; buildSteps(); window.scrollTo({top:0,behavior:'smooth'});
+}
+
+const QS = [
+  {
+    p: 'João foi preso em flagrante por lesão corporal doméstica (art. 129, §9º, CP). Pós Lei 14.994/2024, a pena máxima desse crime é de 5 anos. O delegado pode arbitrar fiança?',
+    ops: [
+      'Sim — lesão corporal doméstica não está na lista de crimes hediondos e inafiançáveis da CF',
+      'Não — a pena máxima de 5 anos supera o limite de 4 anos do art. 322 do CPP. Apenas o juiz pode conceder fiança',
+      'Depende — o delegado pode se entender que não estão presentes os requisitos da preventiva',
+      'Sim, mas somente se o MP concordar com a fiança'
+    ],
+    c: 1,
+    fb: 'Com a Lei 14.994/2024, a pena máxima da lesão corporal doméstica (art. 129, §9º) passou de 3 para 5 anos. O art. 322 CPP limita a competência do delegado para fiança aos crimes com pena máxima não superior a 4 anos. 5 anos supera esse limite — apenas o juiz pode conceder fiança, na audiência de custódia (art. 310, III, CPP) ou por petição autônoma.'
+  },
+  {
+    p: 'Carlos foi preso em flagrante por ameaça com violência de gênero (art. 147, §1º, CP). Sua advogada calcula a pena máxima. O §1º do art. 147 é uma causa de aumento que dobra a pena. A pena base da ameaça simples é de 1 a 6 meses. Qual é a pena máxima aplicável com a causa de aumento?',
+    ops: [
+      '4 anos — o §1º fixou uma pena autônoma de 4 anos para a ameaça qualificada',
+      '2 anos — a lei dobrou apenas a pena mínima',
+      '12 meses — a pena base máxima de 6 meses, aplicado o dobro, resulta em 12 meses',
+      '3 anos — a ameaça qualificada tem pena base diferenciada'
+    ],
+    c: 2,
+    fb: 'O §1º do art. 147 é uma causa de aumento de pena (dobro), não uma pena autônoma. A pena base da ameaça simples (caput) é de 1 a 6 meses de detenção. Com o dobro da causa de aumento: mínimo de 2 meses e máximo de 12 meses. Portanto, pelo critério da pena isolado, o delegado poderia arbitrar fiança (12 meses < 4 anos). A discussão se resolve na Camada 3 (vedação implícita).'
+  },
+  {
+    p: 'Seu cliente foi preso em flagrante às 22h por ameaça simples (pena máxima: 6 meses) contra a ex-companheira. O delegado negou a fiança com base na vedação implícita do art. 313, III do CPP. O que você pode fazer IMEDIATAMENTE?',
+    ops: [
+      'Aguardar a audiência de custódia, que ocorre em até 24 horas, e requerer a fiança ao juiz nesse momento',
+      'Impetrar habeas corpus imediatamente no Tribunal de Justiça com pedido liminar de concessão de fiança, documentando a negativa do delegado',
+      'Ambas as alternativas são cabíveis — a audiência de custódia é a via mais imediata; o HC é cabível se houver flagrante ilegalidade na negativa',
+      'Apenas o MP pode contestar a negativa de fiança pela autoridade policial'
+    ],
+    c: 2,
+    fb: 'Ambas as vias são corretas e podem ser usadas em conjunto. A audiência de custódia (art. 310 CPP) ocorre em até 24 horas e é o momento natural para requerer fiança ao juiz — o advogado deve comparecer e requerer oralmente. O HC ao TJ é cabível se houver flagrante ilegalidade na negativa (ameaça simples com pena de 6 meses, sem vedação expressa). As duas vias não se excluem.'
+  },
+  {
+    p: 'O PL 1.168/2024, aprovado pela CDH do Senado em dezembro de 2024, propõe tornar inafiançável o crime de lesão corporal em VD. Se aprovado, qual será o principal impacto para a defesa — diferentemente da situação atual?',
+    ops: [
+      'Nenhum — a Lei 14.994/2024 já tornou a lesão corporal doméstica inafiançável',
+      'Com o PL aprovado, nem o juiz poderá conceder fiança. Hoje, com a pena em 5 anos, o delegado não pode arbitrar fiança, mas o juiz ainda pode concedê-la na audiência de custódia. O PL tornaria a inafiançabilidade absoluta — vedando também a fiança judicial',
+      'O PL só impede a fiança policial — o juiz continuaria podendo conceder fiança normalmente',
+      'O impacto seria apenas processual, sem diferença prática para o réu preso'
+    ],
+    c: 1,
+    fb: 'A Lei 14.994/2024 elevou a pena máxima para 5 anos, o que já impede o delegado de arbitrar fiança (art. 322 CPP). Mas o juiz AINDA PODE conceder fiança — a lei atual não tornou o crime inafiançável, apenas deslocou a competência para o Judiciário. O PL 1.168/2024 vai além: torna o crime INAFIANÇÁVEL, impedindo que QUALQUER autoridade — delegado ou juiz — conceda fiança. A estratégia da defesa, se o PL for aprovado, passa a depender exclusivamente de liberdade provisória sem fiança ou de habeas corpus por ilegalidade da prisão.'
+  }
+];
+
+function buildQuiz() {
+  const el = document.getElementById('quiz');
+  QS.forEach((q,qi) => {
+    const c = document.createElement('div'); c.className='qcard';
+    c.innerHTML=`<div class="qnum">Questão ${qi+1} de ${QS.length}</div>
+      <div class="qp">${q.p}</div>
+      ${q.ops.map((op,oi)=>`<div class="qop" id="qo${qi}_${oi}" onclick="ans(${qi},${oi})">${String.fromCharCode(65+oi)}) ${op}</div>`).join('')}
+      <div class="qfb" id="qf${qi}"></div>`;
+    el.appendChild(c);
+  });
+}
+
+function ans(qi,oi) {
+  if(respostas[qi]!==undefined) return;
+  respostas[qi]=oi;
+  const q=QS[qi];
+  for(let j=0;j<q.ops.length;j++){
+    const e=document.getElementById(`qo${qi}_${j}`); e.classList.add('bl');
+    if(j===q.c) e.classList.add('ok'); else if(j===oi) e.classList.add('er');
+  }
+  const fb=document.getElementById('qf'+qi); const ok=oi===q.c;
+  fb.className='qfb on '+(ok?'ok':'er');
+  fb.innerHTML=`<strong>${ok?'✓ Correto!':'✗ Atenção.'}</strong> ${q.fb}`;
+}
+
+buildSteps(); buildQuiz();
+</script>
+</body>
+</html>

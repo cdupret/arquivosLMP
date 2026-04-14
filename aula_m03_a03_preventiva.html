@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Módulo 03 · Aula 3 — Prisão Preventiva na LMP · Penha em Cena</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --rosa: #D4537E; --rosa2: #A33360;
+  --fundo: #0E0B14; --fundo2: #17122A; --fundo3: #211A38;
+  --roxo: #7F77DD; --texto: #F0EAF8; --muted: #9B8FBC;
+  --borda: rgba(212,83,126,0.2); --verde: #1D9E75;
+  --dourado: #C9963A; --azul: #3A8ADC;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'DM Sans', sans-serif; background: var(--fundo); color: var(--texto); min-height: 100vh; font-size: 17px; line-height: 1.75; }
+.bg-p { position:fixed;inset:0;pointer-events:none;z-index:0; background: radial-gradient(ellipse 60% 40% at 20% 20%, rgba(127,119,221,0.07) 0%, transparent 60%), radial-gradient(ellipse 40% 60% at 80% 80%, rgba(212,83,126,0.06) 0%, transparent 60%); }
+.header { position:sticky;top:0;z-index:100;background:rgba(14,11,20,0.95);border-bottom:1px solid var(--borda);padding:14px 28px;display:flex;align-items:center;gap:14px;backdrop-filter:blur(16px); }
+.logo { font-family:'Playfair Display',serif;font-size:19px;color:var(--rosa);font-weight:700; }
+.sep { color:var(--muted); } .info { font-size:14px;color:var(--muted); }
+.prog { background:var(--fundo2);border-bottom:1px solid var(--borda);padding:12px 28px;position:sticky;top:57px;z-index:99; }
+.steps { max-width:900px;margin:0 auto;display:flex;align-items:center; }
+.step { display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;cursor:pointer;border:none;background:none; }
+.dot { width:32px;height:32px;border-radius:50%;border:2px solid rgba(155,143,188,0.3);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;color:var(--muted);transition:all .3s; }
+.dot.a { background:var(--rosa);border-color:var(--rosa);color:#fff;box-shadow:0 0 18px rgba(212,83,126,0.5); }
+.dot.d { background:var(--verde);border-color:var(--verde);color:#fff; }
+.slbl { font-size:9px;color:var(--muted);white-space:nowrap;text-align:center; }
+.slbl.a { color:var(--rosa); } .slbl.d { color:var(--verde); }
+.sline { flex:1;height:2px;background:rgba(155,143,188,0.15);margin-bottom:14px;transition:background .4s; }
+.sline.d { background:var(--verde); }
+.main { max-width:900px;margin:0 auto;padding:40px 28px 120px;position:relative;z-index:1; }
+.tela { display:none;animation:up .4s ease; }
+.tela.on { display:block; }
+@keyframes up { from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);} }
+.badge { display:inline-flex;align-items:center;gap:6px;background:rgba(212,83,126,0.12);border:1px solid rgba(212,83,126,0.3);border-radius:20px;padding:5px 14px;font-size:12px;font-weight:500;color:var(--rosa);letter-spacing:.06em;text-transform:uppercase;margin-bottom:18px; }
+.titulo { font-family:'Playfair Display',serif;font-size:clamp(24px,4vw,40px);font-weight:900;line-height:1.15;color:var(--texto);margin-bottom:14px; }
+.titulo em { color:var(--rosa);font-style:italic; }
+.desc { font-size:17px;color:var(--muted);line-height:1.9;margin-bottom:28px; }
+.card { background:var(--fundo2);border:1px solid var(--borda);border-radius:14px;padding:24px 26px;margin-bottom:16px; }
+.card.dest { border-color:rgba(212,83,126,0.45);background:rgba(212,83,126,0.04); }
+.card.verde { border-color:rgba(29,158,117,0.4);background:rgba(29,158,117,0.04); }
+.card.roxo { border-color:rgba(127,119,221,0.4);background:rgba(127,119,221,0.04); }
+.card.dourado { border-color:rgba(201,150,58,0.4);background:rgba(201,150,58,0.04); }
+.card.azul { border-color:rgba(58,138,220,0.35);background:rgba(58,138,220,0.04); }
+.card.alerta { border-color:rgba(220,80,80,0.4);background:rgba(220,80,80,0.04); }
+.card-label { font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:7px;color:var(--rosa); }
+.card-label.verde { color:#5DCAA5; } .card-label.roxo { color:#AFA9EC; }
+.card-label.dourado { color:#E8C46A; } .card-label.azul { color:#7BBAF0; }
+.card-label.alerta { color:#E87070; }
+.card-h { font-family:'Playfair Display',serif;font-size:19px;font-weight:700;color:var(--texto);margin-bottom:12px; }
+.card-p { font-size:16px;color:var(--muted);line-height:1.85;margin-bottom:10px; }
+.card-p:last-child { margin-bottom:0; }
+.card-p strong { color:var(--texto); }
+.card-p em { color:var(--rosa);font-style:normal; }
+.card-p a { color:var(--rosa);text-decoration:none; }
+.card-p a:hover { text-decoration:underline; }
+.lei { font-size:15px;color:var(--muted);border-left:3px solid var(--rosa);padding-left:15px;margin:12px 0;font-style:italic;line-height:1.85; }
+.lei.verde { border-left-color:var(--verde); }
+.lei.roxo { border-left-color:var(--roxo); }
+.lei.dourado { border-left-color:var(--dourado); }
+.julgado { background:var(--fundo3);border:1px solid rgba(127,119,221,0.2);border-radius:10px;padding:16px 18px;margin:12px 0;font-size:14px;color:var(--muted);line-height:1.8; }
+.julgado strong { color:#AFA9EC; }
+.julgado a { color:#AFA9EC;text-decoration:none; }
+.julgado a:hover { text-decoration:underline; }
+
+/* ESQUEMA VISUAL */
+.esquema { display:flex;align-items:center;justify-content:center;gap:0;margin:24px 0;flex-wrap:wrap; }
+.esq-box { background:var(--fundo3);border-radius:14px;padding:18px 20px;text-align:center;flex:1;min-width:140px;max-width:200px; }
+.esq-box.rosa { border:2px solid rgba(212,83,126,0.5);background:rgba(212,83,126,0.06); }
+.esq-box.roxo { border:2px solid rgba(127,119,221,0.5);background:rgba(127,119,221,0.06); }
+.esq-box.verde { border:2px solid rgba(29,158,117,0.5);background:rgba(29,158,117,0.06); }
+.esq-box.dourado { border:2px solid rgba(201,150,58,0.5);background:rgba(201,150,58,0.06); }
+.esq-ic { font-size:28px;margin-bottom:8px; }
+.esq-tit { font-size:13px;font-weight:700;margin-bottom:4px; }
+.esq-tit.rosa { color:var(--rosa); }
+.esq-tit.roxo { color:#AFA9EC; }
+.esq-tit.verde { color:#5DCAA5; }
+.esq-tit.dourado { color:#E8C46A; }
+.esq-art { font-size:11px;color:var(--muted);margin-bottom:6px; }
+.esq-desc { font-size:13px;color:var(--muted);line-height:1.7; }
+.esq-seta { font-size:28px;color:var(--muted);padding:0 8px;margin-bottom:18px; }
+.esq-mais { font-size:24px;color:var(--rosa);padding:0 8px;margin-bottom:18px;font-weight:700; }
+.esq-resultado { background:linear-gradient(135deg,rgba(29,158,117,0.12),rgba(127,119,221,0.08));border:2px solid rgba(29,158,117,0.4);border-radius:14px;padding:20px 24px;text-align:center;margin-top:16px; }
+.esq-resultado-tit { font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:var(--verde);margin-bottom:6px; }
+.esq-resultado-txt { font-size:14px;color:var(--muted);line-height:1.7; }
+
+.passo { display:flex;gap:16px;margin-bottom:14px;align-items:flex-start; }
+.passo-num { width:36px;height:36px;border-radius:50%;background:var(--rosa);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;flex-shrink:0;margin-top:2px; }
+.passo-num.verde { background:var(--verde); }
+.passo-num.roxo { background:var(--roxo); }
+.passo-num.dourado { background:var(--dourado); }
+.passo-corpo { flex:1; }
+.passo-tit { font-size:16px;font-weight:600;color:var(--texto);margin-bottom:5px; }
+.passo-txt { font-size:15px;color:var(--muted);line-height:1.8; }
+.passo-txt strong { color:var(--texto); }
+.passo-txt a { color:var(--rosa);text-decoration:none; }
+.modelo { background:var(--fundo3);border:1px solid rgba(127,119,221,0.2);border-radius:10px;padding:18px 20px;font-size:14px;color:var(--muted);line-height:1.95;font-style:italic;margin-top:10px; }
+.modelo strong { color:#AFA9EC;font-style:normal; }
+
+/* COMPARATIVO */
+.comp2 { display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0; }
+@media(max-width:600px){ .comp2{grid-template-columns:1fr;} }
+
+.qcard { background:var(--fundo2);border:1px solid var(--borda);border-radius:14px;padding:26px;margin-bottom:16px; }
+.qnum { font-size:12px;font-weight:600;color:var(--rosa);letter-spacing:.07em;text-transform:uppercase;margin-bottom:10px; }
+.qp { font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:var(--texto);margin-bottom:18px;line-height:1.5; }
+.qop { background:rgba(255,255,255,0.03);border:1px solid rgba(155,143,188,0.2);border-radius:9px;padding:13px 15px;margin-bottom:8px;cursor:pointer;font-size:15px;color:var(--muted);transition:all .2s;line-height:1.65; }
+.qop:hover:not(.bl) { border-color:var(--rosa);color:var(--texto);background:rgba(212,83,126,0.07); }
+.qop.ok { background:rgba(29,158,117,0.12);border-color:var(--verde);color:#9FE1CB; }
+.qop.er { background:rgba(212,83,126,0.1);border-color:var(--rosa);color:#EDB0C5; }
+.qop.bl { cursor:default; }
+.qfb { display:none;margin-top:10px;padding:13px 16px;border-radius:9px;font-size:14px;line-height:1.8; }
+.qfb.on { display:block; }
+.qfb.ok { background:rgba(29,158,117,0.1);border:1px solid rgba(29,158,117,0.25);color:#9FE1CB; }
+.qfb.er { background:rgba(212,83,126,0.08);border:1px solid rgba(212,83,126,0.2);color:#EDB0C5; }
+.rgrid { display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin-bottom:26px; }
+.rcard { background:var(--fundo2);border:1px solid var(--borda);border-radius:12px;padding:20px; }
+.ric { font-size:22px;margin-bottom:8px; }
+.rtit { font-size:15px;font-weight:600;color:var(--texto);margin-bottom:6px; }
+.rtxt { font-size:13px;color:var(--muted);line-height:1.8; }
+.conclusao { background:linear-gradient(135deg,rgba(212,83,126,0.08),rgba(127,119,221,0.05));border:1px solid rgba(212,83,126,0.2);border-radius:16px;padding:32px;text-align:center;margin-top:20px; }
+.c-ic { font-size:44px;margin-bottom:10px; }
+.c-tit { font-family:'Playfair Display',serif;font-size:22px;font-weight:900;color:var(--verde);margin-bottom:8px; }
+.c-txt { font-size:16px;color:var(--muted);line-height:1.85; }
+.nav { display:flex;align-items:center;justify-content:space-between;margin-top:40px;padding-top:24px;border-top:1px solid var(--borda); }
+.btn { display:inline-flex;align-items:center;gap:8px;padding:12px 22px;border-radius:10px;font-size:16px;font-weight:500;cursor:pointer;transition:all .2s;border:none;font-family:'DM Sans',sans-serif; }
+.btn-s { background:rgba(255,255,255,0.05);color:var(--muted);border:1px solid rgba(155,143,188,0.2); }
+.btn-s:hover { background:rgba(255,255,255,0.09);color:var(--texto); }
+.btn-p { background:var(--rosa);color:#fff;box-shadow:0 4px 18px rgba(212,83,126,0.35); }
+.btn-p:hover { background:var(--rosa2);transform:translateY(-1px); }
+</style>
+</head>
+<body>
+<div class="bg-p"></div>
+<header class="header">
+  <span class="logo">PENHA em Cena</span>
+  <span class="sep">/</span>
+  <span class="info">Módulo 03 · Aula 3</span>
+</header>
+<div class="prog"><div class="steps" id="stps"></div></div>
+<div class="main">
+
+<!-- TELA 0: FUNDAMENTOS LEGAIS -->
+<div class="tela on" id="t0">
+  <div class="badge">Módulo 03 · Aula 3</div>
+  <h1 class="titulo">Prisão preventiva na LMP:<br><em>fundamentos específicos</em></h1>
+  <p class="desc">A prisão preventiva em casos de violência doméstica tem fundamentos próprios que vão além dos requisitos gerais do CPP. Dominar essa arquitetura legal é o que diferencia o advogado criminalista que age preventivamente do que apenas reage depois que o cliente já está preso.</p>
+
+  <div class="card dest">
+    <div class="card-label">A estrutura completa — o que é necessário para decretar a preventiva</div>
+    <div class="card-h">Três elementos cumulativos e obrigatórios: sempre os dois do art. 312 + uma condição do art. 313</div>
+    <p class="card-p">Todo decreto de prisão preventiva exige a presença simultânea dos três elementos abaixo. <strong>Nenhum dispensa os outros.</strong></p>
+
+    <div class="esquema">
+      <div class="esq-box rosa">
+        <div class="esq-ic">🔍</div>
+        <div class="esq-tit rosa">① Fumus comissi delicti</div>
+        <div class="esq-art">Art. 312, caput, CPP — SEMPRE obrigatório</div>
+        <div class="esq-desc"><strong>Prova da materialidade do crime</strong> (existência do fato) + <strong>indício suficiente de autoria</strong>. Sem isso, não há preventiva — em nenhum caso.</div>
+      </div>
+      <div class="esq-mais">+</div>
+      <div class="esq-box roxo">
+        <div class="esq-ic">⚡</div>
+        <div class="esq-tit roxo">② Periculum libertatis</div>
+        <div class="esq-art">Art. 312, caput, CPP — SEMPRE obrigatório</div>
+        <div class="esq-desc">Perigo concreto gerado pelo estado de liberdade do imputado. Deve ser um dos requisitos: garantia da ordem pública, da ordem econômica, conveniência da instrução criminal ou assegurar a aplicação da lei penal. <strong>Basta um.</strong> Vedada a gravidade abstrata (art. 312, §4º — Lei 15.272/2025).</div>
+      </div>
+      <div class="esq-mais">+</div>
+      <div class="esq-box verde">
+        <div class="esq-ic">⚖️</div>
+        <div class="esq-tit verde">③ Condição de admissibilidade</div>
+        <div class="esq-art">Art. 313, CPP — SEMPRE obrigatório</div>
+        <div class="esq-desc">Uma das hipóteses do art. 313 deve estar presente. Os incisos <strong>não são cumulativos entre si</strong> — basta um. São hipóteses alternativas: inciso I (pena máxima > 4 anos), inciso II (reincidência), inciso III (violência doméstica), inciso V (organização criminosa).</div>
+      </div>
+    </div>
+
+    <div class="esq-resultado">
+      <div class="esq-resultado-tit">⚠️ O art. 313, III satisfaz a condição de admissibilidade — mas não dispensa o art. 312</div>
+      <div class="esq-resultado-txt">Em casos de violência doméstica, o <strong>inciso III do art. 313</strong> é suficiente para preencher a condição de admissibilidade — não é necessário cumulá-lo com os incisos I ou II. Porém, isso resolve apenas o terceiro elemento. Os dois primeiros — <strong>fumus comissi delicti</strong> (prova da materialidade + indício de autoria) e <strong>periculum libertatis</strong> (perigo concreto do art. 312) — continuam sendo obrigatórios e devem estar concretamente demonstrados na decisão. O art. 313, III não substitui o art. 312: ele apenas abre a porta. Quem justifica a prisão é o art. 312.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-label">Art. 312, caput e §§ — redação da Lei 13.964/2019 e Lei 15.272/2025</div>
+    <div class="card-h">As hipóteses do periculum libertatis e suas vedações</div>
+    <div class="lei">"A prisão preventiva poderá ser decretada como garantia da ordem pública, da ordem econômica, por conveniência da instrução criminal ou para assegurar a aplicação da lei penal, quando houver prova da existência do crime e indício suficiente de autoria e de perigo gerado pelo estado de liberdade do imputado." (art. 312, caput, CPP)</div>
+    <p class="card-p"><strong>Vedações expressas:</strong></p>
+    <p class="card-p">① <strong>Vedação à antecipação de pena</strong> (art. 313, §2º CPP — Lei 13.964/2019): não se admite preventiva como decorrência imediata de investigação, recebimento de denúncia ou apresentação de réu. A decisão deve ser motivada em fatos novos ou contemporâneos (art. 312, §2º c/c art. 315, §1º, CPP).</p>
+    <p class="card-p">② <strong>Vedação à gravidade abstrata</strong> (art. 312, §4º CPP — Lei 15.272/2025): "É incabível a decretação da prisão preventiva com base em alegações de gravidade abstrata do delito, devendo ser concretamente demonstrados a periculosidade do agente e seu risco à ordem pública."</p>
+    <p class="card-p">③ <strong>Critérios para aferição da periculosidade</strong> (art. 312, §3º CPP — Lei 15.272/2025): modus operandi, uso reiterado de violência ou grave ameaça, participação em organização criminosa, fundado receio de reiteração delitiva à vista de outros inquéritos e ações penais em curso.</p>
+  </div>
+
+  <div class="card roxo">
+    <div class="card-label roxo">Art. 313, III do CPP — a hipótese de admissibilidade específica da violência doméstica</div>
+    <div class="card-h">Não é autônomo — e não se aplica a contravenções</div>
+    <div class="lei roxo">"Será admitida a decretação da prisão preventiva: [...] III - se o crime envolver violência doméstica e familiar contra a mulher, criança, adolescente, idoso, enfermo ou pessoa com deficiência, para garantir a execução das medidas protetivas de urgência." (art. 313, III, CPP)</div>
+    <p class="card-p"><strong>Ponto crítico 1 — os incisos do art. 313 não são cumulativos:</strong> basta que uma das hipóteses esteja presente. Em violência doméstica, o inciso III é suficiente para a admissibilidade. Os incisos I (pena máxima > 4 anos) e II (reincidência) são hipóteses alternativas — a presença de qualquer uma delas já satisfaz o requisito de admissibilidade.</p>
+    <p class="card-p"><strong>Ponto crítico 2 — o art. 313, III não é autônomo em relação ao art. 312:</strong> ele apenas autoriza a admissibilidade da preventiva em violência doméstica — ainda é obrigatório que estejam presentes o fumus comissi delicti e o periculum libertatis do art. 312.</p>
+    <p class="card-p"><strong>Ponto crítico 3 — contravenções penais:</strong> o STJ firmou que não cabe prisão preventiva para autores de contravenção penal, mesmo em violência doméstica, mesmo com descumprimento de medida protetiva. A cautela extrema não admite interpretação extensiva.</p>
+    <div class="julgado">
+      <strong>STJ, HC 589.544/SC</strong> — Min. Laurita Vaz, 6ª Turma, j. 08/09/2020 — vedação de preventiva para autor de contravenção penal em violência doméstica.<br>
+      <a href="https://www.stj.jus.br/websecstj/decisoesmonocraticas/frame.asp?url=/websecstj/cgi/revista/REJ.cgi/MON?seq=132009246&tipo=0&nreg=202001148580&SeqCgrmaSessao=&CodOrgaoJgdr=&dt=20201111&formato=PDF&salvar=false" target="_blank">Acesso: stj.jus.br</a>
+    </div>
+  </div>
+
+  <div class="card azul">
+    <div class="card-label azul">Preventiva sem prévia prisão em flagrante</div>
+    <div class="card-h">A preventiva pode ser decretada a qualquer momento</div>
+    <div class="lei">"Em qualquer fase da investigação policial ou do processo penal, caberá a prisão preventiva decretada pelo juiz, a requerimento do Ministério Público, do querelante ou do assistente, ou por representação da autoridade policial." (art. 311, CPP — redação da Lei 13.964/2019)</div>
+    <p class="card-p">A preventiva <strong>não exige prisão em flagrante prévia</strong>. Ela pode ser decretada:</p>
+    <p class="card-p">① Durante o inquérito policial, a requerimento do delegado ou do MP — ex: agressor que não foi preso em flagrante, mas ameaça a vítima de forma reiterada.</p>
+    <p class="card-p">② Durante o processo penal, a requerimento do MP, querelante ou assistente de acusação.</p>
+    <p class="card-p">③ <strong>Jamais de ofício</strong> (após a Lei 13.964/2019): o juiz não pode decretar a preventiva sem provocação. O art. 20 da LMP ainda menciona decretação "de ofício", mas o STJ firmou que esse dispositivo destoa do regime atual e a vedação é absoluta.</p>
+    <div class="julgado">
+      <strong>STJ, RHC 145.225-RO</strong> — Min. Rogerio Schietti Cruz, 6ª Turma, j. 15/02/2022, Info 725:<br>
+      "Não obstante o art. 20 da Lei 11.340/2006 ainda autorize a decretação da prisão preventiva de ofício, tal disposição destoa do atual regime jurídico. A atuação do juiz de ofício é vedada, independentemente do delito praticado ou de sua gravidade."<br>
+      <a href="https://www.stj.jus.br/sites/portalp/Paginas/Comunicacao/Noticias/10032022-Decretacao-de-medida-cautelar-mais-grave-que-a-requerida-pelo-MP-nao-caracteriza-atuacao-de-oficio.aspx" target="_blank">Acesso: stj.jus.br</a>
+    </div>
+    <p class="card-p"><strong>Nuance importante:</strong> se o MP requereu qualquer medida cautelar (mesmo diversa da prisão), o juiz pode decretar a preventiva sem que isso seja considerado atuação de ofício — pois já houve provocação. A escolha da medida mais adequada é do juiz (STJ, RHC 145.225-RO).</p>
+  </div>
+
+  <div class="nav"><span></span>
+    <button class="btn btn-p" onclick="ir(1)">Próximo: Descumprimento e art. 316 →</button>
+  </div>
+</div>
+
+<!-- TELA 1: DESCUMPRIMENTO E REVISÃO -->
+<div class="tela" id="t1">
+  <div class="badge">Etapa 2 de 7</div>
+  <h1 class="titulo">Descumprimento da medida protetiva<br>e o <em>art. 316 do CPP</em></h1>
+  <p class="desc">O descumprimento de medida protetiva é o principal gatilho para a decretação de preventiva em violência doméstica. E o art. 316 do CPP — a revisão a cada 90 dias — é a principal ferramenta da defesa para questionar preventivas longas.</p>
+
+  <div class="card dest">
+    <div class="card-label">Descumprimento → preventiva</div>
+    <div class="card-h">O fundamento mais comum na prática</div>
+    <p class="card-p">O descumprimento de medida protetiva é hipótese autorizadora da prisão preventiva por duas vias:</p>
+    <p class="card-p"><strong>Via 1 — art. 313, III CPP:</strong> para garantir a execução das medidas protetivas (fundamento direto).</p>
+    <p class="card-p"><strong>Via 2 — art. 312, §1º CPP:</strong> a preventiva também pode ser decretada em caso de descumprimento de qualquer medida cautelar (redação da Lei 13.964/2019). Como a medida protetiva é equiparada a cautelar para esse fim, o descumprimento fundamenta a preventiva.</p>
+    <div class="julgado">
+      <strong>STJ, AgRg no HC 955.849/SP</strong> — Min. Daniela Teixeira, 5ª Turma, j. 12/02/2025, DJEN 17/02/2025:<br>
+      Prisão preventiva fundamentada no risco à integridade física da vítima após descumprimento de medida protetiva. Impossibilidade de reexame de fatos em habeas corpus. Agravo desprovido.<br>
+      <a href="https://www.stj.jus.br/websecstj/cgi/revista/REJ.cgi/ATC?seq=184888818&tipo=91&nreg=202304168150&SeqCgrmaSessao=&CodOrgaoJgdr=&dt=20250217&formato=PDF&salvar=false" target="_blank">Acesso: stj.jus.br</a>
+    </div>
+    <div class="julgado">
+      <strong>STJ, RHC 56.079/MS</strong> — Min. Gurgel de Faria, 5ª Turma, DJe 13/05/2015:<br>
+      "A reiteração de condutas delituosas e o descumprimento das medidas protetivas denotam, de forma concreta, uma propensão do paciente em cometer crimes, razão pela qual a manutenção da prisão se mostra necessária para garantia da ordem pública."<br>
+      <a href="https://www.stj.jus.br/websecstj/cgi/revista/REJ.cgi/ATC?seq=48083779&tipo=91&nreg=201500375780&SeqCgrmaSessao=&CodOrgaoJgdr=&dt=20150513&formato=PDF&salvar=false" target="_blank">Acesso: stj.jus.br</a>
+    </div>
+    <p class="card-p"><strong>Ponto crítico para a defesa:</strong> o simples descumprimento, por si só, não basta. É necessário que os requisitos do art. 312 estejam presentes (periculum concreto). Preventivas decretadas apenas com o fato do descumprimento, sem demonstração de risco atual à vítima, são ilegais e devem ser atacadas por habeas corpus.</p>
+  </div>
+
+  <div class="card dourado">
+    <div class="card-label dourado">Art. 316, parágrafo único — revisão a cada 90 dias</div>
+    <div class="card-h">A ferramenta da defesa contra preventivas prolongadas</div>
+    <div class="lei dourado">"Decretada a prisão preventiva, deverá o órgão emissor da decisão revisar a necessidade de sua manutenção a cada 90 (noventa) dias, mediante decisão fundamentada, de ofício, sob pena de tornar a prisão ilegal." (art. 316, §único, CPP — Lei 13.964/2019)</div>
+    <p class="card-p"><strong>O que o STF decidiu (ADIs 6581 e 6582, Plenário, j. 08/03/2022):</strong></p>
+    <p class="card-p">① O descumprimento do prazo de 90 dias <strong>não implica revogação automática</strong> da preventiva — o juízo competente deve ser provocado para reavaliar.<br>
+    ② A revisão se aplica até o encerramento da cognição plena pelo TJ/TRF (2ª instância) — não alcança STJ e STF.<br>
+    ③ Em 2ª instância, cabe ao desembargador relator fazer a revisão periódica por decisão monocrática.</p>
+    <div class="julgado">
+      <strong>STF, ADI 6581/DF e ADI 6582/DF</strong> — Rel. Min. Edson Fachin, Redator Min. Alexandre de Moraes, Plenário, j. 08/03/2022, Info 1046.<br>
+      <a href="https://portal.stf.jus.br/processos/detalhe.asp?incidente=5964739" target="_blank">Acesso: portal.stf.jus.br — ADI 6581</a>
+    </div>
+    <p class="card-p"><strong>Estratégia prática:</strong> se o juiz não revisou a preventiva em 90 dias, peticione imediatamente requerendo a revisão com fundamento no art. 316, §único CPP. Se o juiz não responder ou mantiver sem nova fundamentação concreta, impetre habeas corpus apontando o constrangimento ilegal. A revogação não é automática, mas a falta de fundamentação atualizada é fundamento para habeas corpus.</p>
+  </div>
+
+  <div class="nav">
+    <button class="btn btn-s" onclick="ir(0)">← Voltar</button>
+    <button class="btn btn-p" onclick="ir(2)">Próximo: Audiência de custódia →</button>
+  </div>
+</div>
+
+<!-- TELA 2: AUDIÊNCIA DE CUSTÓDIA -->
+<div class="tela" id="t2">
+  <div class="badge">Etapa 3 de 7</div>
+  <h1 class="titulo">Audiência de custódia:<br><em>como evitar a preventiva</em></h1>
+  <p class="desc">A audiência de custódia é o momento mais crítico para a defesa. É aqui que você pode impedir a conversão do flagrante em preventiva — ou minimizar os danos se ela for decretada. Preparação é tudo.</p>
+
+  <div class="card verde">
+    <div class="card-label verde">Art. 310 CPP — redação da Lei 15.358/2026</div>
+    <div class="card-h">Prazo e obrigações do juiz na audiência de custódia</div>
+    <div class="lei verde">"Após receber o auto de prisão em flagrante, no prazo máximo de até 24 (vinte e quatro) horas após a realização da prisão, o juiz deverá promover, por meio de videoconferência em tempo real, audiência de custódia com a presença do acusado, seu advogado constituído ou membro da Defensoria Pública e o membro do Ministério Público." (art. 310, CPP — redação da Lei 15.358/2026)</div>
+    <p class="card-p">Na audiência, o juiz deve fundamentadamente: (I) relaxar a prisão ilegal; (II) converter em preventiva, quando presentes os requisitos do art. 312 e insuficientes as cautelares diversas; ou (III) conceder liberdade provisória, com ou sem fiança.</p>
+    <p class="card-p"><strong>Lei 15.272/2025 — art. 310, §5º:</strong> incluiu circunstâncias que recomendam a conversão em preventiva: prática reiterada de infrações, infração com violência ou grave ameaça, agente já liberado em audiência de custódia anterior por outra infração, infração na pendência de inquérito ou ação penal, risco de fuga, ou perigo à instrução criminal.</p>
+    <p class="card-p"><strong>Lei 15.358/2026 — art. 310, §7º:</strong> antes da audiência, a serventia deve verificar processos criminais do acusado e, constatada citação pendente em qualquer deles, informar o juiz para citação pessoal imediata.</p>
+    <p class="card-p"><strong>Videoconferência obrigatória:</strong> a Lei 15.358/2026 tornou a audiência por videoconferência a regra, não mais exceção.</p>
+  </div>
+
+  <div class="card roxo">
+    <div class="card-label roxo">Estratégia da defesa na audiência de custódia</div>
+    <div class="card-h">O que fazer para evitar a conversão em preventiva</div>
+    <div class="passo">
+      <div class="passo-num">1</div>
+      <div class="passo-corpo">
+        <div class="passo-tit">Compareça preparado(a) — leve documentos</div>
+        <div class="passo-txt">Leve: comprovante de residência fixa, vínculo empregatício, certidão de antecedentes, comprovante de família. Primariedade, residência fixa e emprego não afastam a preventiva sozinhos (STF), mas são úteis combinados com outros argumentos.</div>
+      </div>
+    </div>
+    <div class="passo">
+      <div class="passo-num">2</div>
+      <div class="passo-corpo">
+        <div class="passo-tit">Ataque o periculum libertatis com concretude</div>
+        <div class="passo-txt">A lei veda preventiva por gravidade abstrata (art. 312, §4º CPP — Lei 15.272/2025). Argumente que não há risco concreto: episódio isolado, partes separadas, ausência de reiteração delitiva. Peça ao juiz que explicite qual fato concreto justifica o periculum.</div>
+      </div>
+    </div>
+    <div class="passo">
+      <div class="passo-num">3</div>
+      <div class="passo-corpo">
+        <div class="passo-tit">Proponha cautelares alternativas robustas</div>
+        <div class="passo-txt">O art. 310, II CPP só permite a conversão em preventiva se as cautelares diversas forem inadequadas ou insuficientes. Proponha um pacote do art. 319: proibição de aproximação + monitoração eletrônica + comparecimento periódico ao juízo + proibição de contato. Quanto mais robusto o pacote, mais difícil justificar a prisão.</div>
+      </div>
+    </div>
+    <div class="passo">
+      <div class="passo-num">4</div>
+      <div class="passo-corpo">
+        <div class="passo-tit">Verifique e argua ilegalidades do flagrante</div>
+        <div class="passo-txt">Verifique se o flagrante foi lavrado corretamente: apresentação do preso em 24h, nota de culpa entregue, oitiva das partes. Vícios formais podem fundamentar pedido de relaxamento (art. 310, I CPP).</div>
+      </div>
+    </div>
+    <div class="passo">
+      <div class="passo-num">5</div>
+      <div class="passo-corpo">
+        <div class="passo-tit">Verificar excludentes — art. 314 CPP</div>
+        <div class="passo-txt">O art. 314 CPP veda a preventiva se o agente praticou o fato em legítima defesa, estado de necessidade ou estrito cumprimento do dever legal. Se houver elementos de excludente, argua expressamente na audiência.</div>
+      </div>
+    </div>
+    <div class="passo">
+      <div class="passo-num">6</div>
+      <div class="passo-corpo">
+        <div class="passo-tit">Se inevitável — requeira prisão domiciliar subsidiariamente</div>
+        <div class="passo-txt">Se a preventiva for inevitável, requeira substituição por prisão domiciliar (art. 318 CPP) se cabível: maior de 80 anos, gestante, mulher com filho até 12 anos, homem único responsável por filho até 12 anos, ou extremamente debilitado por doença grave. <strong>Atenção:</strong> o art. 318-A não se aplica se o crime envolveu violência ou grave ameaça (art. 318-A, I, CPP).</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="nav">
+    <button class="btn btn-s" onclick="ir(1)">← Voltar</button>
+    <button class="btn btn-p" onclick="ir(3)">Próximo: Quando a preventiva foi decretada →</button>
+  </div>
+</div>
+
+<!-- TELA 3: QUANDO A PREVENTIVA JÁ FOI DECRETADA -->
+<div class="tela" id="t3">
+  <div class="badge">Etapa 4 de 7</div>
+  <h1 class="titulo">Quando a preventiva<br>já foi <em>decretada</em></h1>
+  <p class="desc">Seu cliente está preso. Antes de qualquer estratégia, é fundamental entender a distinção entre relaxamento e revogação — são institutos diferentes, com fundamentos e instrumentos distintos.</p>
+
+  <div class="card dest">
+    <div class="card-label">Distinção fundamental — relaxamento vs. revogação</div>
+    <div class="card-h">Dois institutos diferentes: não confunda</div>
+    <div class="comp2">
+      <div class="card alerta" style="margin-bottom:0;">
+        <div class="card-label alerta">❌ Relaxamento</div>
+        <div class="card-h" style="font-size:16px;">Prisão ilegal desde o início</div>
+        <p class="card-p" style="font-size:15px;"><strong>Quando usar:</strong> a preventiva foi decretada sem que houvesse motivo legal desde o início — ausência de fumus, periculum ou hipótese de admissibilidade. A prisão é originariamente ilegal.</p>
+        <p class="card-p" style="font-size:15px;"><strong>Fundamento:</strong> art. 310, I CPP (no flagrante) ou art. 5º, LXV, CF (prisão ilegal deve ser imediatamente relaxada).</p>
+        <p class="card-p" style="font-size:15px;"><strong>Estratégia correta:</strong> encaminhar ao mesmo juízo que decretou seria ineficaz. A via adequada é o <em>habeas corpus</em> ao Tribunal, requerendo o relaxamento com fundamento na ilegalidade por ausência de motivo desde a origem.</p>
+      </div>
+      <div class="card verde" style="margin-bottom:0;">
+        <div class="card-label verde">✓ Revogação</div>
+        <div class="card-h" style="font-size:16px;">Prisão que era legal, mas o motivo cessou</div>
+        <p class="card-p" style="font-size:15px;"><strong>Quando usar:</strong> a preventiva foi decretada com fundamento legítimo, mas as circunstâncias que a justificavam mudaram — o periculum libertatis deixou de existir.</p>
+        <p class="card-p" style="font-size:15px;"><strong>Fundamento:</strong> art. 316, caput, CPP — o juiz pode revogar a preventiva se verificar falta de motivo para que ela subsista.</p>
+        <p class="card-p" style="font-size:15px;"><strong>Estratégia correta:</strong> petição ao juízo que decretou demonstrando a mudança fática concreta. Se negada sem fundamentação adequada, habeas corpus ao Tribunal.</p>
+      </div>
+    </div>
+    <div class="card" style="margin-top:16px;margin-bottom:0;background:rgba(127,119,221,0.04);border-color:rgba(127,119,221,0.3);">
+      <p class="card-p"><strong>Resumo prático:</strong> relaxamento = prisão nunca deveria ter sido decretada → habeas corpus imediato ao Tribunal. Revogação = prisão era válida, mas o motivo cessou → petição ao juízo, e se negada, habeas corpus.</p>
+    </div>
+  </div>
+
+  <div class="card dourado">
+    <div class="card-label dourado">Cenário 1 — Preventiva decretada na audiência de custódia com fundamentação genérica</div>
+    <div class="card-h">Caso de relaxamento — habeas corpus imediato</div>
+    <p class="card-p">Se a decisão que converteu o flagrante em preventiva viola o art. 315 CPP — por ser genérica, reproduzir apenas o texto legal, invocar a gravidade abstrata do crime ou não enfrentar os argumentos da defesa — trata-se de prisão <strong>ilegal desde o início</strong>.</p>
+    <p class="card-p"><strong>Instrumento:</strong> habeas corpus ao Tribunal competente com pedido liminar de relaxamento. Fundamentos: art. 315, §2º CPP (decisão não fundamentada), art. 312, §4º CPP (gravidade abstrata), art. 5º, LXV, CF.</p>
+    <div class="julgado">
+      <strong>STF, RHC 241.589 AgR/SC</strong> — Min. Gilmar Mendes, 2ª Turma, j. 19/08/2024, pub. 04/09/2024:<br>
+      Análise da conversão da prisão em flagrante em preventiva em violência doméstica. Reafirma necessidade de provocação do MP ou delegado e fundamentação concreta.<br>
+      <a href="https://portal.stf.jus.br/processos/detalhe.asp?incidente=7064773" target="_blank">Acesso: portal.stf.jus.br</a>
+    </div>
+  </div>
+
+  <div class="card roxo">
+    <div class="card-label roxo">Cenário 2 — Preventiva após descumprimento de medida protetiva</div>
+    <div class="card-h">A situação mais comum — e mais difícil para a defesa</div>
+    <p class="card-p">Quando a preventiva é decretada após descumprimento de medida protetiva com risco concreto demonstrado, a jurisprudência a considera legítima (STJ, RHC 56.079/MS). A defesa enfrenta o ônus de demonstrar que o periculum não mais existe para pedir a revogação.</p>
+    <p class="card-p"><strong>Estratégias possíveis:</strong></p>
+    <p class="card-p">① <strong>Atipicidade do descumprimento:</strong> se o contato foi iniciado pela vítima sem coação, o STJ admite atipicidade por ausência de intimidação.</p>
+    <div class="julgado">
+      <strong>STJ, AgRg no AREsp 2.330.912/DF</strong> — Min. Ribeiro Dantas, 5ª Turma, j. 22/08/2023:<br>
+      Consentimento da vítima afasta a tipicidade do crime de descumprimento de medida protetiva quando não há intimidação.<br>
+      <a href="https://www.stj.jus.br/websecstj/cgi/revista/REJ.cgi/ATC?seq=170399174&tipo=91&nreg=202302096671&SeqCgrmaSessao=&CodOrgaoJgdr=&dt=20230825&formato=PDF&salvar=false" target="_blank">Acesso: stj.jus.br</a>
+    </div>
+    <p class="card-p">② <strong>Demonstrar mudança fática para revogação:</strong> se houve reconciliação voluntária e segura, separação definitiva ou outras circunstâncias que removem o risco, peça revogação com fundamento no art. 316 CPP com provas concretas.</p>
+    <p class="card-p">③ <strong>Infração penal que gerou a medida protetiva era contravenção:</strong> se a infração penal que gerou a medida protetiva era uma contravenção (ex: vias de fato) e o descumprimento envolve apenas essa contravenção, o STJ veda a preventiva.</p>
+  </div>
+
+  <div class="card azul">
+    <div class="card-label azul">Cenário 3 — Preventiva prolongada — uso do art. 316</div>
+    <div class="card-h">Cliente preso há mais de 90 dias sem revisão — pedido de revogação</div>
+    <div class="passo">
+      <div class="passo-num dourado">1</div>
+      <div class="passo-corpo">
+        <div class="passo-tit">Calcule o prazo desde a última decisão</div>
+        <div class="passo-txt">Conte 90 dias da data da última decisão fundamentada que manteve ou decretou a preventiva. Se o prazo passou sem nova fundamentação do juízo emissor, há violação ao art. 316, §único CPP.</div>
+      </div>
+    </div>
+    <div class="passo">
+      <div class="passo-num dourado">2</div>
+      <div class="passo-corpo">
+        <div class="passo-tit">Peticione ao juízo requerendo a revisão</div>
+        <div class="passo-txt">Protocole petição requerendo, com fundamento no art. 316, §único CPP, a revisão da necessidade de manutenção, apresentando fatos novos que demonstrem a cessação do periculum.</div>
+      </div>
+    </div>
+    <div class="passo">
+      <div class="passo-num dourado">3</div>
+      <div class="passo-corpo">
+        <div class="passo-tit">Se o juiz não responder ou mantiver genericamente — habeas corpus</div>
+        <div class="passo-txt">A ausência de revisão ou manutenção sem nova fundamentação concreta é constrangimento ilegal. Impetre habeas corpus ao Tribunal apontando: (a) decurso do prazo nonagesimal sem revisão fundamentada; (b) violação ao art. 315, §2º CPP. Cite as ADIs 6581 e 6582 do STF.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="nav">
+    <button class="btn btn-s" onclick="ir(2)">← Voltar</button>
+    <button class="btn btn-p" onclick="ir(4)">Próximo: Pedido de revogação →</button>
+  </div>
+</div>
+
+<!-- TELA 4: PEDIDO DE REVOGAÇÃO -->
+<div class="tela" id="t4">
+  <div class="badge">Etapa 5 de 7</div>
+  <h1 class="titulo">Como fazer o pedido<br>de <em>revogação da preventiva</em></h1>
+  <p class="desc">Lembre-se: revogação é para quando a prisão era legítima, mas o motivo cessou. O pedido tem requisitos específicos — um pedido genérico será negado imediatamente.</p>
+
+  <div class="card verde">
+    <div class="card-label verde">Art. 316, caput CPP — Fundamento legal</div>
+    <div class="card-h">Quando e para quem peticionar</div>
+    <div class="lei verde">"O juiz poderá, de ofício ou a pedido das partes, revogar a prisão preventiva se, no correr da investigação ou do processo, verificar a falta de motivo para que ela subsista." (art. 316, caput, CPP)</div>
+    <p class="card-p"><strong>Destinatário:</strong> Juízo de Violência Doméstica e Familiar que decretou a preventiva (1ª instância) ou desembargador relator (se em grau de recurso).<br>
+    <strong>Momento:</strong> a qualquer tempo durante a investigação ou processo.<br>
+    <strong>Requisito central:</strong> demonstração concreta de que os motivos que fundamentaram a decretação não mais existem — mudança fática real, não mera alegação temporal.</p>
+  </div>
+
+  <div class="card azul">
+    <div class="card-label azul">Estrutura do pedido de revogação — 5 pontos essenciais</div>
+    <div class="card-h">O que o pedido deve conter para ter chance real</div>
+    <div class="passo">
+      <div class="passo-num dourado">I</div>
+      <div class="passo-corpo">
+        <div class="passo-tit">Síntese do fundamento original da preventiva</div>
+        <div class="passo-txt">Identifique com precisão qual fundamento do art. 312 embasou a decretação (ordem pública? instrução criminal? aplicação da lei penal?). Só atacando o fundamento específico a petição tem consistência.</div>
+      </div>
+    </div>
+    <div class="passo">
+      <div class="passo-num dourado">II</div>
+      <div class="passo-corpo">
+        <div class="passo-tit">Demonstração da mudança fática concreta</div>
+        <div class="passo-txt">Este é o coração do pedido. Exemplos: separação definitiva e documentada, decurso de tempo substancial sem novos episódios, vítima em local seguro, agressor em tratamento psicossocial com laudos, inquérito concluído (cessou o fundamento de conveniência da instrução).</div>
+      </div>
+    </div>
+    <div class="passo">
+      <div class="passo-num dourado">III</div>
+      <div class="passo-corpo">
+        <div class="passo-tit">Proposta de cautelares alternativas</div>
+        <div class="passo-txt">Proponha um pacote robusto do art. 319 como substitutivo. Quanto mais específico e efetivo o pacote, maior a chance de o juiz sentir-se confortável para revogar.</div>
+      </div>
+    </div>
+    <div class="passo">
+      <div class="passo-num dourado">IV</div>
+      <div class="passo-corpo">
+        <div class="passo-tit">Vedação à gravidade abstrata — argumento técnico</div>
+        <div class="passo-txt">Cite o art. 312, §4º CPP (Lei 15.272/2025) e argua que a manutenção sem fundamentação concreta e atualizada viola o princípio da excepcionalidade. Se não houve revisão em 90 dias, cite as ADIs 6581/6582 do STF.</div>
+      </div>
+    </div>
+    <div class="passo">
+      <div class="passo-num dourado">V</div>
+      <div class="passo-corpo">
+        <div class="passo-tit">Condições pessoais favoráveis — use como reforço</div>
+        <div class="passo-txt">Primariedade, residência fixa, emprego lícito, família dependente — são argumentos auxiliares, não definitivos. A jurisprudência é pacífica: essas condições, por si sós, não afastam a preventiva. Use como reforço, nunca como argumento principal.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-label">Modelo — estrutura do pedido de revogação</div>
+    <div class="modelo">
+      <strong>Exmo. Sr. Dr. Juiz do [X]º Juízo de Violência Doméstica e Familiar de [Cidade/UF]</strong><br><br>
+      [Nome do advogado(a)], OAB/[UF] nº [nº], advogado(a) de [nome do réu], preso preventivamente nos autos do Processo nº [nº], vem requerer a REVOGAÇÃO DA PRISÃO PREVENTIVA, com fundamento no art. 316, caput, do CPP, pelos seguintes fundamentos:<br><br>
+      <strong>I — Da prisão preventiva decretada e seus fundamentos</strong><br>
+      A prisão preventiva foi decretada em [data] com fundamento em [ordem pública/instrução criminal/art. 313, III], em razão de [resumo do fundamento original].<br><br>
+      <strong>II — Da mudança fática superveniente</strong><br>
+      Desde a decretação da prisão, as circunstâncias que a fundamentaram sofreram modificação substancial: [descrever concretamente: separação, período sem incidentes, tratamento, etc.]. Tais fatos demonstram que o periculum libertatis que embasou a custódia cautelar não mais subsiste.<br><br>
+      <strong>III — Das cautelares alternativas suficientes</strong><br>
+      As medidas cautelares diversas do art. 319 do CPP são adequadas e suficientes para tutelar a situação: proibição de aproximação a [X] metros da ofendida, proibição de qualquer contato, monitoração eletrônica e comparecimento mensal ao juízo.<br><br>
+      <strong>IV — Da vedação à manutenção por gravidade abstrata</strong><br>
+      Nos termos do art. 312, §4º do CPP (Lei 15.272/2025) e do art. 315 do CPP, a manutenção da preventiva exige fundamentação concreta e atualizada — não a mera reiteração dos fundamentos originais.<br><br>
+      Ante o exposto, requer a revogação da prisão preventiva e a imposição das medidas cautelares diversas acima propostas.<br><br>
+      [Cidade], [data]. [Assinatura]
+    </div>
+  </div>
+
+  <div class="nav">
+    <button class="btn btn-s" onclick="ir(3)">← Voltar</button>
+    <button class="btn btn-p" onclick="ir(5)">Próximo: Quiz →</button>
+  </div>
+</div>
+
+<!-- TELA 5: QUIZ -->
+<div class="tela" id="t5">
+  <div class="badge">Etapa 6 de 7 — Fixação</div>
+  <h1 class="titulo">Teste seu <em>domínio</em></h1>
+  <p class="desc">Cinco casos práticos com gabarito comentado e fundamento legal.</p>
+  <div id="quiz"></div>
+  <div class="nav">
+    <button class="btn btn-s" onclick="ir(4)">← Voltar</button>
+    <button class="btn btn-p" onclick="ir(6)">Próximo: Resumo →</button>
+  </div>
+</div>
+
+<!-- TELA 6: RESUMO -->
+<div class="tela" id="t6">
+  <div class="badge">Etapa 7 de 7 — Resumo</div>
+  <h1 class="titulo">O que fixar<br>desta <em>aula</em></h1>
+  <div class="rgrid" id="rgrid"></div>
+  <div class="conclusao">
+    <div class="c-ic">✓</div>
+    <div class="c-tit">Aula concluída!</div>
+    <div class="c-txt">Continue para a <strong>Aula 4 — Audiência de custódia: como atuar</strong> (vídeo).</div>
+  </div>
+  <div class="nav">
+    <button class="btn btn-s" onclick="ir(5)">← Voltar ao quiz</button>
+    <button class="btn btn-p" onclick="ir(0)">↺ Rever do início</button>
+  </div>
+</div>
+
+</div>
+
+<script>
+const ETAPAS = ['Fundamentos','Descumprimento','Audiência','Quando preso','Revogação','Quiz','Resumo'];
+let cur = 0;
+const respostas = {};
+
+function buildSteps() {
+  const el = document.getElementById('stps'); el.innerHTML = '';
+  ETAPAS.forEach((n,i) => {
+    if(i>0){ const l=document.createElement('div'); l.className='sline'+(i<=cur?' d':''); el.appendChild(l); }
+    const btn=document.createElement('button'); btn.className='step'; btn.onclick=()=>ir(i);
+    const dot=document.createElement('div'); dot.className='dot'+(i===cur?' a':i<cur?' d':''); dot.textContent=i<cur?'✓':i+1;
+    const lbl=document.createElement('div'); lbl.className='slbl'+(i===cur?' a':i<cur?' d':''); lbl.textContent=n;
+    btn.appendChild(dot); btn.appendChild(lbl); el.appendChild(btn);
+  });
+}
+
+function ir(n) {
+  document.querySelectorAll('.tela').forEach(t=>t.classList.remove('on'));
+  document.getElementById('t'+n).classList.add('on');
+  cur=n; buildSteps(); window.scrollTo({top:0,behavior:'smooth'});
+}
+
+const QS = [
+  {
+    p: 'O juiz decretou prisão preventiva de João por lesão corporal doméstica com a seguinte fundamentação: "Decreta-se a prisão preventiva por se tratar de crime de violência doméstica, que é grave e gera risco à ordem pública." A decisão está correta?',
+    ops: [
+      'Sim — o art. 313, III do CPP autoriza preventiva em todos os casos de violência doméstica, bastando a menção ao fundamento legal',
+      'Não — a decisão viola o art. 312, §4º do CPP (Lei 15.272/2025) e o art. 315 do CPP. A fundamentação é genérica e abstrata, sem indicação de fatos concretos e contemporâneos que justifiquem o periculum libertatis',
+      'Sim — a gravidade do crime de violência doméstica é, por si só, fundamento suficiente para a preventiva',
+      'Não — o art. 313, III só se aplica a crimes com pena máxima superior a 4 anos'
+    ],
+    c: 1,
+    fb: 'A decisão é nula por violar o art. 315, §1º e §2º do CPP (Lei 13.964/2019) e o art. 312, §4º (Lei 15.272/2025). Não basta invocar a gravidade abstrata do crime ou a mera tipificação legal — a decisão deve indicar concretamente fatos novos ou contemporâneos que justifiquem o periculum libertatis. Uma decisão que "limitar-se à indicação ou reprodução de ato normativo" ou "invocar motivos que se prestariam a justificar qualquer outra decisão" é considerada não fundamentada (art. 315, §2º, I e III CPP). Trata-se de prisão ilegal desde a origem — instrumento adequado: habeas corpus ao Tribunal pedindo o relaxamento.'
+  },
+  {
+    p: 'Pedro foi preso preventivamente há 95 dias. O juiz não revisou a preventiva no prazo de 90 dias do art. 316, §único CPP. O advogado de Pedro pode requerer a imediata soltura com base no decurso do prazo?',
+    ops: [
+      'Sim — o art. 316, §único CPP é expresso: a preventiva se torna ilegal após 90 dias sem revisão, e o relaxamento é automático',
+      'Não — o STF decidiu nas ADIs 6581 e 6582 (j. 08/03/2022) que a inobservância do prazo não implica revogação automática. O advogado deve provocar o juízo para reavaliar, e se a resposta for insatisfatória, impetrar habeas corpus',
+      'Depende — a revogação automática só ocorre se o prazo ultrapassar 120 dias',
+      'Não — o prazo de 90 dias é impróprio e não gera consequência alguma'
+    ],
+    c: 1,
+    fb: 'O STF, nas ADIs 6581/DF e 6582/DF (Plenário, j. 08/03/2022, Info 1046), fixou que a inobservância do prazo de 90 dias NÃO implica revogação automática. O advogado deve: (1) peticionar ao juízo requerendo a revisão; (2) se o juiz mantiver sem nova fundamentação concreta, impetrar habeas corpus apontando o constrangimento ilegal por violação ao art. 315 CPP. Acesso: portal.stf.jus.br (ADI 6581).'
+  },
+  {
+    p: 'Carlos foi preso em flagrante por vias de fato (contravenção penal) contra sua esposa, com medida protetiva em vigor. O MP requereu a conversão em preventiva para garantir a execução das medidas protetivas (art. 313, III CPP). O juiz pode decretar a preventiva?',
+    ops: [
+      'Sim — o art. 313, III CPP autoriza preventiva em qualquer caso de violência doméstica, incluindo contravenções',
+      'Sim — o descumprimento de medida protetiva é fundamento autônomo para a preventiva, independentemente do tipo de infração penal',
+      'Não — o STJ firmou entendimento de que não cabe preventiva para autor de contravenção penal, mesmo em violência doméstica e mesmo com descumprimento de medida protetiva. A aplicação da cautela extrema não admite interpretação extensiva',
+      'Depende — cabe preventiva se a contravenção foi praticada com violência'
+    ],
+    c: 2,
+    fb: 'O STJ fixou que não há previsão legal autorizadora da prisão preventiva contra autor de contravenção penal, mesmo na hipótese de violência doméstica e mesmo com descumprimento de medida protetiva. O art. 313 do CPP, ao tratar da admissibilidade da preventiva, não alcança contravenções penais — sendo vedada a interpretação extensiva em matéria de privação da liberdade. Esse é um argumento poderoso da defesa. STJ, HC 589.544/SC, Min. Laurita Vaz, 6ª Turma, j. 08/09/2020.'
+  },
+  {
+    p: 'A preventiva de Roberto foi decretada quando havia descumprimento de medida protetiva e risco concreto documentado à vítima. Agora, 6 meses depois, as partes se separaram definitivamente, a vítima se mudou para outra cidade, há laudo de tratamento psicossocial do agressor e nenhum novo incidente. Qual o instrumento correto para buscar a liberdade de Roberto?',
+    ops: [
+      'Habeas corpus pedindo relaxamento, pois a preventiva era ilegal desde o início',
+      'Pedido de revogação da preventiva ao Juízo de Violência Doméstica e Familiar, demonstrando a mudança fática concreta que eliminou o periculum libertatis, com proposta de cautelares alternativas',
+      'Recurso em sentido estrito ao Tribunal de Justiça',
+      'Apenas o MP pode pedir a revogação da preventiva'
+    ],
+    c: 1,
+    fb: 'Trata-se de hipótese de REVOGAÇÃO — não de relaxamento. A preventiva era legítima quando decretada (havia descumprimento e risco concreto), mas as circunstâncias mudaram substancialmente. O instrumento correto é o pedido de revogação ao Juízo de Violência Doméstica e Familiar, com fundamento no art. 316, caput CPP, apresentando as provas da mudança fática (separação, mudança de cidade, laudo de tratamento, ausência de novos incidentes) e propondo cautelares alternativas do art. 319. Se negado sem fundamentação concreta, aí sim caberia habeas corpus ao Tribunal.'
+  },
+  {
+    p: 'João não foi preso em flagrante. Dois meses após o episódio de violência doméstica, com a vítima relatando novas ameaças, o MP requereu a decretação de prisão preventiva. É possível?',
+    ops: [
+      'Não — a preventiva só pode ser decretada após prisão em flagrante e audiência de custódia',
+      'Sim — o art. 311 do CPP permite que a preventiva seja decretada em qualquer fase da investigação ou do processo, a requerimento do MP, sem necessidade de prévia prisão em flagrante',
+      'Não — após 30 dias do fato sem flagrante, não cabe mais a preventiva',
+      'Sim, mas apenas se houver condenação anterior do agressor'
+    ],
+    c: 1,
+    fb: 'O art. 311 do CPP (redação da Lei 13.964/2019) é expresso: a preventiva pode ser decretada "em qualquer fase da investigação policial ou do processo penal", a requerimento do MP, delegado, querelante ou assistente. Não há exigência de prévia prisão em flagrante. Nesse cenário, se decretada a preventiva, não haverá audiência de custódia (pois não há flagrante) — o preso é apresentado ao juiz por meio de mandado de prisão. A defesa deve requerer cautelares alternativas do art. 319 imediatamente e, se necessário, impetrar habeas corpus questionando o periculum libertatis.'
+  }
+];
+
+function buildQuiz() {
+  const el = document.getElementById('quiz');
+  QS.forEach((q,qi) => {
+    const c = document.createElement('div'); c.className='qcard';
+    c.innerHTML=`<div class="qnum">Questão ${qi+1} de ${QS.length}</div>
+      <div class="qp">${q.p}</div>
+      ${q.ops.map((op,oi)=>`<div class="qop" id="qo${qi}_${oi}" onclick="ans(${qi},${oi})">${String.fromCharCode(65+oi)}) ${op}</div>`).join('')}
+      <div class="qfb" id="qf${qi}"></div>`;
+    el.appendChild(c);
+  });
+}
+
+function ans(qi,oi) {
+  if(respostas[qi]!==undefined) return;
+  respostas[qi]=oi;
+  const q=QS[qi];
+  for(let j=0;j<q.ops.length;j++){
+    const e=document.getElementById(`qo${qi}_${j}`); e.classList.add('bl');
+    if(j===q.c) e.classList.add('ok'); else if(j===oi) e.classList.add('er');
+  }
+  const fb=document.getElementById('qf'+qi); const ok=oi===q.c;
+  fb.className='qfb on '+(ok?'ok':'er');
+  fb.innerHTML=`<strong>${ok?'✓ Correto!':'✗ Atenção.'}</strong> ${q.fb}`;
+}
+
+const RES = [
+  {ic:'📐',tit:'3 elementos para decretar a preventiva',txt:'Fumus comissi delicti (art. 312) + Periculum libertatis (art. 312) + Hipótese de admissibilidade (art. 313). Em violência doméstica, o art. 313, III é suficiente para a admissibilidade. Os incisos do art. 313 não são cumulativos entre si.'},
+  {ic:'🚫',tit:'Vedação à gravidade abstrata',txt:'Art. 312, §4º CPP (Lei 15.272/2025): é incabível a preventiva com base em gravidade abstrata do delito. A fundamentação deve ser concreta e contemporânea (art. 315, §1º CPP). Decisão genérica = prisão ilegal = relaxamento via habeas corpus.'},
+  {ic:'📌',tit:'Preventiva sem flagrante',txt:'O art. 311 CPP permite preventiva em qualquer fase da investigação ou processo, sem prévia prisão em flagrante, a requerimento do MP, delegado ou querelante. O juiz não pode decretá-la de ofício (vedação após Lei 13.964/2019).'},
+  {ic:'🔄',tit:'Relaxamento vs. Revogação',txt:'Relaxamento: prisão ilegal desde a origem (ausência de motivo) → habeas corpus ao Tribunal pedindo o relaxamento. Revogação: prisão era legítima, mas o motivo cessou → petição ao Juízo de Violência Doméstica e Familiar + habeas corpus se negada.'},
+  {ic:'🕐',tit:'Art. 316 §único — revisão em 90 dias',txt:'Órgão emissor deve revisar a preventiva a cada 90 dias. Descumprimento NÃO revoga automaticamente — mas é fundamento para habeas corpus se a decisão for genérica (STF, ADIs 6581/6582, j. 08/03/2022, portal.stf.jus.br).'},
+  {ic:'🎯',tit:'Na audiência de custódia — estratégia',txt:'Leve documentos, ataque o periculum com concretude, proponha cautelares robustas (art. 319), verifique ilegalidades do flagrante (art. 310, I) e excludentes (art. 314). Se inevitável, requeira prisão domiciliar subsidiariamente (art. 318).'},
+  {ic:'📋',tit:'Pedido de revogação — estrutura',txt:'(I) Identificar o fundamento original. (II) Demonstrar mudança fática concreta. (III) Propor cautelares alternativas. (IV) Citar vedação à gravidade abstrata. (V) Usar condições pessoais como reforço, nunca como argumento principal.'},
+  {ic:'⚡',tit:'Habeas corpus — quando usar',txt:'(1) Decisão com fundamentação genérica (relaxamento). (2) 90 dias sem revisão e juiz mantém sem nova fundamentação. (3) Preventiva por contravenção penal. (4) Flagrante com vício formal. (5) Excludentes de ilicitude não examinadas.'},
+];
+
+function buildRes() {
+  const el=document.getElementById('rgrid');
+  RES.forEach(r=>{
+    const d=document.createElement('div'); d.className='rcard';
+    d.innerHTML=`<div class="ric">${r.ic}</div><div class="rtit">${r.tit}</div><div class="rtxt">${r.txt}</div>`;
+    el.appendChild(d);
+  });
+}
+
+buildSteps(); buildQuiz(); buildRes();
+</script>
+</body>
+</html>
