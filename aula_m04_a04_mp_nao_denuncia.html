@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Módulo 04 · Aula 4 — MP Não Oferece Denúncia · Penha em Cena</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--rosa:#D4537E;--rosa2:#A33360;--fundo:#0E0B14;--fundo2:#17122A;--fundo3:#211A38;--roxo:#7F77DD;--texto:#F0EAF8;--muted:#9B8FBC;--borda:rgba(212,83,126,0.2);--verde:#1D9E75;--dourado:#C9963A;--azul:#3A8ADC}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--fundo);color:var(--texto);min-height:100vh;font-size:18px;line-height:1.75;overflow-x:hidden}
+.bg-p{position:fixed;inset:0;pointer-events:none;z-index:0;background:radial-gradient(ellipse 60% 40% at 20% 20%,rgba(127,119,221,.07) 0%,transparent 60%),radial-gradient(ellipse 40% 60% at 80% 80%,rgba(212,83,126,.06) 0%,transparent 60%),radial-gradient(ellipse 30% 30% at 50% 50%,rgba(201,150,58,.03) 0%,transparent 70%)}
+.header{position:sticky;top:0;z-index:100;background:rgba(14,11,20,.95);border-bottom:1px solid var(--borda);padding:16px 32px;display:flex;align-items:center;gap:14px;backdrop-filter:blur(16px)}
+.logo{font-family:'Playfair Display',serif;font-size:20px;color:var(--rosa);font-weight:700}
+.sep{color:var(--muted);font-size:14px}.info{font-size:15px;color:var(--muted)}
+.prog{background:var(--fundo2);border-bottom:1px solid var(--borda);padding:14px 24px;position:sticky;top:57px;z-index:99}
+.steps{max-width:860px;margin:0 auto;display:flex;align-items:center}
+.step{display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;cursor:pointer;border:none;background:none}
+.dot{width:28px;height:28px;border-radius:50%;border:2px solid rgba(155,143,188,.25);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;color:var(--muted);transition:.3s}
+.dot.a{background:var(--rosa);border-color:var(--rosa);color:#fff;box-shadow:0 0 18px rgba(212,83,126,.4)}
+.dot.d{background:var(--verde);border-color:var(--verde);color:#fff}
+.slabel{font-size:10px;color:var(--muted);white-space:nowrap}.slabel.a{color:var(--rosa)}.slabel.d{color:var(--verde)}
+.sline{flex:1;height:2px;background:rgba(155,143,188,.15);margin-bottom:14px;transition:.3s}.sline.d{background:var(--verde)}
+.main{max-width:860px;margin:0 auto;padding:44px 32px 100px;position:relative;z-index:1}
+.tela{display:none;animation:fadeUp .4s ease}.tela.on{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.badge{display:inline-flex;align-items:center;background:rgba(212,83,126,.12);border:1px solid rgba(212,83,126,.25);color:var(--rosa);padding:8px 18px;border-radius:20px;font-size:14px;font-weight:500;margin-bottom:24px}
+.titulo{font-family:'Playfair Display',serif;font-size:clamp(26px,5vw,38px);font-weight:900;line-height:1.2;margin-bottom:14px}
+.titulo em{font-style:normal;color:var(--rosa)}
+.desc{font-size:19px;color:var(--muted);margin-bottom:36px;max-width:720px;line-height:1.8}
+.card{background:var(--fundo2);border:1px solid var(--borda);border-radius:16px;padding:32px;margin-bottom:24px;transition:border-color .2s}
+.card:hover{border-color:rgba(212,83,126,.35)}
+.card h3{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;margin-bottom:16px;line-height:1.3}
+.card h4{font-size:20px;font-weight:600;margin:20px 0 12px;color:var(--rosa)}
+.card p,.card li{font-size:17px;line-height:1.85;margin-bottom:12px}
+.card ul{padding-left:22px}.card ul li{margin-bottom:8px}
+.card ol{padding-left:22px}.card ol li{margin-bottom:10px}
+.tag{display:inline-block;padding:5px 14px;border-radius:12px;font-size:13px;font-weight:600;margin-right:6px;margin-bottom:6px}
+.tag-inc{background:rgba(29,158,117,.15);color:#9FE1CB;border:1px solid rgba(29,158,117,.3)}
+.tag-cond{background:rgba(201,150,58,.15);color:#E8C97A;border:1px solid rgba(201,150,58,.3)}
+.tag-lei{background:rgba(127,119,221,.15);color:#B5B0E8;border:1px solid rgba(127,119,221,.3)}
+.tag-novo{background:rgba(29,158,117,.15);color:#9FE1CB;border:1px solid rgba(29,158,117,.3);font-size:11px;padding:3px 10px}
+.alerta{padding:22px 26px;border-radius:14px;margin:20px 0;font-size:17px;line-height:1.85}
+.alerta-verde{background:rgba(29,158,117,.1);border:1px solid rgba(29,158,117,.25);color:#9FE1CB}
+.alerta-amarelo{background:rgba(201,150,58,.1);border:1px solid rgba(201,150,58,.25);color:#E8C97A}
+.alerta-vermelho{background:rgba(212,83,126,.08);border:1px solid rgba(212,83,126,.2);color:#EDB0C5}
+.alerta-info{background:rgba(127,119,221,.1);border:1px solid rgba(127,119,221,.25);color:#B5B0E8}
+.exemplo{background:rgba(127,119,221,.06);border-left:3px solid var(--roxo);padding:22px 26px;border-radius:0 14px 14px 0;margin:20px 0;font-size:17px;line-height:1.85}
+.exemplo strong{color:var(--roxo)}
+.redacao{background:rgba(201,150,58,.08);border:1px solid rgba(201,150,58,.2);border-radius:12px;padding:20px 24px;margin:16px 0;font-size:16px;line-height:1.8;font-style:italic;color:#E8C97A}
+.redacao .rotulo{font-style:normal;font-weight:600;font-size:14px;margin-bottom:8px;display:block;color:var(--dourado)}
+.tabela-c{overflow-x:auto;margin:20px 0}
+table{width:100%;border-collapse:collapse;font-size:16px}
+th{background:rgba(212,83,126,.15);color:var(--rosa);padding:14px 18px;text-align:left;font-weight:600;border-bottom:2px solid rgba(212,83,126,.3)}
+td{padding:14px 18px;border-bottom:1px solid rgba(155,143,188,.1)}
+tr:hover{background:rgba(127,119,221,.04)}
+.link-ext{color:var(--roxo);text-decoration:underline;font-weight:500}.link-ext:hover{color:var(--rosa)}
+.accordion{margin-bottom:14px}
+.acc-h{width:100%;text-align:left;padding:18px 22px;border:1px solid var(--borda);border-radius:12px;background:var(--fundo2);font-size:17px;font-weight:500;color:var(--texto);cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-family:'DM Sans',sans-serif;transition:.2s}
+.acc-h:hover{background:var(--fundo3);border-color:rgba(212,83,126,.35)}
+.acc-b{display:none;padding:20px 22px;border:1px solid var(--borda);border-top:none;border-radius:0 0 12px 12px;background:var(--fundo2);font-size:17px;line-height:1.85}
+.acc-b.open{display:block}
+.comparativo{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:20px 0}
+.comparativo>div{padding:20px;border-radius:12px}
+.comp-antes{background:rgba(212,83,126,.06);border:1px solid rgba(212,83,126,.15)}
+.comp-depois{background:rgba(29,158,117,.06);border:1px solid rgba(29,158,117,.15)}
+.comp-titulo{font-weight:600;font-size:15px;margin-bottom:10px}
+.fluxo{display:flex;flex-direction:column;gap:0;margin:24px 0}
+.fluxo-step{display:flex;align-items:flex-start;gap:16px}
+.fluxo-marker{display:flex;flex-direction:column;align-items:center;min-width:40px}
+.fluxo-num{width:36px;height:36px;border-radius:50%;background:var(--rosa);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;flex-shrink:0}
+.fluxo-line{width:2px;height:40px;background:rgba(212,83,126,.3)}
+.fluxo-content{padding-bottom:16px}
+.fluxo-titulo{font-weight:600;font-size:17px;margin-bottom:4px}
+.fluxo-desc{font-size:16px;color:var(--muted);line-height:1.7}
+.quiz-q{background:var(--fundo2);border:1px solid var(--borda);border-radius:16px;padding:28px;margin-bottom:18px}
+.quiz-q h4{font-size:18px;font-weight:500;margin-bottom:16px;line-height:1.6}
+.quiz-opt{display:block;width:100%;text-align:left;padding:14px 18px;margin-bottom:10px;border:2px solid rgba(155,143,188,.15);border-radius:10px;background:var(--fundo3);font-size:16px;color:var(--texto);cursor:pointer;transition:.2s;font-family:'DM Sans',sans-serif}
+.quiz-opt:hover{border-color:var(--roxo);background:rgba(127,119,221,.08)}
+.quiz-opt.certo{border-color:var(--verde);background:rgba(29,158,117,.1);color:#9FE1CB}
+.quiz-opt.errado{border-color:var(--rosa);background:rgba(212,83,126,.1);color:#EDB0C5}
+.quiz-opt:disabled{cursor:default;opacity:.85}
+.quiz-feed{margin-top:12px;padding:16px 18px;border-radius:10px;font-size:16px;line-height:1.75;display:none}
+.quiz-feed.show{display:block}
+.nav{display:flex;align-items:center;justify-content:space-between;margin-top:40px;padding-top:28px;border-top:1px solid var(--borda);gap:12px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:14px 28px;border-radius:10px;font-size:16px;font-weight:500;cursor:pointer;transition:.2s;border:none;font-family:'DM Sans',sans-serif}
+.btn-s{background:rgba(255,255,255,.05);color:var(--muted);border:1px solid rgba(155,143,188,.2)}.btn-s:hover{background:rgba(255,255,255,.09);color:var(--texto)}
+.btn-p{background:var(--rosa);color:#fff;box-shadow:0 4px 18px rgba(212,83,126,.3)}.btn-p:hover{background:var(--rosa2);transform:translateY(-1px);box-shadow:0 6px 24px rgba(212,83,126,.4)}
+.concluido{background:linear-gradient(135deg,rgba(212,83,126,.07),rgba(127,119,221,.05));border:1px solid rgba(212,83,126,.2);border-radius:16px;padding:40px;text-align:center;margin-top:32px}
+.concluido .ic{font-size:48px;margin-bottom:12px}.concluido .tit{font-family:'Playfair Display',serif;font-size:26px;font-weight:900;color:var(--verde);margin-bottom:10px}.concluido .sub{color:var(--muted);font-size:17px;line-height:1.7}
+@media(max-width:700px){.main{padding:24px 16px 60px}.card{padding:22px 18px}.header{padding:12px 16px}.prog{padding:10px 12px}.comparativo{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="bg-p"></div>
+<div class="header"><div class="logo">Penha em Cena</div><span class="sep">·</span><span class="info">Módulo 04 · Aula 4 de 6</span></div>
+
+<div class="prog"><div class="steps">
+<button class="step" onclick="ir(0)"><div class="dot a" id="d0">1</div><div class="slabel a">Intro</div></button><div class="sline" id="l0"></div>
+<button class="step" onclick="ir(1)"><div class="dot" id="d1">2</div><div class="slabel">Problema</div></button><div class="sline" id="l1"></div>
+<button class="step" onclick="ir(2)"><div class="dot" id="d2">3</div><div class="slabel">Art. 28</div></button><div class="sline" id="l2"></div>
+<button class="step" onclick="ir(3)"><div class="dot" id="d3">4</div><div class="slabel">Subsidiária</div></button><div class="sline" id="l3"></div>
+<button class="step" onclick="ir(4)"><div class="dot" id="d4">5</div><div class="slabel">Diligências</div></button><div class="sline" id="l4"></div>
+<button class="step" onclick="ir(5)"><div class="dot" id="d5">6</div><div class="slabel">Prática</div></button><div class="sline" id="l5"></div>
+<button class="step" onclick="ir(6)"><div class="dot" id="d6">7</div><div class="slabel">Quiz</div></button><div class="sline" id="l6"></div>
+<button class="step" onclick="ir(7)"><div class="dot" id="d7">8</div><div class="slabel">Resumo</div></button>
+</div></div>
+
+<div class="main">
+
+<!-- ===== TELA 0: INTRODUÇÃO ===== -->
+<div class="tela on" id="t0">
+  <div class="badge">Módulo 04 · Audiência de Retratação e Ação Penal</div>
+  <h1 class="titulo">O MP não oferece <em>denúncia</em> — e agora?</h1>
+  <p class="desc">Você representa a vítima de violência doméstica. O inquérito foi concluído, as provas estão robustas, mas o Ministério Público promove o arquivamento. O que o advogado da vítima pode fazer? Quais são os caminhos jurídicos? Esta aula é sobre isso: as ferramentas legais que a assistente de acusação e o advogado da vítima têm à disposição quando o MP se omite ou arquiva indevidamente.</p>
+
+  <div class="card">
+    <h3>O que você vai dominar nesta aula</h3>
+    <ul>
+      <li>O que mudou no arquivamento com o art. 28 do CPP (Lei 13.964/2019 — Pacote Anticrime): antes e depois</li>
+      <li>O direito da vítima de provocar a revisão do arquivamento (art. 28, §1º, CPP)</li>
+      <li>A ação penal privada subsidiária da pública: fundamento constitucional (art. 5º, LIX, CF), requisitos, prazo e peça processual</li>
+      <li>Como requerer diligências complementares ao MP e ao juiz</li>
+      <li>Novas provas após o arquivamento: o que fazer (art. 18, CPP)</li>
+      <li>Situações práticas: como atuar quando o MP é omisso na violência doméstica</li>
+    </ul>
+  </div>
+
+  <div class="nav"><span></span><button class="btn btn-p" onclick="ir(1)">Começar a aula →</button></div>
+</div>
+
+<!-- ===== TELA 1: O PROBLEMA ===== -->
+<div class="tela" id="t1">
+  <div class="badge">Etapa 2 de 8 — O problema na prática</div>
+  <h1 class="titulo">Quando o MP <em>não denuncia</em></h1>
+  <p class="desc">Na maioria dos crimes de violência doméstica, a ação penal é pública incondicionada. Isso significa que o Ministério Público é o titular da ação e tem o dever de oferecer denúncia se houver justa causa (prova de materialidade e indícios de autoria). Mas e quando o MP não faz isso?</p>
+
+  <div class="card">
+    <h3>As situações mais comuns</h3>
+    <p>Na prática, o advogado da vítima pode se deparar com as seguintes situações:</p>
+
+    <h4>1. O MP promove o arquivamento do inquérito</h4>
+    <p>O promotor entende que não há provas suficientes, que o fato é atípico, ou que não há justa causa para a ação penal. Ele ordena o arquivamento do inquérito (art. 28, CPP). A vítima recebe a comunicação do arquivamento.</p>
+
+    <h4>2. O MP deixa transcorrer o prazo sem oferecer denúncia</h4>
+    <p>O inquérito foi concluído e remetido ao MP, mas o promotor simplesmente não se manifesta — não oferece denúncia nem pede arquivamento. O prazo para oferecimento da denúncia (art. 46, CPP) se esgota: 5 dias se o réu estiver preso, 15 dias se estiver solto.</p>
+
+    <h4>3. O MP pede novas diligências indefinidamente</h4>
+    <p>Em vez de denunciar ou arquivar, o promotor devolve os autos à delegacia pedindo "novas diligências" repetidamente, sem que haja efetiva progressão na investigação. Trata-se de uma forma disfarçada de inércia.</p>
+
+    <h4>4. O MP oferece denúncia, mas por crime menos grave</h4>
+    <p>A vítima sofreu lesões gravíssimas, mas o MP denuncia apenas por lesão leve. Ou: houve tentativa de feminicídio, mas o MP denuncia por lesão corporal qualificada. Nesse caso, a vítima pode se habilitar como assistente de acusação e atuar para que a classificação correta seja aplicada.</p>
+  </div>
+
+  <div class="alerta alerta-amarelo">
+    <strong>Por que isso importa para o advogado criminalista?</strong> O advogado que atua na violência doméstica pode estar em qualquer polo: na defesa do acusado (e aí o arquivamento é favorável ao cliente) ou na assistência à vítima (e aí o arquivamento é um problema grave). Dominar os dois lados é essencial para uma atuação completa.
+  </div>
+
+  <div class="exemplo">
+    <strong>Exemplo prático:</strong> Sua cliente Marta foi agredida violentamente pelo ex-marido. Sofreu fratura no braço e hematomas no rosto. Registrou BO, fez exame de corpo de delito, obteve medidas protetivas. O inquérito foi concluído com relatório detalhado. Dois meses depois, o MP promove o arquivamento alegando "insuficiência de provas" — mesmo com o laudo do IML e testemunhos dos vizinhos. Marta te procura desesperada: "Doutora, eles vão deixar ele solto? Não vão fazer nada?" O que você faz?
+  </div>
+
+  <div class="nav">
+    <button class="btn btn-s" onclick="ir(0)">← Voltar</button>
+    <button class="btn btn-p" onclick="ir(2)">O art. 28 do CPP →</button>
+  </div>
+</div>
+
+<!-- ===== TELA 2: ART. 28 CPP ===== -->
+<div class="tela" id="t2">
+  <div class="badge">Etapa 3 de 8 — O art. 28 do CPP</div>
+  <h1 class="titulo">O novo sistema de <em>arquivamento</em></h1>
+  <p class="desc">O Pacote Anticrime (Lei 13.964/2019) mudou completamente o procedimento de arquivamento do inquérito policial. Antes, o juiz participava da decisão. Agora, o controle é interno do Ministério Público — mas a vítima ganhou um papel ativo.</p>
+
+  <div class="card">
+    <h3>Antes e depois do Pacote Anticrime</h3>
+    <div class="comparativo">
+      <div class="comp-antes">
+        <div class="comp-titulo" style="color:#EDB0C5">❌ Redação anterior do art. 28 (1941-2019):</div>
+        <p style="font-size:15px;line-height:1.7;color:#EDB0C5">"Se o órgão do Ministério Público, ao invés de apresentar a denúncia, requerer o arquivamento do inquérito policial ou de quaisquer peças de informação, o juiz, no caso de considerar improcedentes as razões invocadas, fará remessa do inquérito ou peças de informação ao procurador-geral, e este oferecerá a denúncia, designará outro órgão do Ministério Público para oferecê-la, ou insistirá no pedido de arquivamento, ao qual só então estará o juiz obrigado a atender."</p>
+        <p style="font-size:14px;color:#EDB0C5;margin-top:8px"><strong>Resumo:</strong> MP pedia → Juiz decidia → Se discordasse, mandava para o PGJ → PGJ dava a última palavra.</p>
+      </div>
+      <div class="comp-depois">
+        <div class="comp-titulo" style="color:#9FE1CB">✅ Redação atual do art. 28 (Lei 13.964/2019):</div>
+        <p style="font-size:15px;line-height:1.7;color:#9FE1CB">"Art. 28. Ordenado o arquivamento do inquérito policial ou de quaisquer elementos informativos da mesma natureza, o órgão do Ministério Público comunicará à vítima, ao investigado e à autoridade policial e encaminhará os autos para a instância de revisão ministerial para fins de homologação, na forma da lei."</p>
+        <p style="font-size:14px;color:#9FE1CB;margin-top:8px"><strong>Resumo:</strong> MP ordena o arquivamento → Comunica a vítima → Remete à instância revisora do próprio MP para homologação.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>O direito da vítima de provocar a revisão (art. 28, §1º)</h3>
+    <div class="redacao">
+      <span class="rotulo">Art. 28, §1º, CPP (Lei 13.964/2019):</span>
+      "Se a vítima, ou seu representante legal, não concordar com o arquivamento do inquérito policial, poderá, no prazo de 30 (trinta) dias do recebimento da comunicação, submeter a matéria à revisão da instância competente do órgão ministerial, conforme dispuser a respectiva lei orgânica."
+    </div>
+
+    <p><strong>O que isso significa na prática para o advogado da vítima:</strong></p>
+    <ul>
+      <li>Quando o MP arquiva, ele é <strong>obrigado</strong> a comunicar a vítima</li>
+      <li>A vítima (ou seu advogado, como representante) tem <strong>30 dias</strong> a contar do recebimento da comunicação para submeter a matéria à revisão</li>
+      <li>A revisão é feita pela <strong>instância revisora do próprio Ministério Público</strong> — geralmente o Conselho Superior do MP ou Câmara de Revisão Criminal, conforme a lei orgânica de cada MP estadual</li>
+      <li>A instância revisora pode: (a) homologar o arquivamento; (b) determinar que outro promotor ofereça denúncia; ou (c) requisitar novas diligências</li>
+      <li>Não é necessário advogado para submeter o pedido de revisão, mas a atuação técnica do advogado na elaboração do pedido aumenta significativamente as chances de sucesso</li>
+    </ul>
+
+    <div class="alerta alerta-verde">
+      <strong>Dica prática:</strong> O pedido de revisão deve ser fundamentado. Não basta dizer "não concordo com o arquivamento". O advogado da vítima deve: (a) apontar os elementos de prova que o promotor ignorou ou subestimou; (b) indicar as razões pelas quais há justa causa para a ação penal; (c) demonstrar, se for o caso, que o promotor não analisou todas as provas ou cometeu erro de avaliação. Um pedido bem fundamentado pode reverter um arquivamento indevido.
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Observação importante: a situação atual do art. 28</h3>
+    <p>O STF, no julgamento das ADIs 6.298, 6.299, 6.300 e 6.305, conferiu interpretação conforme ao art. 28 do CPP, criando um modelo híbrido. Na prática, dependendo da localidade, pode ser que o procedimento de arquivamento ainda siga, total ou parcialmente, a sistemática anterior (com intervenção judicial) ou a nova sistemática (controle interno do MP). O advogado deve verificar qual modelo está sendo aplicado na sua comarca.</p>
+    <p>Independentemente do modelo, o direito da vítima de impugnar o arquivamento existe. Se o modelo aplicado for o antigo, o juiz pode discordar e remeter ao PGJ. Se for o novo, a vítima provoca a instância revisora do MP.</p>
+  </div>
+
+  <div class="exemplo">
+    <strong>Exemplo — Continuação do caso de Marta:</strong> Marta recebeu a comunicação do arquivamento. Você, como advogada, tem 30 dias para submeter pedido de revisão à instância competente do MP. No pedido, você argumenta: (1) o laudo do IML comprova fratura no braço e hematomas — materialidade incontestável; (2) há depoimentos de dois vizinhos que ouviram os gritos e presenciaram o agressor saindo da casa; (3) o promotor não ouviu a vítima em sede ministerial antes de arquivar; (4) o histórico de violência (BOs anteriores + medidas protetivas já concedidas) demonstra padrão de agressões reiteradas. O pedido é sólido e tem boas chances de reverter o arquivamento.
+  </div>
+
+  <div class="nav">
+    <button class="btn btn-s" onclick="ir(1)">← Voltar</button>
+    <button class="btn btn-p" onclick="ir(3)">Ação penal privada subsidiária →</button>
+  </div>
+</div>
+
+<!-- ===== TELA 3: AÇÃO PRIVADA SUBSIDIÁRIA ===== -->
+<div class="tela" id="t3">
+  <div class="badge">Etapa 4 de 8 — Ação penal privada subsidiária da pública</div>
+  <h1 class="titulo">A última <em>trincheira</em> da vítima</h1>
+  <p class="desc">Quando o MP se omite — deixa passar o prazo legal para oferecer denúncia sem se manifestar —, a Constituição Federal assegura à vítima o direito de agir por conta própria, oferecendo queixa-crime subsidiária.</p>
+
+  <div class="card">
+    <h3>Fundamento constitucional e legal</h3>
+    <div class="redacao">
+      <span class="rotulo">Art. 5º, LIX, Constituição Federal:</span>
+      "Será admitida ação privada nos crimes de ação pública, se esta não for intentada no prazo legal."
+    </div>
+    <div class="redacao" style="margin-top:12px">
+      <span class="rotulo">Art. 29, CPP:</span>
+      "Será admitida ação privada nos crimes de ação pública, se esta não for intentada no prazo legal, cabendo ao Ministério Público aditar a queixa, repudiá-la e oferecer denúncia substitutiva, intervir em todos os termos do processo, fornecer elementos de prova, interpor recurso e, a todo tempo, no caso de negligência do querelante, retomar a ação como parte principal."
+    </div>
+    <div class="redacao" style="margin-top:12px">
+      <span class="rotulo">Art. 100, §3º, Código Penal:</span>
+      "A ação de iniciativa privada pode intentar-se nos crimes de ação pública, se o Ministério Público não oferece denúncia no prazo legal."
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Requisitos e procedimento</h3>
+
+    <h4>Quando cabe:</h4>
+    <p>A ação penal privada subsidiária da pública só é cabível quando o MP <strong>deixa transcorrer o prazo legal</strong> para oferecimento da denúncia <strong>sem se manifestar</strong>. O prazo para o MP oferecer denúncia é (art. 46, CPP):</p>
+    <ul>
+      <li><strong>5 dias</strong> — se o réu estiver preso</li>
+      <li><strong>15 dias</strong> — se o réu estiver solto</li>
+    </ul>
+    <p>Se o MP, dentro do prazo, promoveu o arquivamento, pediu novas diligências ou se manifestou de qualquer forma, <strong>não cabe</strong> a ação subsidiária — porque houve manifestação do MP, e não inércia. Nesse caso, o caminho é o pedido de revisão do arquivamento (art. 28, §1º, CPP), que vimos na etapa anterior.</p>
+
+    <h4>Prazo para a vítima:</h4>
+    <p>A vítima tem <strong>6 meses</strong> para oferecer a queixa-crime subsidiária, contados a partir do dia em que se esgotou o prazo do MP para oferecer a denúncia (art. 38, CPP c/c art. 29).</p>
+
+    <h4>Peça processual:</h4>
+    <p>A peça é uma <strong>queixa-crime</strong> (não uma denúncia — a denúncia é privativa do MP). Deve ser elaborada por advogado e endereçada ao juiz competente. Deve conter os requisitos do art. 41 do CPP: qualificação do acusado, descrição dos fatos com todas as circunstâncias, classificação do crime e rol de testemunhas.</p>
+
+    <h4>O papel do MP na subsidiária:</h4>
+    <p>Mesmo na ação subsidiária, o MP mantém amplos poderes (art. 29, CPP). Ele pode:</p>
+    <ul>
+      <li><strong>Aditar a queixa</strong> — complementar fatos ou incluir novos acusados</li>
+      <li><strong>Repudiar a queixa</strong> e oferecer <strong>denúncia substitutiva</strong> — se entender que a queixa é inadequada</li>
+      <li><strong>Intervir em todos os termos do processo</strong> — produzir provas, inquirir testemunhas</li>
+      <li><strong>Interpor recurso</strong> — contra decisões desfavoráveis</li>
+      <li><strong>Retomar a ação como parte principal</strong> — a qualquer tempo, se o querelante for negligente</li>
+    </ul>
+    <div class="alerta alerta-info">
+      <strong>Consequência importante:</strong> Por isso, diferente da ação penal privada exclusiva (como nos crimes contra a honra), na subsidiária <strong>não cabe perempção pelo abandono do querelante</strong>. Se a vítima abandonar a ação, o MP retoma como parte principal. Também não cabe perdão ou renúncia ao direito de queixa — porque o interesse público na punição persiste.
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Fluxo prático da ação subsidiária</h3>
+    <div class="fluxo">
+      <div class="fluxo-step"><div class="fluxo-marker"><div class="fluxo-num">1</div><div class="fluxo-line"></div></div><div class="fluxo-content"><div class="fluxo-titulo">Inquérito é concluído e remetido ao MP</div><div class="fluxo-desc">O delegado finaliza o inquérito e remete ao promotor.</div></div></div>
+      <div class="fluxo-step"><div class="fluxo-marker"><div class="fluxo-num">2</div><div class="fluxo-line"></div></div><div class="fluxo-content"><div class="fluxo-titulo">O MP deixa o prazo legal expirar sem se manifestar</div><div class="fluxo-desc">15 dias (réu solto) ou 5 dias (réu preso) se passam sem denúncia, arquivamento ou pedido de diligências.</div></div></div>
+      <div class="fluxo-step"><div class="fluxo-marker"><div class="fluxo-num">3</div><div class="fluxo-line"></div></div><div class="fluxo-content"><div class="fluxo-titulo">Surge o direito da vítima à ação subsidiária</div><div class="fluxo-desc">A partir do dia seguinte ao fim do prazo do MP, começa a correr o prazo de 6 meses para a vítima oferecer queixa-crime subsidiária.</div></div></div>
+      <div class="fluxo-step"><div class="fluxo-marker"><div class="fluxo-num">4</div><div class="fluxo-line"></div></div><div class="fluxo-content"><div class="fluxo-titulo">Advogado elabora queixa-crime subsidiária</div><div class="fluxo-desc">A queixa deve conter os requisitos do art. 41 do CPP e ser instruída com as provas disponíveis. É endereçada ao juiz da Vara de Violência Doméstica.</div></div></div>
+      <div class="fluxo-step"><div class="fluxo-marker"><div class="fluxo-num">5</div><div class="fluxo-line"></div></div><div class="fluxo-content"><div class="fluxo-titulo">MP é intimado e pode: aditar, repudiar ou substituir</div><div class="fluxo-desc">O MP mantém todos os poderes do art. 29 do CPP. Se repudiar a queixa e oferecer denúncia substitutiva, o processo prossegue com a denúncia do MP.</div></div></div>
+      <div class="fluxo-step"><div class="fluxo-marker"><div class="fluxo-num">6</div></div><div class="fluxo-content"><div class="fluxo-titulo">Processo segue normalmente</div><div class="fluxo-desc">A ação subsidiária tramita como qualquer ação penal. A vítima atua como querelante (com advogado), e o MP atua como fiscal da lei ou retoma a ação se necessário.</div></div></div>
+    </div>
+  </div>
+
+  <div class="exemplo">
+    <strong>Exemplo prático:</strong> Sua cliente foi vítima de violência psicológica (art. 147-B, CP). O inquérito foi concluído com provas robustas (prints de mensagens, laudos psicológicos, testemunhos). Remetido ao MP, passaram-se 20 dias sem qualquer manifestação — o promotor não ofereceu denúncia, não pediu diligências, não arquivou. O prazo de 15 dias (réu solto) já expirou. Você, como advogada da vítima, agora pode oferecer queixa-crime subsidiária (art. 5º, LIX, CF c/c art. 29, CPP) no prazo de 6 meses. Na queixa, descreve os fatos detalhadamente, classifica o crime, arrola testemunhas e junta as provas. O juiz recebe a queixa e intima o MP, que pode aditar ou substituir por denúncia.
+  </div>
+
+  <div class="alerta alerta-vermelho">
+    <strong>Atenção — distinguir inércia de arquivamento:</strong> Se o MP, dentro do prazo, promoveu o <strong>arquivamento</strong> (mesmo que você discorde), não cabe ação subsidiária. O caminho é o pedido de revisão (art. 28, §1º, CPP). A ação subsidiária só cabe quando houve <strong>inércia total</strong> — o MP deixou o prazo expirar sem nenhuma manifestação. Essa distinção é crucial e costuma ser cobrada em provas e na prática.
+  </div>
+
+  <div class="nav">
+    <button class="btn btn-s" onclick="ir(2)">← Voltar</button>
+    <button class="btn btn-p" onclick="ir(4)">Requerer diligências e novas provas →</button>
+  </div>
+</div>
+
+<!-- ===== TELA 4: DILIGÊNCIAS E NOVAS PROVAS ===== -->
+<div class="tela" id="t4">
+  <div class="badge">Etapa 5 de 8 — Diligências e novas provas</div>
+  <h1 class="titulo">Outras ferramentas do <em>advogado da vítima</em></h1>
+  <p class="desc">Além do pedido de revisão (art. 28, §1º) e da ação subsidiária (art. 29), o advogado da vítima tem outras ferramentas para garantir que a investigação e a persecução penal sejam adequadas.</p>
+
+  <div class="card">
+    <h3>1. Requerer diligências ao MP (antes do arquivamento)</h3>
+    <p>Durante o inquérito ou mesmo após seu encerramento, antes que o MP se manifeste sobre o arquivamento, o advogado da vítima pode peticionar ao promotor requerendo diligências complementares:</p>
+    <ul>
+      <li>Oitiva de testemunhas que não foram ouvidas</li>
+      <li>Juntada de provas documentais (prints, áudios, vídeos, laudos médicos, relatórios psicológicos)</li>
+      <li>Requisição de laudos periciais adicionais</li>
+      <li>Requisição de imagens de câmeras de segurança</li>
+      <li>Quebra de sigilo telemático (mensagens, registros de ligações)</li>
+    </ul>
+    <p>O fundamento é o art. 14 do CPP: "O ofendido, ou seu representante legal, e o indiciado poderão requerer qualquer diligência, que será realizada, ou não, a juízo da autoridade."</p>
+    <p>Na Lei Maria da Penha, o art. 12, §1º, reforça que a vítima tem direito a atendimento policial e jurídico adequado. Se a investigação foi deficiente, documentar essa deficiência é fundamental para impugnar eventual arquivamento.</p>
+  </div>
+
+  <div class="card">
+    <h3>2. Habilitação como assistente de acusação</h3>
+    <p>Se o MP ofereceu denúncia (mesmo que por crime diferente do que a vítima entende correto), o advogado da vítima deve se habilitar como <strong>assistente de acusação</strong> (arts. 268 a 273, CPP). Como assistente, ele pode:</p>
+    <ul>
+      <li>Propor meios de prova e indicar testemunhas</li>
+      <li>Fazer perguntas às testemunhas, à vítima e ao réu</li>
+      <li>Participar dos debates orais e apresentar alegações finais</li>
+      <li>Interpor recurso quando o MP não o fizer (art. 271, CPP)</li>
+      <li>Arguir a desclassificação para crime mais grave (por exemplo: de lesão corporal para tentativa de feminicídio)</li>
+    </ul>
+    <p><strong>Momento para habilitação:</strong> A habilitação pode ser requerida a qualquer momento após o recebimento da denúncia e antes do trânsito em julgado (art. 268, CPP). Na prática, quanto antes a habilitação, melhor — para acompanhar a instrução desde o início.</p>
+  </div>
+
+  <div class="card">
+    <h3>3. Novas provas após o arquivamento (art. 18, CPP)</h3>
+    <div class="redacao">
+      <span class="rotulo">Art. 18, CPP:</span>
+      "Depois de ordenado o arquivamento do inquérito pela autoridade judiciária, por falta de base para a denúncia, a autoridade policial poderá proceder a novas pesquisas, se de outras provas tiver notícia."
+    </div>
+    <p>Mesmo após o arquivamento, se surgirem <strong>novas provas</strong> (provas que não existiam ao tempo do arquivamento), o inquérito pode ser reaberto. Isso é relevante nos casos de violência doméstica em que:</p>
+    <ul>
+      <li>Novas testemunhas aparecem depois do arquivamento</li>
+      <li>A vítima obtém gravações, mensagens ou documentos que não estavam disponíveis antes</li>
+      <li>O agressor pratica nova violência, e as novas provas podem ser conectadas ao fato anterior</li>
+      <li>Laudos periciais complementares são produzidos</li>
+    </ul>
+    <p>O advogado da vítima pode levar essas novas provas ao delegado ou diretamente ao MP, requerendo a reabertura da investigação.</p>
+    <div class="alerta alerta-amarelo">
+      <strong>Atenção:</strong> O arquivamento por falta de provas não faz coisa julgada material. Mas o arquivamento por atipicidade ou extinção da punibilidade pode fazer coisa julgada, dependendo do modelo de arquivamento aplicado (conforme entendimento recente do STJ no Informativo 829, Inq. 1.721/DF, julgado em 2/10/2024). Essa distinção é relevante para avaliar se a reabertura é possível.
+    </div>
+  </div>
+
+  <div class="exemplo">
+    <strong>Exemplo prático:</strong> O inquérito de lesão corporal contra o ex-marido de sua cliente foi arquivado por "insuficiência de provas" — não havia testemunhas oculares e o laudo do IML foi inconclusivo. Três meses depois, uma vizinha que mudou de apartamento procura sua cliente e diz que presenciou a agressão e está disposta a depor. Essa é uma <strong>prova nova</strong> que justifica a reabertura do inquérito (art. 18, CPP). Você deve orientar a vizinha a prestar depoimento na delegacia e peticionar ao MP informando a existência de nova prova testemunhal.
+  </div>
+
+  <div class="nav">
+    <button class="btn btn-s" onclick="ir(3)">← Voltar</button>
+    <button class="btn btn-p" onclick="ir(5)">Fluxograma prático →</button>
+  </div>
+</div>
+
+<!-- ===== TELA 5: FLUXOGRAMA PRÁTICO ===== -->
+<div class="tela" id="t5">
+  <div class="badge">Etapa 6 de 8 — Roteiro de atuação prática</div>
+  <h1 class="titulo">O que fazer <em>em cada situação</em></h1>
+  <p class="desc">Um guia decisório para o advogado da vítima, conforme a postura adotada pelo MP.</p>
+
+  <div class="card">
+    <h3>Roteiro: MP arquivou o inquérito</h3>
+    <div class="fluxo">
+      <div class="fluxo-step"><div class="fluxo-marker"><div class="fluxo-num">1</div><div class="fluxo-line"></div></div><div class="fluxo-content"><div class="fluxo-titulo">Recebeu a comunicação do arquivamento?</div><div class="fluxo-desc">Verifique se a vítima foi regularmente comunicada (art. 28, caput, CPP). Se não foi, peticione ao MP apontando a irregularidade — a falta de comunicação pode ser arguida.</div></div></div>
+      <div class="fluxo-step"><div class="fluxo-marker"><div class="fluxo-num">2</div><div class="fluxo-line"></div></div><div class="fluxo-content"><div class="fluxo-titulo">Discorda do arquivamento?</div><div class="fluxo-desc">No prazo de <strong>30 dias</strong> do recebimento da comunicação, submeta pedido fundamentado de revisão à instância competente do MP (art. 28, §1º, CPP). Aponte as provas ignoradas e a justa causa existente.</div></div></div>
+      <div class="fluxo-step"><div class="fluxo-marker"><div class="fluxo-num">3</div><div class="fluxo-line"></div></div><div class="fluxo-content"><div class="fluxo-titulo">A instância revisora manteve o arquivamento?</div><div class="fluxo-desc">Monitore se surgem novas provas (art. 18, CPP). Se surgirem, leve ao delegado ou ao MP e requeira a reabertura. Também avalie se cabe mandado de segurança ou reclamação em situações excepcionais.</div></div></div>
+      <div class="fluxo-step"><div class="fluxo-marker"><div class="fluxo-num">4</div></div><div class="fluxo-content"><div class="fluxo-titulo">Busque alternativas cíveis</div><div class="fluxo-desc">Mesmo com o arquivamento criminal, a vítima pode buscar indenização por danos morais e materiais na esfera cível. As medidas protetivas de urgência também são autônomas e independem de ação penal (art. 19, §1º, Lei 11.340/2006 — Lei 14.550/2023).</div></div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Roteiro: MP ficou inerte (não se manifestou no prazo)</h3>
+    <div class="fluxo">
+      <div class="fluxo-step"><div class="fluxo-marker"><div class="fluxo-num">1</div><div class="fluxo-line"></div></div><div class="fluxo-content"><div class="fluxo-titulo">Verifique o prazo exato</div><div class="fluxo-desc">O prazo para o MP oferecer denúncia é de 5 dias (réu preso) ou 15 dias (réu solto), contados do recebimento dos autos do inquérito (art. 46, CPP). Confirme que o prazo realmente expirou.</div></div></div>
+      <div class="fluxo-step"><div class="fluxo-marker"><div class="fluxo-num">2</div><div class="fluxo-line"></div></div><div class="fluxo-content"><div class="fluxo-titulo">Ofereça queixa-crime subsidiária</div><div class="fluxo-desc">No prazo de <strong>6 meses</strong> a contar do dia seguinte ao fim do prazo do MP, elabore queixa-crime subsidiária (art. 5º, LIX, CF c/c art. 29, CPP). Descreva os fatos, classifique o crime, arrole testemunhas.</div></div></div>
+      <div class="fluxo-step"><div class="fluxo-marker"><div class="fluxo-num">3</div></div><div class="fluxo-content"><div class="fluxo-titulo">Acompanhe a manifestação do MP</div><div class="fluxo-desc">Após o oferecimento da queixa, o MP será intimado. Ele pode aditar, repudiar (e oferecer denúncia substitutiva) ou aceitar. Em qualquer caso, o processo segue.</div></div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Roteiro: MP denunciou por crime menos grave</h3>
+    <div class="fluxo">
+      <div class="fluxo-step"><div class="fluxo-marker"><div class="fluxo-num">1</div><div class="fluxo-line"></div></div><div class="fluxo-content"><div class="fluxo-titulo">Habilite-se como assistente de acusação</div><div class="fluxo-desc">Requeira habilitação ao juiz (art. 268, CPP) o mais cedo possível, preferencialmente logo após o recebimento da denúncia.</div></div></div>
+      <div class="fluxo-step"><div class="fluxo-marker"><div class="fluxo-num">2</div><div class="fluxo-line"></div></div><div class="fluxo-content"><div class="fluxo-titulo">Produza provas que sustentem a classificação correta</div><div class="fluxo-desc">Indique testemunhas, requeira laudos complementares, junte provas documentais que demonstrem que o crime é mais grave do que o denunciado.</div></div></div>
+      <div class="fluxo-step"><div class="fluxo-marker"><div class="fluxo-num">3</div></div><div class="fluxo-content"><div class="fluxo-titulo">Nas alegações finais, pugne pela classificação correta</div><div class="fluxo-desc">O juiz pode dar ao fato definição jurídica diversa da constante na denúncia (art. 383, CPP — emendatio libelli), ou reconhecer circunstância elementar não contida na denúncia, desde que o réu tenha sido ouvido sobre ela (art. 384, CPP — mutatio libelli).</div></div></div>
+    </div>
+  </div>
+
+  <div class="nav">
+    <button class="btn btn-s" onclick="ir(4)">← Voltar</button>
+    <button class="btn btn-p" onclick="ir(6)">Quiz de fixação →</button>
+  </div>
+</div>
+
+<!-- ===== TELA 6: QUIZ ===== -->
+<div class="tela" id="t6">
+  <div class="badge">Etapa 7 de 8 — Fixação</div>
+  <h1 class="titulo">Teste seu <em>domínio</em></h1>
+  <p class="desc">Cinco questões sobre os caminhos do advogado da vítima quando o MP não oferece denúncia.</p>
+  <div id="quiz"></div>
+  <div class="nav" style="margin-top:32px">
+    <button class="btn btn-s" onclick="ir(5)">← Voltar</button>
+    <button class="btn btn-p" onclick="ir(7)">Resumo final →</button>
+  </div>
+</div>
+
+<!-- ===== TELA 7: RESUMO ===== -->
+<div class="tela" id="t7">
+  <div class="badge">Etapa 8 de 8 — Resumo e links</div>
+  <h1 class="titulo">O que <em>fixar</em> desta aula</h1>
+
+  <div class="card">
+    <h3>Mapa decisório — O que fazer quando o MP não denuncia</h3>
+    <div class="tabela-c"><table>
+      <tr><th>Situação</th><th>Caminho</th><th>Prazo</th><th>Fundamento</th></tr>
+      <tr><td>MP arquivou o inquérito</td><td>Pedido de revisão à instância revisora do MP</td><td>30 dias da comunicação</td><td>Art. 28, §1º, CPP (Lei 13.964/2019)</td></tr>
+      <tr><td>MP ficou inerte (não se manifestou no prazo)</td><td>Ação penal privada subsidiária da pública (queixa-crime)</td><td>6 meses do fim do prazo do MP</td><td>Art. 5º, LIX, CF + art. 29, CPP</td></tr>
+      <tr><td>MP denunciou por crime menos grave</td><td>Habilitação como assistente de acusação + provas + alegações finais</td><td>A qualquer momento até o trânsito em julgado</td><td>Arts. 268-273, CPP + arts. 383/384, CPP</td></tr>
+      <tr><td>Surgiram novas provas após o arquivamento</td><td>Levar provas ao delegado/MP e requerer reabertura</td><td>Enquanto não prescrito</td><td>Art. 18, CPP</td></tr>
+    </table></div>
+  </div>
+
+  <div class="card">
+    <h3>Checklist prático para o advogado da vítima</h3>
+    <ol>
+      <li><strong>Monitore os prazos:</strong> Acompanhe se o MP se manifestou dentro do prazo legal (5 ou 15 dias conforme art. 46 CPP)</li>
+      <li><strong>Exija a comunicação:</strong> Se o MP arquivou, verifique se a vítima foi comunicada (art. 28, caput)</li>
+      <li><strong>Fundamente o pedido de revisão:</strong> Não basta dizer que discorda — aponte provas, demonstre justa causa</li>
+      <li><strong>Conheça a ação subsidiária:</strong> Se houve inércia total, ofereça queixa-crime subsidiária em 6 meses</li>
+      <li><strong>Preserve provas:</strong> Oriente a vítima a guardar prints, áudios, vídeos, laudos — toda prova que possa surgir depois</li>
+      <li><strong>Habilite-se cedo:</strong> Se o MP denunciou, habilite-se como assistente o mais rápido possível</li>
+      <li><strong>Lembre-se da esfera cível:</strong> O arquivamento criminal não impede indenização por danos na esfera cível</li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <h3>Fundamentos legais desta aula</h3>
+    <ul>
+      <li>Art. 28 do CPP (redação dada pela Lei 13.964/2019 — Pacote Anticrime) — arquivamento e revisão</li>
+      <li>Art. 28, §1º, CPP — direito da vítima de provocar revisão em 30 dias</li>
+      <li>Art. 5º, LIX, CF — ação penal privada subsidiária da pública</li>
+      <li>Art. 29, CPP — procedimento da ação subsidiária e poderes do MP</li>
+      <li>Art. 100, §3º, CP — ação privada em crimes de ação pública</li>
+      <li>Art. 46, CPP — prazos para oferecimento da denúncia</li>
+      <li>Art. 38, CPP — prazo de 6 meses para queixa-crime</li>
+      <li>Art. 18, CPP — novas pesquisas após o arquivamento</li>
+      <li>Arts. 268 a 273, CPP — assistente de acusação</li>
+      <li>Arts. 383 e 384, CPP — emendatio e mutatio libelli</li>
+      <li>Art. 14, CPP — requerimento de diligências pelo ofendido</li>
+    </ul>
+  </div>
+
+  <div class="card" style="text-align:center">
+    <h3>Material de Apoio em PDF</h3>
+    <p>Baixe o conteúdo completo desta aula para consultar offline, imprimir ou levar para a audiência.</p>
+    <a href="https://cdupret.github.io/arquivosLMP/material_m04_a04_mp_nao_denuncia.pdf" target="_blank" class="btn btn-p" style="display:inline-flex;margin-top:12px;text-decoration:none">📄 Baixar PDF — Aula 4</a>
+  </div>
+
+  <div class="concluido">
+    <div class="ic">✓</div>
+    <div class="tit">Aula 4 do Módulo 4 concluída</div>
+    <div class="sub">Você domina agora os caminhos disponíveis para o advogado da vítima quando o MP não oferece denúncia — da revisão do arquivamento à ação subsidiária.<br>Continue para a Aula 5: Retratação x Renúncia x Perdão.</div>
+  </div>
+
+  <div class="nav">
+    <button class="btn btn-s" onclick="ir(0)">↺ Rever do início</button>
+    <button class="btn btn-s" onclick="ir(5)">← Voltar</button>
+  </div>
+</div>
+
+</div><!-- /main -->
+
+<script>
+let atual=0;const total=8;
+function ir(n){document.querySelectorAll('.tela').forEach(t=>t.classList.remove('on'));document.getElementById('t'+n).classList.add('on');for(let i=0;i<total;i++){const d=document.getElementById('d'+i),s=d.parentElement.querySelector('.slabel');d.className='dot';s.className='slabel';if(i<n){d.classList.add('d');s.classList.add('d')}else if(i===n){d.classList.add('a');s.classList.add('a')}if(i<total-1){const l=document.getElementById('l'+i);if(l)l.className=i<n?'sline d':'sline'}}atual=n;window.scrollTo({top:0,behavior:'smooth'})}
+function toggleAcc(btn){const b=btn.nextElementSibling;b.classList.toggle('open');btn.querySelector('span:last-child').textContent=b.classList.contains('open')?'▲':'▼'}
+
+const perguntas=[
+  {q:"1. O MP arquivou o inquérito de lesão corporal contra o agressor de sua cliente. Qual é o primeiro passo do advogado da vítima?",
+   opts:["Oferecer queixa-crime subsidiária imediatamente","No prazo de 30 dias da comunicação do arquivamento, submeter pedido de revisão à instância competente do MP (art. 28, §1º, CPP)","Recorrer ao juiz para reverter o arquivamento","Registrar novo BO com os mesmos fatos"],
+   correta:1,feed:"Correto! Quando o MP arquiva, o primeiro caminho é o pedido de revisão à instância competente do MP, no prazo de 30 dias da comunicação (art. 28, §1º, CPP — Lei 13.964/2019). A ação subsidiária só cabe quando o MP ficou totalmente inerte (não se manifestou no prazo), não quando arquivou."},
+
+  {q:"2. Quando cabe a ação penal privada subsidiária da pública?",
+   opts:["Sempre que a vítima discordar do arquivamento","Quando o MP deixa transcorrer o prazo legal para oferecimento da denúncia sem se manifestar (inércia total)","Quando o MP denuncia por crime menos grave do que a vítima entende correto","Quando a vítima não tem advogado"],
+   correta:1,feed:"Correto! A ação subsidiária (art. 5º, LIX, CF + art. 29, CPP) só cabe quando o MP ficou totalmente inerte — deixou o prazo expirar sem oferecer denúncia, sem arquivar e sem pedir diligências. Se houve arquivamento, o caminho é o pedido de revisão (art. 28, §1º). Se houve denúncia por crime menos grave, o caminho é a habilitação como assistente de acusação."},
+
+  {q:"3. Qual o prazo para a vítima oferecer a queixa-crime subsidiária?",
+   opts:["30 dias da comunicação do arquivamento","5 dias se o réu estiver preso","6 meses, contados do dia em que se esgotou o prazo do MP para oferecer a denúncia","Não há prazo — pode ser oferecida a qualquer momento"],
+   correta:2,feed:"Correto! O prazo é de 6 meses, contados a partir do dia seguinte ao fim do prazo do MP para oferecer denúncia (art. 38, CPP c/c art. 29). Se esse prazo expirar sem que a vítima ofereça a queixa, ocorre decadência."},
+
+  {q:"4. Na ação penal privada subsidiária da pública, o que o MP pode fazer?",
+   opts:["Nada — ele perdeu o direito de atuar por ter ficado inerte","Aditar a queixa, repudiá-la e oferecer denúncia substitutiva, intervir no processo e retomar a ação se o querelante for negligente","Apenas assistir ao processo como observador","Arquivar a queixa-crime da vítima"],
+   correta:1,feed:"Correto! O art. 29 do CPP assegura ao MP amplos poderes: aditar a queixa, repudiá-la e oferecer denúncia substitutiva, intervir em todos os termos do processo, fornecer provas, interpor recurso e retomar a ação como parte principal se o querelante for negligente."},
+
+  {q:"5. O inquérito foi arquivado por insuficiência de provas. Três meses depois, surge uma nova testemunha ocular. O que o advogado da vítima pode fazer?",
+   opts:["Nada — o arquivamento é definitivo e irreversível","Levar a nova prova ao delegado ou ao MP e requerer a reabertura da investigação (art. 18, CPP)","Oferecer queixa-crime subsidiária com base na nova prova","Ajuizar mandado de segurança contra o arquivamento"],
+   correta:1,feed:"Correto! O arquivamento por insuficiência de provas não faz coisa julgada material. Se surgirem novas provas, a investigação pode ser reaberta (art. 18, CPP). O advogado da vítima deve levar a nova prova ao delegado ou diretamente ao MP."}
+];
+
+function renderQuiz(){const c=document.getElementById('quiz');let h='';perguntas.forEach((p,i)=>{h+=`<div class="quiz-q"><h4>${p.q}</h4>`;p.opts.forEach((o,j)=>{h+=`<button class="quiz-opt" data-q="${i}" data-o="${j}" onclick="resp(this,${i},${j})">${String.fromCharCode(65+j)}) ${o}</button>`});h+=`<div class="quiz-feed" id="f${i}"></div></div>`});c.innerHTML=h}
+function resp(btn,qi,oi){const q=perguntas[qi];document.querySelectorAll(`[data-q="${qi}"]`).forEach(b=>{b.disabled=true;if(+b.dataset.o===q.correta)b.classList.add('certo');else if(b===btn&&oi!==q.correta)b.classList.add('errado')});const f=document.getElementById('f'+qi);f.className=`quiz-feed show ${oi===q.correta?'alerta-verde':'alerta-vermelho'}`;f.innerHTML=oi===q.correta?'✅ '+q.feed:'❌ Incorreto. '+q.feed}
+renderQuiz();
+</script>
+</body>
+</html>

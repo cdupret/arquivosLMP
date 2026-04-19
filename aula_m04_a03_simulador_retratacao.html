@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Módulo 04 · Aula 3 — Simulador: A Vítima Quer Retratar · Penha em Cena</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--rosa:#D4537E;--rosa2:#A33360;--fundo:#0E0B14;--fundo2:#17122A;--fundo3:#211A38;--roxo:#7F77DD;--texto:#F0EAF8;--muted:#9B8FBC;--borda:rgba(212,83,126,0.2);--verde:#1D9E75;--dourado:#C9963A;--azul:#3A8ADC}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--fundo);color:var(--texto);min-height:100vh;font-size:18px;line-height:1.75;overflow-x:hidden}
+.bg-p{position:fixed;inset:0;pointer-events:none;z-index:0;background:radial-gradient(ellipse 60% 40% at 20% 20%,rgba(127,119,221,.07) 0%,transparent 60%),radial-gradient(ellipse 40% 60% at 80% 80%,rgba(212,83,126,.06) 0%,transparent 60%)}
+.header{position:sticky;top:0;z-index:100;background:rgba(14,11,20,.95);border-bottom:1px solid var(--borda);padding:16px 32px;display:flex;align-items:center;gap:14px;backdrop-filter:blur(16px)}
+.logo{font-family:'Playfair Display',serif;font-size:20px;color:var(--rosa);font-weight:700}
+.sep{color:var(--muted);font-size:14px}.info{font-size:15px;color:var(--muted)}
+.main{max-width:860px;margin:0 auto;padding:44px 32px 100px;position:relative;z-index:1}
+.tela{display:none;animation:fadeUp .5s ease}.tela.on{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.badge{display:inline-flex;align-items:center;background:rgba(212,83,126,.12);border:1px solid rgba(212,83,126,.25);color:var(--rosa);padding:8px 18px;border-radius:20px;font-size:14px;font-weight:500;margin-bottom:24px}
+.badge-sim{background:rgba(127,119,221,.12);border:1px solid rgba(127,119,221,.25);color:var(--roxo)}
+.titulo{font-family:'Playfair Display',serif;font-size:clamp(26px,5vw,38px);font-weight:900;line-height:1.2;margin-bottom:14px}
+.titulo em{font-style:normal;color:var(--rosa)}
+.desc{font-size:19px;color:var(--muted);margin-bottom:32px;max-width:720px;line-height:1.8}
+.card{background:var(--fundo2);border:1px solid var(--borda);border-radius:16px;padding:32px;margin-bottom:24px}
+.card h3{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;margin-bottom:16px;line-height:1.3}
+.card h4{font-size:20px;font-weight:600;margin:20px 0 12px;color:var(--rosa)}
+.card p,.card li{font-size:17px;line-height:1.85;margin-bottom:12px}
+.card ul{padding-left:22px}.card ul li{margin-bottom:8px}
+
+/* CENÁRIO */
+.cenario{background:linear-gradient(135deg,rgba(127,119,221,.08),rgba(212,83,126,.05));border:1px solid rgba(127,119,221,.25);border-radius:16px;padding:32px;margin-bottom:28px}
+.cenario-label{font-size:13px;font-weight:600;color:var(--roxo);text-transform:uppercase;letter-spacing:.05em;margin-bottom:12px}
+.cenario p{font-size:17px;line-height:1.85;margin-bottom:12px}
+.cenario strong{color:var(--roxo)}
+
+/* PERSONAGEM */
+.persona{display:flex;align-items:flex-start;gap:16px;background:var(--fundo3);border:1px solid var(--borda);border-radius:14px;padding:20px;margin:16px 0}
+.persona-icon{font-size:32px;flex-shrink:0}
+.persona-nome{font-weight:600;color:var(--rosa);font-size:15px;margin-bottom:4px}
+.persona-fala{font-size:16px;line-height:1.75;font-style:italic;color:var(--muted)}
+
+/* OPÇÕES DE DECISÃO */
+.decisoes{margin:28px 0}
+.decisao-titulo{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;margin-bottom:16px}
+.opt-btn{display:block;width:100%;text-align:left;padding:18px 22px;margin-bottom:12px;border:2px solid rgba(155,143,188,.15);border-radius:12px;background:var(--fundo3);font-size:17px;color:var(--texto);cursor:pointer;transition:.25s;font-family:'DM Sans',sans-serif;line-height:1.7}
+.opt-btn:hover{border-color:var(--roxo);background:rgba(127,119,221,.08);transform:translateX(4px)}
+.opt-btn.selecionada{border-color:var(--roxo);background:rgba(127,119,221,.1)}
+.opt-btn.correta{border-color:var(--verde);background:rgba(29,158,117,.1);color:#9FE1CB}
+.opt-btn.incorreta{border-color:var(--rosa);background:rgba(212,83,126,.08);color:#EDB0C5}
+.opt-btn:disabled{cursor:default;opacity:.85}
+
+/* FEEDBACK */
+.feedback{display:none;padding:24px;border-radius:14px;margin:20px 0;font-size:17px;line-height:1.85}
+.feedback.on{display:block}
+.fb-ok{background:rgba(29,158,117,.1);border:1px solid rgba(29,158,117,.25);color:#9FE1CB}
+.fb-erro{background:rgba(212,83,126,.08);border:1px solid rgba(212,83,126,.2);color:#EDB0C5}
+.fb-info{background:rgba(127,119,221,.1);border:1px solid rgba(127,119,221,.25);color:#B5B0E8}
+.fb-alerta{background:rgba(201,150,58,.1);border:1px solid rgba(201,150,58,.25);color:#E8C97A}
+
+/* NAVEGAÇÃO */
+.nav{display:flex;align-items:center;justify-content:space-between;margin-top:40px;padding-top:28px;border-top:1px solid var(--borda);gap:12px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:14px 28px;border-radius:10px;font-size:16px;font-weight:500;cursor:pointer;transition:.2s;border:none;font-family:'DM Sans',sans-serif}
+.btn-s{background:rgba(255,255,255,.05);color:var(--muted);border:1px solid rgba(155,143,188,.2)}.btn-s:hover{background:rgba(255,255,255,.09);color:var(--texto)}
+.btn-p{background:var(--rosa);color:#fff;box-shadow:0 4px 18px rgba(212,83,126,.3)}.btn-p:hover{background:var(--rosa2);transform:translateY(-1px)}
+.btn-roxo{background:var(--roxo);color:#fff;box-shadow:0 4px 18px rgba(127,119,221,.3)}.btn-roxo:hover{opacity:.85}
+
+/* BARRA DE PROGRESSO SIMPLES */
+.prog-sim{display:flex;gap:6px;margin-bottom:28px}
+.prog-dot{width:12px;height:12px;border-radius:50%;background:rgba(155,143,188,.2);transition:.3s}
+.prog-dot.ativo{background:var(--rosa);box-shadow:0 0 10px rgba(212,83,126,.4)}
+.prog-dot.feito{background:var(--verde)}
+
+/* RESUMO FINAL */
+.resultado{background:linear-gradient(135deg,rgba(212,83,126,.07),rgba(127,119,221,.05));border:1px solid rgba(212,83,126,.2);border-radius:16px;padding:40px;text-align:center;margin-top:32px}
+.resultado .ic{font-size:48px;margin-bottom:12px}
+.resultado .tit{font-family:'Playfair Display',serif;font-size:26px;font-weight:900;margin-bottom:10px}
+.resultado .sub{color:var(--muted);font-size:17px;line-height:1.7}
+.score{font-family:'Playfair Display',serif;font-size:48px;font-weight:900;color:var(--rosa);margin:16px 0}
+
+.link-ext{color:var(--roxo);text-decoration:underline;font-weight:500}.link-ext:hover{color:var(--rosa)}
+
+/* TIMELINE */
+.timeline{margin:24px 0}
+.tl-item{display:flex;gap:16px;margin-bottom:20px}
+.tl-marker{display:flex;flex-direction:column;align-items:center}
+.tl-dot{width:16px;height:16px;border-radius:50%;background:var(--rosa);flex-shrink:0}
+.tl-line{width:2px;flex:1;background:rgba(212,83,126,.2);margin-top:4px}
+.tl-content{padding-bottom:8px}
+.tl-titulo{font-weight:600;font-size:16px;margin-bottom:4px}
+.tl-desc{font-size:15px;color:var(--muted);line-height:1.7}
+
+@media(max-width:600px){.main{padding:24px 16px 60px}.card{padding:22px 18px}.cenario{padding:22px 18px}.header{padding:12px 16px}}
+</style>
+</head>
+<body>
+<div class="bg-p"></div>
+<div class="header"><div class="logo">Penha em Cena</div><span class="sep">·</span><span class="info">Módulo 04 · Aula 3 de 6 — Simulador</span></div>
+
+<div class="main">
+
+<!-- ===== TELA 0: INTRODUÇÃO ===== -->
+<div class="tela on" id="t0">
+  <div class="badge">Módulo 04 · Simulador Interativo</div>
+  <h1 class="titulo">A vítima quer <em>retratar</em> — o que fazer?</h1>
+  <p class="desc">Neste simulador, você vai atuar como advogado(a) em dois cenários reais de violência doméstica em que a vítima manifesta o desejo de desistir do processo. A cada etapa, você toma uma decisão. Suas escolhas determinam o desfecho — e o simulador explica o fundamento jurídico de cada caminho.</p>
+
+  <div class="card">
+    <h3>Como funciona</h3>
+    <ul>
+      <li>Você receberá um <strong>caso prático</strong> com todos os dados relevantes</li>
+      <li>A cada etapa, escolha entre 3 ou 4 opções de atuação</li>
+      <li>Após cada escolha, receba <strong>feedback jurídico imediato</strong> com fundamento legal</li>
+      <li>Ao final, veja seu resultado e um resumo das lições aprendidas</li>
+      <li>O simulador roda inteiramente no seu navegador — <strong>não consome nenhum crédito</strong></li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>O que você vai exercitar</h3>
+    <ul>
+      <li>Identificar se o crime admite ou não retratação</li>
+      <li>Aplicar o art. 16 da Lei Maria da Penha (com o parágrafo único da Lei 15.380/2026)</li>
+      <li>Distinguir o papel do advogado na defesa e na assistência à acusação</li>
+      <li>Reconhecer situações de pressão/coação sobre a vítima</li>
+      <li>Saber quando e como impugnar audiências designadas de ofício (ADI 7.267/DF)</li>
+    </ul>
+  </div>
+
+  <div class="nav"><span></span><button class="btn btn-p" onclick="iniciarCenario(1)">Iniciar Cenário 1 →</button></div>
+</div>
+
+<!-- ===== CENÁRIO 1: ADVOGADO DA DEFESA ===== -->
+<div class="tela" id="c1_intro">
+  <div class="badge badge-sim">Cenário 1 — Você é o advogado de defesa</div>
+  <h1 class="titulo">O caso de <em>Rafael e Carla</em></h1>
+
+  <div class="cenario">
+    <div class="cenario-label">Situação fática</div>
+    <p>Você foi constituído como advogado de <strong>Rafael</strong>, 34 anos, denunciado pelo crime de <strong>perseguição/stalking</strong> (art. 147-A do CP) contra sua ex-namorada <strong>Carla</strong>, 29 anos.</p>
+    <p>Segundo a denúncia, após o término do relacionamento de 2 anos, Rafael passou a seguir Carla até o trabalho, enviar dezenas de mensagens por dia, criar perfis falsos para monitorá-la nas redes sociais e aparecer nos lugares que ela frequentava. Carla representou na delegacia e obteve medidas protetivas de urgência (proibição de aproximação e contato).</p>
+    <p>A denúncia foi oferecida pelo MP e <strong>ainda não foi recebida</strong> pelo juiz.</p>
+    <p>Rafael procura você no escritório e diz:</p>
+  </div>
+
+  <div class="persona">
+    <div class="persona-icon">👤</div>
+    <div>
+      <div class="persona-nome">Rafael (seu cliente)</div>
+      <div class="persona-fala">"Doutor, eu e a Carla conversamos. Ela disse que me perdoa e que não quer mais esse processo. Ela quer retirar tudo. O que eu faço? Tem como acabar com isso?"</div>
+    </div>
+  </div>
+
+  <div class="nav"><span></span><button class="btn btn-roxo" onclick="mostrarEtapa('c1_e1')">Primeira decisão →</button></div>
+</div>
+
+<!-- CENÁRIO 1 — ETAPA 1 -->
+<div class="tela" id="c1_e1">
+  <div class="badge badge-sim">Cenário 1 · Etapa 1 de 4</div>
+  <div class="prog-sim"><div class="prog-dot ativo"></div><div class="prog-dot"></div><div class="prog-dot"></div><div class="prog-dot"></div></div>
+  <h1 class="titulo">Primeira <em>análise</em></h1>
+  <p class="desc">Antes de qualquer orientação ao cliente, você precisa identificar a natureza da ação penal. O crime de perseguição/stalking (art. 147-A do CP) é de qual natureza?</p>
+
+  <div class="decisoes" id="c1e1_opts">
+    <div class="decisao-titulo">Qual é a sua análise?</div>
+    <button class="opt-btn" onclick="escolher('c1e1',0)">A) É ação penal pública incondicionada — a vítima não pode desistir de jeito nenhum, então digo ao Rafael que não há o que fazer.</button>
+    <button class="opt-btn" onclick="escolher('c1e1',1)">B) O crime de perseguição/stalking (art. 147-A do CP) é de ação penal pública condicionada à representação, conforme o §3º do mesmo artigo — portanto, em tese, a retratação é possível, mas preciso verificar as condições legais.</button>
+    <button class="opt-btn" onclick="escolher('c1e1',2)">C) É ação penal privada — Carla precisa oferecer queixa-crime, então basta ela não oferecer.</button>
+    <button class="opt-btn" onclick="escolher('c1e1',3)">D) Não importa a natureza da ação penal. Se a vítima perdoou, o processo acaba automaticamente.</button>
+  </div>
+
+  <div class="feedback" id="c1e1_fb"></div>
+  <div class="nav" id="c1e1_nav" style="display:none">
+    <button class="btn btn-s" onclick="mostrarEtapa('c1_intro')">← Rever caso</button>
+    <button class="btn btn-roxo" onclick="mostrarEtapa('c1_e2')">Etapa 2 →</button>
+  </div>
+</div>
+
+<!-- CENÁRIO 1 — ETAPA 2 -->
+<div class="tela" id="c1_e2">
+  <div class="badge badge-sim">Cenário 1 · Etapa 2 de 4</div>
+  <div class="prog-sim"><div class="prog-dot feito"></div><div class="prog-dot ativo"></div><div class="prog-dot"></div><div class="prog-dot"></div></div>
+  <h1 class="titulo">O que orientar <em>Rafael</em>?</h1>
+
+  <p class="desc">Você identificou corretamente que o crime de perseguição/stalking (art. 147-A do CP) é de ação penal pública condicionada à representação (§3º). A denúncia foi oferecida mas ainda não recebida pelo juiz. Carla quer se retratar. Como você orienta seu cliente?</p>
+
+  <div class="decisoes" id="c1e2_opts">
+    <div class="decisao-titulo">Qual orientação você dá?</div>
+    <button class="opt-btn" onclick="escolher('c1e2',0)">A) Oriento Rafael a procurar Carla e pedir que ela vá à delegacia dizer que não quer mais prosseguir.</button>
+    <button class="opt-btn" onclick="escolher('c1e2',1)">B) Explico a Rafael que a retratação é direito de Carla, mas que ela precisa manifestar esse desejo de forma expressa e espontânea — por escrito ou oralmente — antes do recebimento da denúncia pelo juiz. Rafael não pode intermediar nem pressionar. Alerto que, se Carla não fizer isso antes do recebimento da denúncia, depois não haverá mais nada a ser feito — ela não poderá se retratar durante a ação penal. Além disso, atualmente a Lei 15.380/2026 exige que a própria vítima se manifeste para que o juiz designe a audiência de retratação. Se Carla não se manifestar, Rafael responderá ao processo e poderá ser condenado, independentemente da vontade dela.</button>
+    <button class="opt-btn" onclick="escolher('c1e2',2)">C) Peço a Rafael que traga Carla ao meu escritório para que eu mesmo colha a retratação e protocole no processo.</button>
+    <button class="opt-btn" onclick="escolher('c1e2',3)">D) Informo Rafael que, como a denúncia já foi oferecida, a retratação não é mais possível.</button>
+  </div>
+
+  <div class="feedback" id="c1e2_fb"></div>
+  <div class="nav" id="c1e2_nav" style="display:none">
+    <button class="btn btn-s" onclick="mostrarEtapa('c1_e1')">← Voltar</button>
+    <button class="btn btn-roxo" onclick="mostrarEtapa('c1_e3')">Etapa 3 →</button>
+  </div>
+</div>
+
+<!-- CENÁRIO 1 — ETAPA 3 -->
+<div class="tela" id="c1_e3">
+  <div class="badge badge-sim">Cenário 1 · Etapa 3 de 4</div>
+  <div class="prog-sim"><div class="prog-dot feito"></div><div class="prog-dot feito"></div><div class="prog-dot ativo"></div><div class="prog-dot"></div></div>
+  <h1 class="titulo">O juiz designa <em>audiência de ofício</em></h1>
+
+  <div class="cenario">
+    <div class="cenario-label">Desenvolvimento do caso</div>
+    <p>Carla não se manifestou nos autos. Porém, o juiz, por conta própria, designou audiência do art. 16 da Lei Maria da Penha "para ouvir a vítima sobre a manutenção da representação". Você recebe a intimação.</p>
+  </div>
+
+  <div class="decisoes" id="c1e3_opts">
+    <div class="decisao-titulo">O que você faz como advogado de defesa?</div>
+    <button class="opt-btn" onclick="escolher('c1e3',0)">A) Compareço à audiência normalmente — se Carla disser que quer desistir, ótimo para meu cliente.</button>
+    <button class="opt-btn" onclick="escolher('c1e3',1)">B) Peticiono nos autos apontando que a audiência foi designada de ofício, sem manifestação prévia da vítima, o que é inconstitucional (ADI 7.267/DF do STF) e contraria o Tema 1.167 do STJ e o art. 16, parágrafo único, da Lei Maria da Penha (Lei 15.380/2026). Requeiro o cancelamento da audiência.</button>
+    <button class="opt-btn" onclick="escolher('c1e3',2)">C) Compareço e, na audiência, convenço Carla a se retratar na frente do juiz.</button>
+    <button class="opt-btn" onclick="escolher('c1e3',3)">D) Ignoro a intimação — a audiência é problema da vítima, não meu.</button>
+  </div>
+
+  <div class="feedback" id="c1e3_fb"></div>
+  <div class="nav" id="c1e3_nav" style="display:none">
+    <button class="btn btn-s" onclick="mostrarEtapa('c1_e2')">← Voltar</button>
+    <button class="btn btn-roxo" onclick="mostrarEtapa('c1_e4')">Etapa 4 →</button>
+  </div>
+</div>
+
+<!-- CENÁRIO 1 — ETAPA 4 -->
+<div class="tela" id="c1_e4">
+  <div class="badge badge-sim">Cenário 1 · Etapa 4 de 4</div>
+  <div class="prog-sim"><div class="prog-dot feito"></div><div class="prog-dot feito"></div><div class="prog-dot feito"></div><div class="prog-dot ativo"></div></div>
+  <h1 class="titulo">A denúncia é <em>recebida</em></h1>
+
+  <div class="cenario">
+    <div class="cenario-label">Desdobramento</div>
+    <p>O juiz cancelou a audiência designada de ofício, acolhendo seus argumentos. Dias depois, o juiz <strong>recebeu a denúncia</strong>. Carla, então, procura o advogado de Rafael e diz que quer se retratar agora.</p>
+  </div>
+
+  <div class="decisoes" id="c1e4_opts">
+    <div class="decisao-titulo">O que você responde?</div>
+    <button class="opt-btn" onclick="escolher('c1e4',0)">A) Informo que, após o recebimento da denúncia, a retratação pela via do art. 16 da Lei Maria da Penha não é mais possível. O momento para a retratação era antes do recebimento. Agora, a defesa de Rafael deve se concentrar no mérito — negativa de autoria, atipicidade, ou outras teses defensivas.</button>
+    <button class="opt-btn" onclick="escolher('c1e4',1)">B) Peço ao juiz que designe nova audiência do art. 16 mesmo após o recebimento da denúncia.</button>
+    <button class="opt-btn" onclick="escolher('c1e4',2)">C) Oriento Carla a ir à delegacia e registrar novo BO dizendo que mentiu na representação original.</button>
+    <button class="opt-btn" onclick="escolher('c1e4',3)">D) Informo que Carla pode perdoar Rafael a qualquer momento, pois é violência doméstica.</button>
+  </div>
+
+  <div class="feedback" id="c1e4_fb"></div>
+  <div class="nav" id="c1e4_nav" style="display:none">
+    <button class="btn btn-s" onclick="mostrarEtapa('c1_e3')">← Voltar</button>
+    <button class="btn btn-roxo" onclick="iniciarCenario(2)">Cenário 2 →</button>
+  </div>
+</div>
+
+<!-- ===== CENÁRIO 2: ADVOGADO DA VÍTIMA ===== -->
+<div class="tela" id="c2_intro">
+  <div class="badge badge-sim">Cenário 2 — Você é o advogado da vítima</div>
+  <h1 class="titulo">O caso de <em>Fernanda</em></h1>
+
+  <div class="cenario">
+    <div class="cenario-label">Situação fática</div>
+    <p><strong>Fernanda</strong>, 38 anos, procura você. Ela foi agredida fisicamente pelo ex-marido <strong>Lucas</strong> — sofreu lesão corporal leve (hematomas no braço e rosto). Registrou BO na delegacia há 3 meses. O inquérito foi concluído e o MP ofereceu denúncia por lesão corporal (art. 129, §9º, CP) combinado com a Lei Maria da Penha. A denúncia já foi <strong>recebida</strong> pelo juiz.</p>
+    <p>Fernanda diz a você:</p>
+  </div>
+
+  <div class="persona">
+    <div class="persona-icon">👩</div>
+    <div>
+      <div class="persona-nome">Fernanda (sua cliente)</div>
+      <div class="persona-fala">"Doutora, eu quero desistir de tudo. Nós voltamos a conversar, ele está mudado. Ele disse que se eu retirar o processo, nós voltamos e ele vai cuidar de mim e das crianças. Eu quero retirar a queixa."</div>
+    </div>
+  </div>
+
+  <div class="nav"><span></span><button class="btn btn-roxo" onclick="mostrarEtapa('c2_e1')">Primeira decisão →</button></div>
+</div>
+
+<!-- CENÁRIO 2 — ETAPA 1 -->
+<div class="tela" id="c2_e1">
+  <div class="badge badge-sim">Cenário 2 · Etapa 1 de 3</div>
+  <div class="prog-sim"><div class="prog-dot ativo"></div><div class="prog-dot"></div><div class="prog-dot"></div></div>
+  <h1 class="titulo">Primeira <em>orientação</em></h1>
+  <p class="desc">Fernanda quer "retirar a queixa" de um crime de lesão corporal em contexto de violência doméstica. Como você a orienta?</p>
+
+  <div class="decisoes" id="c2e1_opts">
+    <div class="decisao-titulo">O que você diz a Fernanda?</div>
+    <button class="opt-btn" onclick="escolher('c2e1',0)">A) "Fernanda, infelizmente isso não é possível. A lesão corporal em contexto de violência doméstica é de ação penal pública incondicionada — quem conduz o processo é o Ministério Público, não você. Mesmo que você queira desistir, o processo vai continuar. Essa é a regra desde a ADI 4.424 do STF e a Súmula 542 do STJ."</button>
+    <button class="opt-btn" onclick="escolher('c2e1',1)">B) "Claro, Fernanda. Vou pedir ao juiz para designar uma audiência do art. 16 para você se retratar."</button>
+    <button class="opt-btn" onclick="escolher('c2e1',2)">C) "Vou falar com o promotor para ele retirar a denúncia, já que você não quer mais."</button>
+    <button class="opt-btn" onclick="escolher('c2e1',3)">D) "Você pode simplesmente não comparecer às audiências. Se não aparecer, o processo acaba sozinho."</button>
+  </div>
+
+  <div class="feedback" id="c2e1_fb"></div>
+  <div class="nav" id="c2e1_nav" style="display:none">
+    <button class="btn btn-s" onclick="mostrarEtapa('c2_intro')">← Rever caso</button>
+    <button class="btn btn-roxo" onclick="mostrarEtapa('c2_e2')">Etapa 2 →</button>
+  </div>
+</div>
+
+<!-- CENÁRIO 2 — ETAPA 2 -->
+<div class="tela" id="c2_e2">
+  <div class="badge badge-sim">Cenário 2 · Etapa 2 de 3</div>
+  <div class="prog-sim"><div class="prog-dot feito"></div><div class="prog-dot ativo"></div><div class="prog-dot"></div></div>
+  <h1 class="titulo">Fernanda insiste e <em>chora</em></h1>
+
+  <div class="persona">
+    <div class="persona-icon">👩</div>
+    <div>
+      <div class="persona-nome">Fernanda</div>
+      <div class="persona-fala">"Mas eu não quero que ele vá preso! Ele é o pai dos meus filhos. Se ele for preso, quem vai pagar o aluguel? Ele disse que se eu não retirar o processo, ele não vai mais ajudar com as crianças. Eu preciso dele."</div>
+    </div>
+  </div>
+
+  <p class="desc">Fernanda está claramente em situação de dependência emocional e financeira. Como advogada da vítima, como você atua?</p>
+
+  <div class="decisoes" id="c2e2_opts">
+    <div class="decisao-titulo">Qual é a sua atuação?</div>
+    <button class="opt-btn" onclick="escolher('c2e2',0)">A) Explico que o fato de o processo continuar não significa necessariamente que Lucas será preso. Informo sobre as medidas protetivas, oriento sobre a possibilidade de pensão alimentícia independentemente do processo criminal, e sugiro que ela procure a rede de apoio (CRAM, DEAM, Defensoria Pública para questões de família). Reforço que a violência não é culpa dela e que a lei existe para protegê-la.</button>
+    <button class="opt-btn" onclick="escolher('c2e2',1)">B) Respeito a vontade de Fernanda e me retiro do caso — se ela quer voltar com o agressor, não posso fazer nada.</button>
+    <button class="opt-btn" onclick="escolher('c2e2',2)">C) Digo que o Lucas está certo — se ela retirar o processo, vai ser melhor para todo mundo.</button>
+    <button class="opt-btn" onclick="escolher('c2e2',3)">D) Insisto que ela precisa ir à audiência e contar ao juiz exatamente o que Lucas disse sobre não ajudar com as crianças se ela não retirar o processo.</button>
+  </div>
+
+  <div class="feedback" id="c2e2_fb"></div>
+  <div class="nav" id="c2e2_nav" style="display:none">
+    <button class="btn btn-s" onclick="mostrarEtapa('c2_e1')">← Voltar</button>
+    <button class="btn btn-roxo" onclick="mostrarEtapa('c2_e3')">Etapa 3 →</button>
+  </div>
+</div>
+
+<!-- CENÁRIO 2 — ETAPA 3 -->
+<div class="tela" id="c2_e3">
+  <div class="badge badge-sim">Cenário 2 · Etapa 3 de 3</div>
+  <div class="prog-sim"><div class="prog-dot feito"></div><div class="prog-dot feito"></div><div class="prog-dot ativo"></div></div>
+  <h1 class="titulo">Lucas ameaça <em>Fernanda</em></h1>
+
+  <div class="cenario">
+    <div class="cenario-label">Desenvolvimento</div>
+    <p>Uma semana depois, Fernanda te liga chorando. Lucas descobriu que o processo vai continuar e mandou mensagem de áudio: <em>"Se você não der um jeito de acabar com isso, eu juro que você vai se arrepender. Eu sei onde você mora e onde as crianças estudam."</em></p>
+  </div>
+
+  <div class="decisoes" id="c2e3_opts">
+    <div class="decisao-titulo">Como você atua imediatamente?</div>
+    <button class="opt-btn" onclick="escolher('c2e3',0)">A) Oriento Fernanda a preservar o áudio (não apagar!), registrar novo BO por ameaça (art. 147, §1º, CP — ação penal pública incondicionada por razões de gênero, Lei 14.994/2024), requerer novas medidas protetivas ou o reforço das existentes, e comunicar ao juiz e ao MP o descumprimento das medidas protetivas já deferidas (art. 24-A da Lei Maria da Penha). Se houver risco iminente, orientar Fernanda a ligar para o 190 imediatamente.</button>
+    <button class="opt-btn" onclick="escolher('c2e3',1)">B) Digo a Fernanda que isso é problema da polícia, não meu — que ela ligue para o 190.</button>
+    <button class="opt-btn" onclick="escolher('c2e3',2)">C) Aconselho Fernanda a ceder e tentar acalmar Lucas para evitar que a situação piore.</button>
+    <button class="opt-btn" onclick="escolher('c2e3',3)">D) Peço ao juiz para revogar as medidas protetivas, já que elas parecem estar piorando a situação.</button>
+  </div>
+
+  <div class="feedback" id="c2e3_fb"></div>
+  <div class="nav" id="c2e3_nav" style="display:none">
+    <button class="btn btn-s" onclick="mostrarEtapa('c2_e2')">← Voltar</button>
+    <button class="btn btn-roxo" onclick="mostrarResultado()">Ver resultado final →</button>
+  </div>
+</div>
+
+<!-- ===== RESULTADO FINAL ===== -->
+<div class="tela" id="resultado">
+  <div class="badge">Resultado do simulador</div>
+  <h1 class="titulo">Seu <em>desempenho</em></h1>
+
+  <div class="resultado">
+    <div class="ic">⚖️</div>
+    <div class="score" id="score_texto">0/7</div>
+    <div class="tit" id="resultado_titulo">Carregando...</div>
+    <div class="sub" id="resultado_desc"></div>
+  </div>
+
+  <div class="card" style="margin-top:32px">
+    <h3>Lições deste simulador</h3>
+    <div class="timeline">
+      <div class="tl-item"><div class="tl-marker"><div class="tl-dot"></div><div class="tl-line"></div></div><div class="tl-content"><div class="tl-titulo">Sempre identifique a natureza da ação penal primeiro</div><div class="tl-desc">Antes de qualquer orientação, verifique se o crime é de ação pública incondicionada, condicionada ou privada. Isso define toda a estratégia.</div></div></div>
+      <div class="tl-item"><div class="tl-marker"><div class="tl-dot"></div><div class="tl-line"></div></div><div class="tl-content"><div class="tl-titulo">Lesão corporal na Lei Maria da Penha = incondicionada</div><div class="tl-desc">Súmula 542 do STJ + ADI 4.424/DF. A vítima não pode desistir. Não existe "retirar a queixa" em lesão corporal doméstica.</div></div></div>
+      <div class="tl-item"><div class="tl-marker"><div class="tl-dot"></div><div class="tl-line"></div></div><div class="tl-content"><div class="tl-titulo">Stalking (art. 147-A) = ação penal pública condicionada à representação</div><div class="tl-desc">Em qualquer modalidade do crime de perseguição (art. 147-A, §3º, CP), a ação penal é pública condicionada à representação. A retratação é possível, mas apenas por manifestação expressa da vítima, antes do recebimento da denúncia (art. 16, parágrafo único — Lei 15.380/2026). Se a vítima não se manifestar, o processo segue normalmente.</div></div></div>
+      <div class="tl-item"><div class="tl-marker"><div class="tl-dot"></div><div class="tl-line"></div></div><div class="tl-content"><div class="tl-titulo">O juiz não pode designar audiência do art. 16 de ofício</div><div class="tl-desc">ADI 7.267/DF (STF, 21/8/2023) + Tema 1.167 (STJ, 8/3/2023) + art. 16, parágrafo único (Lei 15.380/2026). Se designou, impugne.</div></div></div>
+      <div class="tl-item"><div class="tl-marker"><div class="tl-dot"></div><div class="tl-line"></div></div><div class="tl-content"><div class="tl-titulo">Após o recebimento da denúncia, não cabe mais retratação pelo art. 16</div><div class="tl-desc">O momento da retratação é antes do recebimento. Depois, a defesa deve se concentrar no mérito.</div></div></div>
+      <div class="tl-item"><div class="tl-marker"><div class="tl-dot"></div><div class="tl-line"></div></div><div class="tl-content"><div class="tl-titulo">O advogado de defesa não pode pressionar a vítima</div><div class="tl-desc">Intermediar ou pressionar a retratação pode configurar coação no curso do processo (art. 344, CP). A manifestação deve ser espontânea da vítima.</div></div></div>
+      <div class="tl-item"><div class="tl-marker"><div class="tl-dot"></div></div><div class="tl-content"><div class="tl-titulo">O advogado da vítima deve acolher, orientar e proteger</div><div class="tl-desc">Informar sobre a rede de apoio (CRAM, DEAM, Defensoria), sobre direitos civis (alimentos, guarda) e preservar provas de novas ameaças ou descumprimento de medidas protetivas.</div></div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Julgados e fundamentos legais utilizados</h3>
+    <ul>
+      <li>Art. 16 da Lei 11.340/2006 (com parágrafo único incluído pela Lei 15.380/2026) — <a class="link-ext" href="https://www.planalto.gov.br/ccivil_03/_ato2023-2026/2026/lei/L15380.htm" target="_blank">Texto no Planalto</a></li>
+      <li>ADI 7.267/DF — STF, Plenário, 21/8/2023 — <a class="link-ext" href="https://portal.stf.jus.br/noticias/verNoticiaDetalhe.asp?idConteudo=512899&tip=UN" target="_blank">Notícia STF</a></li>
+      <li>Tema 1.167 — STJ, 3ª Seção, REsp 1.977.547-MG, 8/3/2023 — <a class="link-ext" href="https://processo.stj.jus.br/repetitivos/temas_repetitivos/pesquisa.jsp?novaConsulta=true&tipo_pesquisa=T&cod_tema_inicial=1167&cod_tema_final=1167" target="_blank">Pesquisa STJ</a></li>
+      <li>Súmula 542 do STJ — ADI 4.424/DF — <a class="link-ext" href="https://portal.stf.jus.br/processos/detalhe.asp?incidente=3897992" target="_blank">Acessar no STF</a></li>
+      <li>Art. 147, §§1º e 2º, CP (Lei 14.994/2024) — ameaça incondicionada por razões de gênero</li>
+      <li>Art. 24-A da Lei 11.340/2006 — descumprimento de medida protetiva</li>
+    </ul>
+  </div>
+
+  <div class="card" style="text-align:center;margin-top:24px">
+    <h3>Material de Apoio em PDF</h3>
+    <p>Baixe o conteúdo completo dos dois cenários, decisões corretas, fundamentos jurídicos e lições para consulta.</p>
+    <a href="https://cdupret.github.io/arquivosLMP/material_m04_a03_retratacao.pdf" target="_blank" class="btn btn-p" style="display:inline-flex;margin-top:12px;text-decoration:none">📄 Baixar PDF — Aula 3</a>
+  </div>
+
+  <div class="nav">
+    <button class="btn btn-s" onclick="reiniciar()">↺ Refazer o simulador</button>
+    <button class="btn btn-s" onclick="mostrarEtapa('t0')">← Voltar à introdução</button>
+  </div>
+</div>
+
+</div><!-- /main -->
+
+<script>
+let acertos=0;
+const totalQ=7;
+const respostas={
+  c1e1:{correta:1,
+    fb_ok:"✅ Excelente! O crime de perseguição/stalking (art. 147-A do CP) é de ação penal pública condicionada à representação, conforme o §3º do mesmo artigo. Essa regra se aplica a qualquer modalidade do crime — não há distinção entre forma simples e qualificada quanto à natureza da ação penal. Isso significa que a retratação é juridicamente possível, desde que cumpridos os requisitos do art. 16 da Lei Maria da Penha. O advogado competente primeiro identifica a natureza da ação antes de orientar o cliente.",
+    fb_erros:[
+      "❌ Incorreto. O crime de perseguição/stalking (art. 147-A do CP) <strong>não é</strong> de ação pública incondicionada — é de ação penal pública condicionada à representação, conforme o §3º do mesmo artigo. Essa regra vale para qualquer modalidade do crime. Portanto, em tese, a retratação é possível, desde que cumpridos os requisitos do art. 16 da Lei Maria da Penha.",
+      "❌ Incorreto. O stalking não é crime de ação penal privada — é de ação penal pública condicionada à representação (art. 147-A, §3º, CP). Em ação privada, quem conduz é a vítima via queixa-crime. Aqui, o MP é titular.",
+      "❌ Incorreto. O perdão da vítima não extingue automaticamente a punibilidade em ação penal pública. O perdão (art. 105, CP) só se aplica à ação penal privada. Em ação condicionada, o instrumento é a retratação da representação (art. 16, Lei Maria da Penha), e em ação incondicionada, a vítima sequer pode interferir."
+    ]},
+  c1e2:{correta:1,
+    fb_ok:"✅ Perfeita orientação! O advogado de defesa deve informar ao cliente que a retratação é um direito da vítima — e somente dela. A manifestação deve ser expressa, espontânea (por escrito ou oralmente), apresentada antes do recebimento da denúncia, e levada ao conhecimento do juiz (art. 16, parágrafo único, Lei 15.380/2026). O advogado de defesa <strong>não pode intermediar</strong> — qualquer pressão sobre a vítima pode configurar coação no curso do processo (art. 344, CP). É essencial alertar o cliente: se Carla não se manifestar antes do recebimento da denúncia, a retratação não será mais possível. A Lei 15.380/2026 exige manifestação expressa da vítima para que o juiz sequer designe a audiência de retratação — sem essa iniciativa dela, Rafael responderá ao processo normalmente e poderá ser condenado, independentemente da vontade de Carla.",
+    fb_erros:[
+      "❌ Perigoso! Orientar o cliente a procurar diretamente a vítima para pedir que desista pode configurar <strong>coação no curso do processo</strong> (art. 344, CP), além de potencial descumprimento de medidas protetivas (se houver proibição de contato). A retratação deve ser iniciativa espontânea da vítima, não induzida pelo agressor ou seu advogado.",
+      "❌ Inadequado e antiético. Trazer a vítima ao escritório do advogado de defesa para colher retratação cria um ambiente de pressão e conflito de interesses evidente. A vítima pode se sentir intimidada. A retratação deve ser manifestada perante o juiz, em audiência designada para esse fim, com a presença do MP (art. 16 da Lei Maria da Penha).",
+      "❌ Incorreto quanto ao momento processual. A denúncia foi oferecida mas <strong>ainda não foi recebida</strong> pelo juiz. O marco temporal do art. 16 é o <strong>recebimento da denúncia</strong>, não o oferecimento. Portanto, ainda há tempo para a retratação — desde que Carla se manifeste expressamente antes que o juiz receba a denúncia."
+    ]},
+  c1e3:{correta:1,
+    fb_ok:"✅ Excelente atuação técnica! Embora a audiência pudesse parecer vantajosa para o seu cliente, designá-la de ofício é inconstitucional. O STF (ADI 7.267/DF, Plenário, 21/8/2023, Rel. Min. Edson Fachin, votação unânime) declarou a inconstitucionalidade da designação de ofício da audiência do art. 16. O STJ já havia fixado o mesmo entendimento no Tema 1.167 (REsp 1.977.547-MG, 3ª Seção, 8/3/2023). E a Lei 15.380/2026 positivou essa vedação no parágrafo único do art. 16. Um advogado ético impugna a nulidade mesmo quando ela poderia beneficiar seu cliente — qualquer retratação obtida em audiência nula pode ser anulada posteriormente, comprometendo toda a estratégia.",
+    fb_erros:[
+      "❌ Comparecer normalmente a uma audiência nula sem impugná-la é eticamente questionável e estrategicamente arriscado. Se a retratação for obtida em audiência inconstitucional, ela pode ser anulada posteriormente (pelo MP, por agravo, ou em recurso). Um advogado diligente documenta a nulidade para preservar os interesses do cliente a longo prazo.",
+      "❌ Gravíssimo! Tentar convencer a vítima a se retratar na frente do juiz pode configurar <strong>coação no curso do processo</strong> (art. 344, CP) e infração ética perante a OAB. O advogado de defesa não pode pressionar, intimidar ou induzir a vítima a se retratar.",
+      "❌ Ignorar intimação judicial pode gerar sanções processuais e é conduta inadequada do advogado. Se o ato é nulo, o caminho é impugnar formalmente nos autos, não ignorar."
+    ]},
+  c1e4:{correta:0,
+    fb_ok:"✅ Correto! O art. 16 da Lei Maria da Penha é claro: a retratação só é admitida <strong>antes do recebimento da denúncia</strong>. Após esse marco processual, não há mais possibilidade de retratação pela via do art. 16. A defesa deve agora se concentrar inteiramente no mérito: negativa de autoria, atipicidade da conduta, ausência de dolo de perseguição, ausência de receio ou temor na vítima, entre outras teses. Essa é a realidade que o advogado de defesa precisa comunicar ao cliente de forma clara.",
+    fb_erros:[
+      "❌ Incorreto. O art. 16 veda expressamente a retratação após o recebimento da denúncia. Não há previsão legal para audiência de retratação nessa fase processual.",
+      "❌ Perigosíssimo! Orientar a vítima a mentir para a polícia (dizer que a representação original era falsa) pode configurar denunciação caluniosa (art. 339, CP) contra Carla, além de colocar Rafael em situação ainda pior. O advogado que orienta isso comete infração ética gravíssima.",
+      "❌ Incorreto. O perdão do ofendido (art. 105, CP) só existe na ação penal privada. O stalking é de ação penal pública condicionada à representação — não cabe perdão. O instrumento seria a retratação (art. 16), mas esta já está preclusa pelo recebimento da denúncia."
+    ]},
+  c2e1:{correta:0,
+    fb_ok:"✅ Perfeita orientação! A lesão corporal no contexto de violência doméstica é de ação penal pública incondicionada (Súmula 542 do STJ + ADI 4.424/DF do STF, Plenário, 9/2/2012). A vítima não é titular da ação — o MP é. Não existe \"retirar a queixa\" nesse caso, porque nunca houve queixa — o que houve foi denúncia do MP. É fundamental que o advogado da vítima explique isso com clareza e empatia, sem julgamento.",
+    fb_erros:[
+      "❌ A audiência do art. 16 só se aplica a crimes de ação penal pública condicionada à representação. A lesão corporal em violência doméstica é incondicionada (Súmula 542 STJ). Não cabe retratação.",
+      "❌ O MP não pode \"retirar\" a denúncia por pedido da vítima. Em ação pública incondicionada, vigora o princípio da obrigatoriedade (art. 24, CPP) e da indisponibilidade (art. 42, CPP). Uma vez oferecida a denúncia, o MP não pode desistir da ação penal.",
+      "❌ Orientar a vítima a não comparecer às audiências não extingue o processo. Em ação pública incondicionada, o processo prossegue independentemente da presença da vítima. Além disso, como advogada da vítima habilitada como assistente de acusação, você tem o dever de comparecer. E na violência doméstica, a não intimação da vítima pode gerar nulidade."
+    ]},
+  c2e2:{correta:0,
+    fb_ok:"✅ Atuação exemplar! O advogado da vítima em violência doméstica não é apenas um operador técnico do direito — é também um orientador que acolhe, informa e conecta a vítima à rede de proteção. Explicar que o processo criminal não significa necessariamente prisão, informar sobre direitos civis (pensão alimentícia, guarda, partilha de bens), encaminhar para o CRAM (Centro de Referência de Atendimento à Mulher) e para a Defensoria Pública (para questões de família) são medidas essenciais. A fala de Lucas — condicionando ajuda financeira à retirada do processo — é um clássico padrão de coação emocional e financeira, exatamente o que a ADI 4.424/DF descreve como \"assimetria de poder\".",
+    fb_erros:[
+      "❌ Retirar-se do caso sem orientar a vítima é abandonar quem mais precisa de assistência. O advogado da vítima tem papel fundamental em informar sobre direitos, rede de apoio e alternativas. A violência doméstica envolve ciclos de dependência — a vítima pode mudar de ideia com informação adequada.",
+      "❌ Gravíssimo e antiético! Concordar com o agressor e aconselhar a vítima a ceder é revitimização institucional. O advogado da vítima deve sempre atuar em defesa dos interesses da cliente, e ceder à pressão do agressor não é interesse da vítima.",
+      "❌ A opção D tem mérito parcial — a fala de Lucas (\"se não retirar o processo, não ajudo com as crianças\") pode configurar coação e é relevante para o juiz. Porém, a melhor atuação é a abordagem integral: acolher, informar sobre a natureza incondicionada da ação, orientar sobre direitos civis e encaminhar à rede de apoio. Insistir unicamente que ela \"conte ao juiz\" sem acolhimento pode gerar mais angústia."
+    ]},
+  c2e3:{correta:0,
+    fb_ok:"✅ Atuação completa e tecnicamente impecável! Preservar o áudio é essencial (prova). Registrar novo BO é necessário — a ameaça contra mulher por razões da condição do sexo feminino agora é de ação penal pública incondicionada (art. 147, §1º e §2º, CP — Lei 14.994/2024, vigor 10/10/2024). O descumprimento de medidas protetivas é crime autônomo (art. 24-A da Lei Maria da Penha — reclusão de 2 a 5 anos e multa, Lei 14.994/2024). E comunicar imediatamente ao juiz e ao MP permite requerer reforço das medidas protetivas, prisão preventiva (art. 313, III, CPP) ou até a transferência do preso para estabelecimento distante (art. 86, §4º, LEP). Em risco iminente: 190.",
+    fb_erros:[
+      "❌ Parcialmente correto mas insuficiente. Dizer que é \"problema da polícia\" ignora o papel ativo do advogado da vítima. Você deve: preservar provas, registrar BO, comunicar ao juiz e ao MP, requerer medidas. A segurança da cliente é responsabilidade compartilhada.",
+      "❌ Gravíssimo! Aconselhar a vítima a ceder diante de ameaças é revitimização e expõe a cliente a risco real de vida. A fala de Lucas — ameaçando a vítima e os filhos — configura crimes autônomos (ameaça incondicionada + descumprimento de MPU) e exige atuação imediata e firme.",
+      "❌ Revogar medidas protetivas porque o agressor reagiu mal a elas é inverter a lógica da proteção. As medidas existem justamente para proteger a vítima de reações como essa. A resposta a um agressor que descumpre medidas protetivas não é retirar as medidas — é reforçá-las e responsabilizá-lo."
+    ]}
+};
+
+function mostrarEtapa(id){
+  document.querySelectorAll('.tela').forEach(t=>t.classList.remove('on'));
+  document.getElementById(id).classList.add('on');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function iniciarCenario(n){
+  if(n===1) mostrarEtapa('c1_intro');
+  else if(n===2) mostrarEtapa('c2_intro');
+}
+
+function escolher(etapa,idx){
+  const r=respostas[etapa];
+  const btns=document.querySelectorAll(`#${etapa}_opts .opt-btn`);
+  btns.forEach((b,i)=>{
+    b.disabled=true;
+    if(i===r.correta) b.classList.add('correta');
+    else if(i===idx&&idx!==r.correta) b.classList.add('incorreta');
+  });
+  const fb=document.getElementById(etapa+'_fb');
+  if(idx===r.correta){
+    fb.className='feedback on fb-ok';
+    fb.innerHTML=r.fb_ok;
+    acertos++;
+  } else {
+    fb.className='feedback on fb-erro';
+    fb.innerHTML=r.fb_erros[idx<r.correta?idx:idx-1]||r.fb_erros[0];
+  }
+  document.getElementById(etapa+'_nav').style.display='flex';
+}
+
+function mostrarResultado(){
+  mostrarEtapa('resultado');
+  document.getElementById('score_texto').textContent=acertos+'/'+totalQ;
+  let titulo,desc;
+  if(acertos===totalQ){
+    titulo='Desempenho excepcional!';
+    desc='Você domina completamente as regras da retratação na Lei Maria da Penha — tanto na defesa quanto na assistência à acusação. Pronto(a) para atuar com segurança.';
+  } else if(acertos>=5){
+    titulo='Muito bom!';
+    desc='Você tem sólido conhecimento dos fundamentos. Revise os pontos em que errou para consolidar sua segurança na atuação prática.';
+  } else if(acertos>=3){
+    titulo='Bom começo — revise os fundamentos';
+    desc='Alguns conceitos precisam ser reforçados, especialmente a distinção entre ação incondicionada e condicionada, e os requisitos da retratação. Refaça o simulador e revise a Aula 1 deste módulo.';
+  } else {
+    titulo='Atenção — revise o módulo';
+    desc='É importante revisar a Aula 1 (Natureza da ação penal) antes de seguir. Os conceitos de ação incondicionada, condicionada e os requisitos do art. 16 são a base de toda a atuação nessa área.';
+  }
+  document.getElementById('resultado_titulo').textContent=titulo;
+  document.getElementById('resultado_titulo').style.color=acertos>=5?'var(--verde)':acertos>=3?'var(--dourado)':'var(--rosa)';
+  document.getElementById('resultado_desc').textContent=desc;
+}
+
+function reiniciar(){
+  acertos=0;
+  // resetar todos os botões e feedbacks
+  document.querySelectorAll('.opt-btn').forEach(b=>{b.disabled=false;b.className='opt-btn'});
+  document.querySelectorAll('.feedback').forEach(f=>{f.className='feedback';f.innerHTML=''});
+  document.querySelectorAll('[id$="_nav"]').forEach(n=>{if(n.id!=='c1e1_nav'){}; n.style.display='none'});
+  mostrarEtapa('t0');
+}
+</script>
+</body>
+</html>

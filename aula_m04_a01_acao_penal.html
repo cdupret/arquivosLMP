@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Módulo 04 · Aula 1 — Natureza da Ação Penal · Penha em Cena</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--rosa:#D4537E;--rosa2:#A33360;--fundo:#0E0B14;--fundo2:#17122A;--fundo3:#211A38;--roxo:#7F77DD;--texto:#F0EAF8;--muted:#9B8FBC;--borda:rgba(212,83,126,0.2);--verde:#1D9E75;--dourado:#C9963A;--azul:#3A8ADC}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--fundo);color:var(--texto);min-height:100vh;font-size:18px;line-height:1.75;overflow-x:hidden}
+.bg-p{position:fixed;inset:0;pointer-events:none;z-index:0;background:radial-gradient(ellipse 60% 40% at 20% 20%,rgba(127,119,221,.07) 0%,transparent 60%),radial-gradient(ellipse 40% 60% at 80% 80%,rgba(212,83,126,.06) 0%,transparent 60%),radial-gradient(ellipse 30% 30% at 50% 50%,rgba(201,150,58,.03) 0%,transparent 70%)}
+.header{position:sticky;top:0;z-index:100;background:rgba(14,11,20,.95);border-bottom:1px solid var(--borda);padding:16px 32px;display:flex;align-items:center;gap:14px;backdrop-filter:blur(16px)}
+.logo{font-family:'Playfair Display',serif;font-size:20px;color:var(--rosa);font-weight:700}
+.sep{color:var(--muted);font-size:14px}.info{font-size:15px;color:var(--muted)}
+.prog{background:var(--fundo2);border-bottom:1px solid var(--borda);padding:14px 24px;position:sticky;top:57px;z-index:99}
+.steps{max-width:900px;margin:0 auto;display:flex;align-items:center}
+.step{display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;cursor:pointer;border:none;background:none}
+.dot{width:28px;height:28px;border-radius:50%;border:2px solid rgba(155,143,188,.25);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;color:var(--muted);transition:.3s}
+.dot.a{background:var(--rosa);border-color:var(--rosa);color:#fff;box-shadow:0 0 18px rgba(212,83,126,.4)}
+.dot.d{background:var(--verde);border-color:var(--verde);color:#fff}
+.slabel{font-size:10px;color:var(--muted);white-space:nowrap}.slabel.a{color:var(--rosa)}.slabel.d{color:var(--verde)}
+.sline{flex:1;height:2px;background:rgba(155,143,188,.15);margin-bottom:14px;transition:.3s}.sline.d{background:var(--verde)}
+.main{max-width:860px;margin:0 auto;padding:44px 32px 100px;position:relative;z-index:1}
+.tela{display:none;animation:fadeUp .4s ease}.tela.on{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.badge{display:inline-flex;align-items:center;background:rgba(212,83,126,.12);border:1px solid rgba(212,83,126,.25);color:var(--rosa);padding:8px 18px;border-radius:20px;font-size:14px;font-weight:500;margin-bottom:24px}
+.titulo{font-family:'Playfair Display',serif;font-size:clamp(28px,5vw,40px);font-weight:900;line-height:1.2;margin-bottom:14px}
+.titulo em{font-style:normal;color:var(--rosa)}
+.desc{font-size:19px;color:var(--muted);margin-bottom:36px;max-width:720px;line-height:1.8}
+.card{background:var(--fundo2);border:1px solid var(--borda);border-radius:16px;padding:32px;margin-bottom:24px;transition:border-color .2s}
+.card:hover{border-color:rgba(212,83,126,.35)}
+.card h3{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;margin-bottom:16px;line-height:1.3}
+.card h4{font-size:20px;font-weight:600;margin:20px 0 12px;color:var(--rosa)}
+.card p,.card li{font-size:17px;line-height:1.85;margin-bottom:12px}
+.card ul{padding-left:22px}.card ul li{margin-bottom:8px}
+.card ol{padding-left:22px}.card ol li{margin-bottom:10px}
+.tag{display:inline-block;padding:5px 14px;border-radius:12px;font-size:13px;font-weight:600;margin-right:6px;margin-bottom:6px}
+.tag-inc{background:rgba(29,158,117,.15);color:#9FE1CB;border:1px solid rgba(29,158,117,.3)}
+.tag-cond{background:rgba(201,150,58,.15);color:#E8C97A;border:1px solid rgba(201,150,58,.3)}
+.tag-priv{background:rgba(212,83,126,.15);color:#EDB0C5;border:1px solid rgba(212,83,126,.3)}
+.tag-lei{background:rgba(127,119,221,.15);color:#B5B0E8;border:1px solid rgba(127,119,221,.3)}
+.tag-novo{background:rgba(29,158,117,.15);color:#9FE1CB;border:1px solid rgba(29,158,117,.3);font-size:11px;padding:3px 10px}
+.alerta{padding:22px 26px;border-radius:14px;margin:20px 0;font-size:17px;line-height:1.85}
+.alerta-verde{background:rgba(29,158,117,.1);border:1px solid rgba(29,158,117,.25);color:#9FE1CB}
+.alerta-amarelo{background:rgba(201,150,58,.1);border:1px solid rgba(201,150,58,.25);color:#E8C97A}
+.alerta-vermelho{background:rgba(212,83,126,.08);border:1px solid rgba(212,83,126,.2);color:#EDB0C5}
+.alerta-info{background:rgba(127,119,221,.1);border:1px solid rgba(127,119,221,.25);color:#B5B0E8}
+.exemplo{background:rgba(127,119,221,.06);border-left:3px solid var(--roxo);padding:22px 26px;border-radius:0 14px 14px 0;margin:20px 0;font-size:17px;line-height:1.85}
+.exemplo strong{color:var(--roxo)}
+.redacao{background:rgba(201,150,58,.08);border:1px solid rgba(201,150,58,.2);border-radius:12px;padding:20px 24px;margin:16px 0;font-size:16px;line-height:1.8;font-style:italic;color:#E8C97A}
+.redacao .rotulo{font-style:normal;font-weight:600;font-size:14px;margin-bottom:8px;display:block;color:var(--dourado)}
+.tabela-c{overflow-x:auto;margin:20px 0}
+table{width:100%;border-collapse:collapse;font-size:16px}
+th{background:rgba(212,83,126,.15);color:var(--rosa);padding:14px 18px;text-align:left;font-weight:600;border-bottom:2px solid rgba(212,83,126,.3)}
+td{padding:14px 18px;border-bottom:1px solid rgba(155,143,188,.1)}
+tr:hover{background:rgba(127,119,221,.04)}
+.link-ext{color:var(--roxo);text-decoration:underline;font-weight:500}.link-ext:hover{color:var(--rosa)}
+.accordion{margin-bottom:14px}
+.acc-h{width:100%;text-align:left;padding:18px 22px;border:1px solid var(--borda);border-radius:12px;background:var(--fundo2);font-size:17px;font-weight:500;color:var(--texto);cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-family:'DM Sans',sans-serif;transition:.2s}
+.acc-h:hover{background:var(--fundo3);border-color:rgba(212,83,126,.35)}
+.acc-b{display:none;padding:20px 22px;border:1px solid var(--borda);border-top:none;border-radius:0 0 12px 12px;background:var(--fundo2);font-size:17px;line-height:1.85}
+.acc-b.open{display:block}
+.quiz-q{background:var(--fundo2);border:1px solid var(--borda);border-radius:16px;padding:28px;margin-bottom:18px}
+.quiz-q h4{font-size:18px;font-weight:500;margin-bottom:16px;line-height:1.6}
+.quiz-opt{display:block;width:100%;text-align:left;padding:14px 18px;margin-bottom:10px;border:2px solid rgba(155,143,188,.15);border-radius:10px;background:var(--fundo3);font-size:16px;color:var(--texto);cursor:pointer;transition:.2s;font-family:'DM Sans',sans-serif}
+.quiz-opt:hover{border-color:var(--roxo);background:rgba(127,119,221,.08)}
+.quiz-opt.certo{border-color:var(--verde);background:rgba(29,158,117,.1);color:#9FE1CB}
+.quiz-opt.errado{border-color:var(--rosa);background:rgba(212,83,126,.1);color:#EDB0C5}
+.quiz-opt:disabled{cursor:default;opacity:.85}
+.quiz-feed{margin-top:12px;padding:16px 18px;border-radius:10px;font-size:16px;line-height:1.75;display:none}
+.quiz-feed.show{display:block}
+.nav{display:flex;align-items:center;justify-content:space-between;margin-top:40px;padding-top:28px;border-top:1px solid var(--borda);gap:12px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:14px 28px;border-radius:10px;font-size:16px;font-weight:500;cursor:pointer;transition:.2s;border:none;font-family:'DM Sans',sans-serif}
+.btn-s{background:rgba(255,255,255,.05);color:var(--muted);border:1px solid rgba(155,143,188,.2)}.btn-s:hover{background:rgba(255,255,255,.09);color:var(--texto)}
+.btn-p{background:var(--rosa);color:#fff;box-shadow:0 4px 18px rgba(212,83,126,.3)}.btn-p:hover{background:var(--rosa2);transform:translateY(-1px);box-shadow:0 6px 24px rgba(212,83,126,.4)}
+.concluido{background:linear-gradient(135deg,rgba(212,83,126,.07),rgba(127,119,221,.05));border:1px solid rgba(212,83,126,.2);border-radius:16px;padding:40px;text-align:center;margin-top:32px}
+.concluido .ic{font-size:48px;margin-bottom:12px}.concluido .tit{font-family:'Playfair Display',serif;font-size:26px;font-weight:900;color:var(--verde);margin-bottom:10px}.concluido .sub{color:var(--muted);font-size:17px;line-height:1.7}
+.comparativo{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:20px 0}
+.comparativo>div{padding:20px;border-radius:12px}
+.comp-antes{background:rgba(212,83,126,.06);border:1px solid rgba(212,83,126,.15)}
+.comp-depois{background:rgba(29,158,117,.06);border:1px solid rgba(29,158,117,.15)}
+.comp-titulo{font-weight:600;font-size:15px;margin-bottom:10px}
+@media(max-width:700px){.main{padding:24px 16px 60px}.card{padding:22px 18px}.header{padding:12px 16px}.prog{padding:10px 12px}.comparativo{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="bg-p"></div>
+<div class="header"><div class="logo">Penha em Cena</div><span class="sep">·</span><span class="info">Módulo 04 · Aula 1 de 6</span></div>
+
+<div class="prog"><div class="steps">
+<button class="step" onclick="ir(0)"><div class="dot a" id="d0">1</div><div class="slabel a">Intro</div></button><div class="sline" id="l0"></div>
+<button class="step" onclick="ir(1)"><div class="dot" id="d1">2</div><div class="slabel">Conceitos</div></button><div class="sline" id="l1"></div>
+<button class="step" onclick="ir(2)"><div class="dot" id="d2">3</div><div class="slabel">Papel</div></button><div class="sline" id="l2"></div>
+<button class="step" onclick="ir(3)"><div class="dot" id="d3">4</div><div class="slabel">Mapa</div></button><div class="sline" id="l3"></div>
+<button class="step" onclick="ir(4)"><div class="dot" id="d4">5</div><div class="slabel">Julgados</div></button><div class="sline" id="l4"></div>
+<button class="step" onclick="ir(5)"><div class="dot" id="d5">6</div><div class="slabel">Súmulas</div></button><div class="sline" id="l5"></div>
+<button class="step" onclick="ir(6)"><div class="dot" id="d6">7</div><div class="slabel">Leis</div></button><div class="sline" id="l6"></div>
+<button class="step" onclick="ir(7)"><div class="dot" id="d7">8</div><div class="slabel">Quiz</div></button><div class="sline" id="l7"></div>
+<button class="step" onclick="ir(8)"><div class="dot" id="d8">9</div><div class="slabel">Resumo</div></button>
+</div></div>
+
+<div class="main">
+
+<!-- ==================== TELA 0: INTRODUÇÃO ==================== -->
+<div class="tela on" id="t0">
+  <div class="badge">Módulo 04 · Audiência de Retratação e Ação Penal</div>
+  <h1 class="titulo">Natureza da <em>ação penal</em> nos crimes da Lei Maria da Penha</h1>
+  <p class="desc">Antes de elaborar qualquer petição, oferecer queixa, orientar a vítima ou construir uma tese de defesa, o advogado criminalista precisa responder a uma pergunta fundamental: <strong>qual é a natureza da ação penal neste crime?</strong> Essa resposta define quem é o titular da ação, se a vítima pode ou não desistir, quais prazos correm, e quais peças processuais são cabíveis.</p>
+
+  <div class="card">
+    <h3>O que você vai dominar nesta aula</h3>
+    <ul>
+      <li>As três modalidades de ação penal e o que cada uma significa na prática para o advogado</li>
+      <li>O papel do advogado na defesa, na assistência à acusação e na representação da vítima em cada modalidade</li>
+      <li>O mapa completo: qual ação penal para cada crime no contexto da Lei Maria da Penha</li>
+      <li>Os julgados fundamentais: ADC 19, ADI 4.424/DF (STF, 9/2/2012) e ADI 7.267/DF (STF, 21/8/2023)</li>
+      <li>Tema Repetitivo 1.167 do STJ (8/3/2023) sobre a audiência do art. 16</li>
+      <li>Todas as súmulas do STJ sobre violência doméstica — com redação completa</li>
+      <li>As alterações legislativas que mudaram a ação penal: Lei 13.718/2018 (crimes sexuais), Lei 14.188/2021 (violência psicológica), Lei 14.994/2024 (ameaça) e Lei 15.380/2026 (audiência de retratação) — com redação dos artigos antes e depois</li>
+    </ul>
+  </div>
+
+  <div class="nav"><span></span><button class="btn btn-p" onclick="ir(1)">Começar a aula →</button></div>
+</div>
+
+<!-- ==================== TELA 1: CONCEITOS FUNDAMENTAIS ==================== -->
+<div class="tela" id="t1">
+  <div class="badge">Etapa 2 de 9 — Conceitos fundamentais</div>
+  <h1 class="titulo">As três modalidades de <em>ação penal</em></h1>
+  <p class="desc">Antes de entrar no mapa específico da Lei Maria da Penha, é essencial dominar o que são e como funcionam as três modalidades de ação penal no direito brasileiro. Essa base é indispensável para compreender os impactos práticos na atuação profissional.</p>
+
+  <div class="card">
+    <h3><span class="tag tag-inc">1. Ação Penal Pública Incondicionada</span></h3>
+    <p><strong>Titular:</strong> Ministério Público (art. 129, I, CF).</p>
+    <p><strong>O que significa:</strong> O Ministério Público tem o <strong>dever</strong> de agir independentemente de qualquer manifestação da vítima. Basta que chegue ao conhecimento do MP a notícia de um crime de ação pública incondicionada para que ele esteja obrigado a apurar e, havendo elementos, oferecer denúncia. Trata-se do <strong>princípio da obrigatoriedade</strong> (art. 24, CPP).</p>
+    <p><strong>Consequências práticas:</strong></p>
+    <ul>
+      <li>A vítima <strong>não pode desistir</strong>, retratar-se ou impedir o processo</li>
+      <li>Não há prazo decadencial — o MP pode agir a qualquer tempo dentro da prescrição</li>
+      <li>O inquérito policial pode ser instaurado de ofício pela autoridade policial (art. 5º, I, CPP)</li>
+      <li>Mesmo que a vítima diga expressamente que "não quer prosseguir", o MP pode e deve oferecer denúncia se houver prova suficiente</li>
+    </ul>
+    <p><strong>Na Lei Maria da Penha:</strong> Esta é a <strong>regra geral</strong>. A grande maioria dos crimes praticados no contexto de violência doméstica e familiar contra a mulher é de ação penal pública incondicionada.</p>
+  </div>
+
+  <div class="card">
+    <h3><span class="tag tag-cond">2. Ação Penal Pública Condicionada à Representação</span></h3>
+    <p><strong>Titular:</strong> Ministério Público — mas ele só pode agir se a vítima oferecer <strong>representação</strong> (condição de procedibilidade).</p>
+    <p><strong>O que significa:</strong> A titularidade da ação continua sendo do MP, mas o Estado condiciona o exercício da ação à manifestação de vontade da vítima. Sem representação, o MP não pode oferecer denúncia e o delegado não pode instaurar inquérito de ofício (art. 5º, §4º, CPP).</p>
+    <p><strong>Consequências práticas:</strong></p>
+    <ul>
+      <li>A vítima precisa representar para que a persecução penal tenha início</li>
+      <li>Prazo decadencial de <strong>6 meses</strong> a contar do conhecimento da autoria (art. 38, CPP)</li>
+      <li>A vítima pode se <strong>retratar da representação</strong>, mas na Lei Maria da Penha essa retratação segue regras especiais (art. 16 da Lei 11.340/2006)</li>
+      <li>Oferecida a denúncia e recebida pelo juiz, a retratação não é mais possível</li>
+    </ul>
+    <p><strong>Na Lei Maria da Penha:</strong> Esta modalidade ficou cada vez mais restrita ao longo dos anos. Com a ADI 4.424 (lesão corporal), a Lei 13.718/2018 (crimes sexuais) e a Lei 14.994/2024 (ameaça por razões de gênero), o campo da ação condicionada na violência doméstica encolheu significativamente. Atualmente, o principal exemplo remanescente é o crime de <strong>perseguição/stalking</strong> (art. 147-A, §3º, CP), que é de ação penal pública condicionada à representação.</p>
+  </div>
+
+  <div class="card">
+    <h3><span class="tag tag-priv">3. Ação Penal Privada</span></h3>
+    <p><strong>Titular:</strong> A própria vítima (ofendido), por meio de advogado constituído.</p>
+    <p><strong>O que significa:</strong> O Estado transfere ao particular a decisão de processar ou não o agressor. A peça inicial não é a denúncia (que é privativa do MP), mas sim a <strong>queixa-crime</strong>, que deve ser elaborada por advogado e endereçada ao juiz.</p>
+    <p><strong>Consequências práticas:</strong></p>
+    <ul>
+      <li>Prazo decadencial de <strong>6 meses</strong> para oferecimento da queixa-crime (art. 38, CPP)</li>
+      <li>A vítima pode renunciar ao direito de queixa (antes de oferecê-la) ou perdoar o ofensor (após o oferecimento)</li>
+      <li>A vítima precisa obrigatoriamente de <strong>advogado</strong> para oferecer a queixa</li>
+      <li>O Ministério Público não é o autor da ação — atua apenas como <em>custos legis</em> (fiscal da lei)</li>
+      <li>A inércia da vítima (não oferecimento da queixa no prazo) gera a <strong>decadência</strong> e a extinção da punibilidade</li>
+    </ul>
+    <p><strong>Na Lei Maria da Penha:</strong> Os crimes contra a honra (calúnia, difamação e injúria) continuam sendo, em regra, de ação penal privada, conforme o art. 145 do Código Penal, que <strong>não foi alterado</strong> nem pela Lei Maria da Penha, nem pela Lei 14.994/2024. Contudo, o art. 145 prevê exceções: quando os crimes contra a honra são praticados contra o Presidente da República, chefe de governo estrangeiro, contra funcionário público no exercício das funções, ou na hipótese de injúria qualificada por preconceito (art. 140, §3º, CP), a ação penal será pública (condicionada ou incondicionada, conforme o caso).</p>
+    <div class="alerta alerta-vermelho">
+      <strong>Atenção importante sobre o inquérito nos crimes de ação privada:</strong> Nos crimes de ação penal privada, o Código de Processo Penal (art. 5º, §5º) determina que a autoridade policial somente poderá proceder ao inquérito <strong>a requerimento de quem tenha qualidade para intentar a ação</strong> (a vítima ou seu representante legal). Isso significa que não basta a vítima registrar um boletim de ocorrência — ela precisa apresentar um <strong>requerimento formal</strong> solicitando a instauração do inquérito. O delegado não pode instaurar o inquérito de ofício. E o inquérito é apenas <strong>preparatório</strong>: o processo real começa com o oferecimento da <strong>queixa-crime</strong> ao juiz, que obrigatoriamente deve ser elaborada por advogado.
+    </div>
+  </div>
+
+  <div class="exemplo">
+    <strong>Exemplo prático — Identificando a modalidade:</strong> Maria é chamada de "vagabunda" e "inútil" pelo ex-marido em mensagens de WhatsApp enviadas ao grupo da família dela. O advogado precisa classificar: trata-se de <strong>injúria</strong> (art. 140, CP) — xingamento é sempre injúria, pois consiste na atribuição de qualidade negativa, e não na imputação de um fato. Não importa se o xingamento foi feito na frente de terceiros: o que define a injúria é a natureza da ofensa (qualidade pejorativa), e não o público. Se, por outro lado, o ex-marido tivesse escrito no grupo "Maria tem um amante, o João do mercado", aí sim seria <strong>difamação</strong> (art. 139, CP), pois ele estaria imputando um fato (ter um amante) ofensivo à reputação. Nos dois casos, a ação penal é privada e o prazo de 6 meses para oferecimento de queixa-crime já está correndo. Se Maria procurar o advogado 7 meses depois, já ocorreu decadência. Por outro lado, se as mensagens também contêm ameaças de morte ("vou te matar", "não vai escapar"), o advogado identificará o crime de <strong>ameaça</strong> (art. 147, §1º, CP) — que, se praticado contra mulher por razões da condição do sexo feminino, é de ação penal pública incondicionada desde a Lei 14.994/2024. Neste caso, mesmo que Maria não queira prosseguir, o MP pode e deve agir.
+  </div>
+
+  <div class="nav">
+    <button class="btn btn-s" onclick="ir(0)">← Voltar</button>
+    <button class="btn btn-p" onclick="ir(2)">O papel do advogado em cada modalidade →</button>
+  </div>
+</div>
+
+<!-- ==================== TELA 2: PAPEL DO ADVOGADO ==================== -->
+<div class="tela" id="t2">
+  <div class="badge">Etapa 3 de 9 — O papel do advogado</div>
+  <h1 class="titulo">O que o advogado <em>faz</em> em cada modalidade</h1>
+  <p class="desc">A natureza da ação penal define diretamente a estratégia e as peças que o advogado vai utilizar. Veja como muda a atuação conforme o lado em que você está.</p>
+
+  <div class="card">
+    <h3>Na defesa do acusado</h3>
+
+    <h4>Se a ação é pública incondicionada:</h4>
+    <p>A vítima não pode "retirar" nada. Não adianta o cliente dizer "ela já me perdoou" ou "nós voltamos a morar juntos". O MP tem o dever legal de prosseguir. A estratégia da defesa deve se concentrar no <strong>mérito</strong>:</p>
+    <ul>
+      <li>Negativa de autoria ou materialidade</li>
+      <li>Teses de mérito: legítima defesa, ausência de dolo, erro de tipo</li>
+      <li>Teses processuais: nulidades, incompetência, falta de justa causa</li>
+      <li>Na dosimetria: penas mínimas, atenuantes, regime inicial mais favorável</li>
+    </ul>
+
+    <h4>Se a ação é pública condicionada:</h4>
+    <p>Aqui surge uma possibilidade estratégica legítima: verificar se houve representação tempestiva e se a vítima deseja se retratar. Mas atenção — o advogado de defesa <strong>não pode pressionar</strong> a vítima a se retratar (isso pode configurar crime de coação no curso do processo, art. 344, CP). O que o advogado pode fazer:</p>
+    <ul>
+      <li>Verificar se a representação foi oferecida no prazo de 6 meses</li>
+      <li>Se não foi, arguir <strong>decadência</strong> (art. 38, CPP)</li>
+      <li>Se a vítima espontaneamente deseja se retratar, orientar o cliente sobre o procedimento do art. 16 da Lei Maria da Penha (manifestação expressa da vítima antes do recebimento da denúncia)</li>
+      <li>Verificar se a denúncia já foi recebida — após o recebimento, a retratação não é mais possível</li>
+    </ul>
+
+    <h4>Se a ação é privada:</h4>
+    <p>A posição da defesa é mais confortável em termos processuais:</p>
+    <ul>
+      <li>Verificar se a queixa-crime foi oferecida no prazo de 6 meses → se não, arguir <strong>decadência</strong></li>
+      <li>Verificar se a queixa preenche os requisitos do art. 41 do CPP (qualificação, fatos, classificação)</li>
+      <li>A vítima pode <strong>renunciar</strong> (antes da queixa) ou <strong>perdoar</strong> (depois da queixa, se aceito pelo réu)</li>
+      <li>Se a vítima não comparece a algum ato processual sem justificativa, pode ocorrer <strong>perempção</strong> (art. 60, CPP) — extinção da ação por abandono</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>Na assistência à acusação / representação da vítima</h3>
+
+    <h4>Se a ação é pública incondicionada:</h4>
+    <p>O advogado da vítima pode se habilitar como <strong>assistente da acusação</strong> (arts. 268 a 273, CPP). Nessa posição, ele atua ao lado do Ministério Público e pode:</p>
+    <ul>
+      <li>Propor meios de prova, inquirir testemunhas, participar dos debates</li>
+      <li>Arrazoar recursos que o MP não tenha interposto (art. 271, CPP)</li>
+      <li>Requerer medidas protetivas de urgência em favor da vítima</li>
+      <li>Peticionar para que o juiz mantenha a prisão preventiva, se for o caso</li>
+    </ul>
+
+    <h4>Se a ação é pública condicionada:</h4>
+    <p>Além das possibilidades acima, o advogado da vítima tem um papel crucial <strong>antes</strong> do processo:</p>
+    <ul>
+      <li>Orientar a vítima sobre a importância de representar e sobre as consequências da representação</li>
+      <li>Alertar sobre o prazo decadencial de 6 meses</li>
+      <li>Se a vítima está sendo pressionada pelo agressor para se retratar, documentar essa pressão e comunicar ao MP e ao juiz</li>
+      <li>Se o juiz designar audiência do art. 16 de ofício (o que é inconstitucional — ADI 7.267), impugnar imediatamente</li>
+    </ul>
+
+    <h4>Se a ação é privada:</h4>
+    <p>Aqui o advogado da vítima é o <strong>protagonista</strong> — é ele quem conduz a ação penal inteira:</p>
+    <ul>
+      <li>Elaborar e oferecer a <strong>queixa-crime</strong> dentro do prazo de 6 meses</li>
+      <li>Requerer, se necessário, a instauração de inquérito policial mediante requerimento formal à autoridade policial (art. 5º, §5º, CPP)</li>
+      <li>Acompanhar toda a instrução como parte autora</li>
+      <li>Interpor recursos contra decisões desfavoráveis</li>
+      <li>Manter a ação em andamento (sob pena de perempção)</li>
+    </ul>
+    <div class="alerta alerta-amarelo">
+      <strong>Dica prática:</strong> Nos crimes contra a honra praticados em contexto de violência doméstica (calúnia, difamação, injúria), muitas vítimas procuram a delegacia e acham que basta registrar o BO. O advogado deve explicar que o BO, por si só, não inicia a ação penal privada. É necessário: (1) requerer formalmente a instauração de inquérito à autoridade policial; e (2) oferecer queixa-crime ao juiz da Vara de Violência Doméstica, por meio de advogado, dentro do prazo de 6 meses. Sem isso, o prazo decai e a punibilidade é extinta.
+    </div>
+  </div>
+
+  <div class="exemplo">
+    <strong>Exemplo comparativo:</strong> Joana foi vítima de três condutas distintas do ex-companheiro: (1) ele a empurrou e ela caiu, machucando o braço — <strong>lesão corporal</strong>, ação pública incondicionada; (2) ele disse "se você me denunciar, eu te mato" — <strong>ameaça</strong>, ação pública incondicionada (art. 147, §1º, CP — Lei 14.994/2024); (3) ele postou em redes sociais que "Joana é uma vagabunda e uma ladra" — <strong>injúria</strong> (art. 140, CP), ação penal privada, pois se trata de xingamento (atribuição de qualidade negativa), e não de imputação de fato. Se ele tivesse escrito "Joana furtou dinheiro da empresa onde trabalha", aí sim seria <strong>calúnia</strong> (art. 138, CP — imputação de fato definido como crime). O advogado de Joana precisa atuar em duas frentes simultaneamente: habilitar-se como assistente de acusação nos crimes 1 e 2 (que estão nas mãos do MP) e, paralelamente, elaborar queixa-crime pelo crime 3 dentro do prazo decadencial.
+  </div>
+
+  <div class="nav">
+    <button class="btn btn-s" onclick="ir(1)">← Voltar</button>
+    <button class="btn btn-p" onclick="ir(3)">Mapa completo dos crimes →</button>
+  </div>
+</div>
+
+<!-- ==================== TELA 3: MAPA DOS CRIMES ==================== -->
+<div class="tela" id="t3">
+  <div class="badge">Etapa 4 de 9 — Mapa das ações penais na Lei Maria da Penha</div>
+  <h1 class="titulo">O <em>mapa completo</em> dos crimes e suas ações penais</h1>
+  <p class="desc">Consulte este mapa sempre que precisar identificar rapidamente a natureza da ação penal de um crime praticado no contexto de violência doméstica e familiar contra a mulher.</p>
+
+  <div class="card">
+    <h3><span class="tag tag-inc">Ação Penal Pública Incondicionada</span> — Regra geral</h3>
+    <div class="tabela-c"><table>
+      <tr><th>Crime</th><th>Dispositivo</th><th>Fundamento da natureza incondicionada</th></tr>
+      <tr><td>Lesão corporal — qualquer grau (leve, grave, gravíssima)</td><td>Art. 129, §9º, CP</td><td>Súmula 542 STJ + ADI 4.424/DF (STF)</td></tr>
+      <tr><td>Ameaça contra mulher por razões da condição do sexo feminino</td><td>Art. 147, §§1º e 2º, CP</td><td>Lei 14.994/2024 (vigor 10/10/2024)</td></tr>
+      <tr><td>Crimes contra a dignidade sexual (estupro, importunação sexual, divulgação de cena etc.)</td><td>Arts. 213 a 218-C, CP</td><td>Art. 225, CP (redação dada pela Lei 13.718/2018)</td></tr>
+      <tr><td>Violência psicológica contra a mulher</td><td>Art. 147-B, CP</td><td>Lei 14.188/2021 (vigor 29/7/2021)</td></tr>
+      <tr><td>Descumprimento de medida protetiva de urgência</td><td>Art. 24-A, Lei 11.340/2006</td><td>Crime próprio da Lei Maria da Penha</td></tr>
+      <tr><td>Feminicídio</td><td>Art. 121-A, CP</td><td>Crime doloso contra a vida (Lei 14.994/2024)</td></tr>
+      <tr><td>Vicaricídio (homicídio vicário)</td><td>Art. 121-B, CP</td><td>Crime doloso contra a vida (Lei 15.383/2026)</td></tr>
+      <tr><td>Vias de fato contra mulher em violência doméstica</td><td>Art. 21, LCP</td><td>STF, Rcl 27.342 (Min. Alexandre de Moraes)</td></tr>
+    </table></div>
+  </div>
+
+  <div class="card">
+    <h3><span class="tag tag-cond">Ação Penal Pública Condicionada à Representação</span> — Exceção cada vez mais restrita</h3>
+    <div class="tabela-c"><table>
+      <tr><th>Crime</th><th>Dispositivo</th><th>Observação</th></tr>
+      <tr><td>Perseguição/stalking</td><td>Art. 147-A, §3º, CP</td><td>O crime de perseguição é de ação penal pública condicionada à representação em qualquer modalidade (§3º).</td></tr>
+      <tr><td>Ameaça fora do contexto de gênero</td><td>Art. 147, §2º, CP</td><td>Situação cada vez mais rara na violência doméstica. Se o MP não demonstrar o elemento "razões da condição do sexo feminino", a defesa pode arguir que se trata de ameaça comum (condicionada).</td></tr>
+    </table></div>
+    <div class="alerta alerta-amarelo">
+      <strong>Atenção prática:</strong> Com a Lei 14.994/2024 tornando a ameaça de ação penal pública incondicionada quando praticada contra mulher por razões da condição do sexo feminino, o campo da ação condicionada na Lei Maria da Penha ficou muito reduzido. O espaço prático mais relevante é o crime de perseguição/stalking (art. 147-A, §3º, CP), que é de ação penal pública condicionada à representação em qualquer modalidade. É neste cenário que o art. 16 da Lei Maria da Penha continua tendo aplicação.
+    </div>
+  </div>
+
+  <div class="card">
+    <h3><span class="tag tag-priv">Ação Penal Privada</span> — Crimes contra a honra</h3>
+    <p>Os crimes contra a honra continuam sendo, <strong>em regra</strong>, de ação penal privada, conforme o art. 145 do Código Penal — que não foi alterado pela Lei Maria da Penha nem pela Lei 14.994/2024.</p>
+    <div class="tabela-c"><table>
+      <tr><th>Crime</th><th>Dispositivo</th><th>Observação</th></tr>
+      <tr><td>Calúnia</td><td>Art. 138, CP</td><td>Ação penal privada (queixa-crime)</td></tr>
+      <tr><td>Difamação</td><td>Art. 139, CP</td><td>Ação penal privada (queixa-crime)</td></tr>
+      <tr><td>Injúria simples</td><td>Art. 140, <em>caput</em>, CP</td><td>Ação penal privada (queixa-crime)</td></tr>
+    </table></div>
+
+    <p><strong>Exceções do art. 145 do CP (ação penal pública):</strong></p>
+    <ul>
+      <li><strong>Injúria qualificada por preconceito</strong> (art. 140, §3º, CP — injúria racial/preconceituosa): ação penal pública <strong>incondicionada</strong> (redação dada pela Lei 14.532/2023)</li>
+      <li>Crimes contra a honra praticados contra <strong>funcionário público</strong> no exercício das funções: ação penal pública <strong>condicionada à representação</strong> (art. 145, parágrafo único, CP)</li>
+      <li>Crimes contra a honra praticados contra o <strong>Presidente da República</strong> ou chefe de governo estrangeiro: ação penal pública condicionada à requisição do Ministro da Justiça (art. 145, parágrafo único, CP)</li>
+    </ul>
+
+    <div class="alerta alerta-vermelho">
+      <strong>Para o advogado da vítima:</strong> Se a sua cliente foi vítima de calúnia, difamação ou injúria simples no contexto de violência doméstica, você precisa agir rapidamente. O prazo de 6 meses para o oferecimento da queixa-crime começa a correr do momento em que a vítima toma conhecimento de quem é o autor do crime (art. 38, CPP). Registrar BO é importante para documentação, mas <strong>não substitui</strong> a queixa-crime. Para instaurar inquérito policial, a vítima deve apresentar <strong>requerimento formal</strong> ao delegado (art. 5º, §5º, CPP). E o processo penal só começa de fato com o oferecimento da queixa-crime, por advogado, ao juiz competente.
+    </div>
+  </div>
+
+  <div class="exemplo">
+    <strong>Exemplo prático — Defesa:</strong> Seu cliente é acusado de ameaça (art. 147 CP) e injúria (art. 140 CP) contra a ex-companheira. A estratégia difere radicalmente conforme o crime: para a ameaça, se praticada por razões da condição do sexo feminino (art. 147, §1º, CP), a ação é pública incondicionada (Lei 14.994/2024) — não adianta buscar a "desistência" da vítima, foque no mérito (negativa de autoria, atipicidade, ausência de dolo etc.). Para a injúria, sendo ação privada, verifique se a queixa foi oferecida no prazo de 6 meses. Se não foi: argua decadência e extinção da punibilidade.
+  </div>
+
+  <div class="exemplo">
+    <strong>Exemplo prático — Advogado da vítima:</strong> Sua cliente foi vítima de difamação reiterada pelo ex-marido nas redes sociais (publicou em grupo de família que ela "tem um amante"). Trata-se de <strong>difamação</strong> (art. 139, CP) — ação penal privada. Você, como advogado, precisa: (1) orientar a cliente a preservar as provas (prints de tela com data, URL, testemunhas); (2) requerer formalmente ao delegado a instauração de inquérito (art. 5º, §5º, CPP); (3) elaborar e protocolar a <strong>queixa-crime</strong> perante o juiz da Vara de Violência Doméstica e Familiar dentro do prazo de 6 meses. Se quiser medidas protetivas paralelamente, pode requerê-las — a competência do juízo de violência doméstica abrange tanto a esfera cível quanto a criminal.
+  </div>
+
+  <div class="nav">
+    <button class="btn btn-s" onclick="ir(2)">← Voltar</button>
+    <button class="btn btn-p" onclick="ir(4)">Os julgados fundamentais →</button>
+  </div>
+</div>
+<!-- ==================== TELA 4: JULGADOS FUNDAMENTAIS ==================== -->
+<div class="tela" id="t4">
+  <div class="badge">Etapa 5 de 9 — Os julgados que mudaram tudo</div>
+  <h1 class="titulo">ADC 19, ADI 4.424 e <em>ADI 7.267</em></h1>
+  <p class="desc">Três julgados do STF — e um tema repetitivo do STJ — que definiram a estrutura processual da Lei Maria da Penha. Todo advogado criminalista que atua nessa área precisa dominá-los.</p>
+
+  <div class="card">
+    <h3>ADC 19 — Constitucionalidade da Lei Maria da Penha</h3>
+    <p><strong>STF, Plenário, 9/2/2012</strong><br>
+    <strong>Relator:</strong> Min. Marco Aurélio<br>
+    <strong>Votação:</strong> unânime<br>
+    <strong>Propositura:</strong> Presidência da República</p>
+    <p><strong>O que decidiu:</strong> Declarou constitucionais os arts. 1º, 33 e 41 da Lei 11.340/2006.</p>
+    <p><strong>O que isso significa na prática:</strong></p>
+    <ul>
+      <li><strong>Art. 41 é constitucional</strong> → a Lei 9.099/95 (Lei dos Juizados Especiais) <strong>não se aplica</strong> aos crimes praticados com violência doméstica e familiar contra a mulher, independentemente da pena prevista</li>
+      <li>Consequência direta: <strong>não cabe</strong> transação penal, suspensão condicional do processo (sursis processual) nem composição civil dos danos em crimes da Lei Maria da Penha</li>
+      <li><strong>Art. 33 é constitucional</strong> → varas criminais podem acumular competência cível e criminal para processar e julgar causas decorrentes de violência doméstica enquanto não estiverem estruturados os Juizados de Violência Doméstica e Familiar contra a Mulher</li>
+      <li><strong>Art. 1º é constitucional</strong> → os mecanismos de proteção criados pela Lei Maria da Penha são compatíveis com a Constituição Federal e com os tratados internacionais ratificados pelo Brasil</li>
+    </ul>
+    <p>🔗 <a class="link-ext" href="https://portal.stf.jus.br/processos/detalhe.asp?incidente=2584650" target="_blank">ADC 19 — Acompanhamento processual no STF</a></p>
+
+    <div class="exemplo">
+      <strong>Relevância prática — Para a defesa:</strong> Se o seu cliente foi condenado por um crime de menor potencial ofensivo (como vias de fato, com pena máxima inferior a 2 anos) praticado em contexto de violência doméstica, e você pretende arguir que deveria ter sido aplicada transação penal ou sursis processual, saiba que essa tese está vedada pela ADC 19 e pela Súmula 536 do STJ. A vedação é absoluta: aplica-se independentemente da pena cominada ou da primariedade do agente.
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>ADI 4.424/DF — Ação penal pública incondicionada para lesão corporal</h3>
+    <p><strong>STF, Plenário, 9/2/2012</strong><br>
+    <strong>Relator:</strong> Min. Marco Aurélio<br>
+    <strong>Votação:</strong> maioria (vencido Min. Cezar Peluso, presidente à época)<br>
+    <strong>Propositura:</strong> Procuradoria-Geral da República (PGR)</p>
+    <p><strong>O que decidiu:</strong> Deu interpretação conforme a Constituição aos arts. 12, inciso I, e 16 da Lei 11.340/2006, para assentar a <strong>natureza incondicionada da ação penal</strong> em caso de crime de lesão corporal praticado contra a mulher no ambiente doméstico, <strong>pouco importando a extensão da lesão</strong> (leve, grave ou gravíssima).</p>
+
+    <p><strong>Os fundamentos centrais da decisão:</strong></p>
+    <ol>
+      <li><strong>Assimetria de poder:</strong> Deixar a atuação estatal a critério da vítima seria desconsiderar a assimetria de poder decorrente de relações histórico-culturais nas relações domésticas.</li>
+      <li><strong>Vício de vontade:</strong> A manifestação de vontade da mulher é cerceada pela própria violência, pelo medo de represálias e pela dependência emocional e/ou financeira. Como destacou o Min. Ricardo Lewandowski, estatisticamente a mulher acaba por não representar ou por afastar a representação anteriormente formalizada, por vício de vontade.</li>
+      <li><strong>Dever constitucional do Estado:</strong> O art. 226, §8º, da CF impõe ao Estado o dever de coibir a violência no âmbito das relações familiares. Condicionar a atuação estatal à vontade da vítima esvazia essa proteção constitucional.</li>
+      <li><strong>Compromissos internacionais:</strong> A decisão está em consonância com a Convenção sobre a Eliminação de Todas as Formas de Discriminação contra a Mulher (CEDAW) e a Convenção Interamericana para Prevenir, Punir e Erradicar a Violência contra a Mulher (Convenção de Belém do Pará).</li>
+    </ol>
+    <p>🔗 <a class="link-ext" href="https://portal.stf.jus.br/processos/detalhe.asp?incidente=3897992" target="_blank">ADI 4.424 — Acompanhamento processual no STF</a></p>
+
+    <div class="alerta alerta-verde">
+      <strong>Para a defesa — ponto importante:</strong> A ADI 4.424 refere-se especificamente à <strong>lesão corporal</strong>. Na própria decisão, o STF ressalvou que "permanece a necessidade de representação para crimes dispostos em leis diversas da 9.099/95, como o de ameaça e os cometidos contra a dignidade sexual" (à época da decisão, em 2012). Essa ressalva perdeu boa parte de sua relevância prática com as alterações legislativas posteriores: a Lei 13.718/2018 tornou os crimes sexuais de ação pública incondicionada, e a Lei 14.994/2024 fez o mesmo com a ameaça contra mulher por razões de gênero. Mas a ressalva continua relevante para crimes como o stalking (art. 147-A do CP), que permanece de ação penal pública condicionada à representação em qualquer modalidade.
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>ADI 7.267/DF — Audiência do art. 16 não pode ser designada de ofício</h3>
+    <p><strong>STF, Plenário, sessão virtual finalizada em 21/8/2023</strong><br>
+    <strong>Relator:</strong> Min. Edson Fachin<br>
+    <strong>Votação:</strong> unânime<br>
+    <strong>Propositura:</strong> CONAMP (Associação Nacional dos Membros do Ministério Público)</p>
+
+    <p><strong>O que decidiu:</strong> Deu interpretação conforme a Constituição ao art. 16 da Lei 11.340/2006 para reconhecer a inconstitucionalidade de duas práticas:</p>
+    <ol>
+      <li>A <strong>designação, de ofício</strong>, da audiência de retratação pelo juiz — ou seja, o juiz não pode, por iniciativa própria, convocar a vítima para perguntar se ela quer manter a representação;</li>
+      <li>O reconhecimento de que o <strong>não comparecimento</strong> da vítima à audiência do art. 16 implique "retratação tácita" ou "renúncia tácita ao direito de representação" — ou seja, o silêncio da vítima não equivale a desistência.</li>
+    </ol>
+
+    <p><strong>Fundamento:</strong> O art. 16 da Lei Maria da Penha não deve ser lido de forma isolada. A audiência perante o juiz tem a finalidade de viabilizar que a vítima, devidamente assistida, expresse de forma livre a sua vontade. A interpretação no sentido da obrigatoriedade dessa audiência, sem pedido da vítima, viola a Constituição e as disposições internacionais que o Brasil se obrigou a cumprir, na medida em que discrimina injustamente a própria vítima de violência.</p>
+
+    <p>🔗 <a class="link-ext" href="https://portal.stf.jus.br/noticias/verNoticiaDetalhe.asp?idConteudo=512899&tip=UN" target="_blank">ADI 7.267 — Notícia do julgamento no portal do STF</a></p>
+
+    <div class="exemplo">
+      <strong>Exemplo — Advogado da vítima:</strong> Sua cliente representou contra o ex-companheiro por ameaças reiteradas. Sem que ela tenha manifestado qualquer desejo de desistir, o juiz, de ofício, designou audiência do art. 16 "para ouvir a vítima sobre a manutenção da representação". Na audiência, o ex-companheiro estava presente na sala de espera. Constrangida e com medo, ela disse ao juiz que "não queria mais prosseguir". Essa audiência é <strong>nula</strong>: (a) o juiz não poderia tê-la designado de ofício (ADI 7.267/DF); (b) a finalidade da audiência é confirmar uma retratação já manifestada pela vítima, e não "perguntar" se ela quer manter a representação. O advogado deve impugnar imediatamente — por agravo de instrumento, por petição ao juiz apontando a nulidade, ou, se necessário, por mandado de segurança.
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Tema Repetitivo 1.167 — STJ</h3>
+    <p><strong>Terceira Seção do STJ, 8/3/2023</strong><br>
+    <strong>Recurso paradigma:</strong> REsp 1.977.547-MG<br>
+    <strong>Relator:</strong> Min. Reynaldo Soares da Fonseca<br>
+    <strong>Votação:</strong> unanimidade<br>
+    <strong>Informativo:</strong> 766</p>
+
+    <p><strong>Tese fixada (transcrição integral):</strong></p>
+    <div class="redacao">
+      <span class="rotulo">Tema 1.167 — Tese fixada pelo STJ:</span>
+      "A audiência prevista no art. 16 da Lei 11.340/2006 tem por objetivo confirmar a retratação, não a representação, e não pode ser designada de ofício pelo juiz. Sua realização somente é necessária caso haja manifestação do desejo da vítima de se retratar trazida aos autos antes do recebimento da denúncia."
+    </div>
+
+    <p><strong>O caso paradigma:</strong> Em Minas Gerais, um homem foi condenado por ameaça (art. 147, CP) em contexto de violência doméstica contra sua companheira. A vítima havia representado. O Tribunal de Justiça, em grau de apelação, decretou <em>de ofício</em> a nulidade do processo desde a denúncia, por entender que a audiência do art. 16 era obrigatória e não havia sido realizada. O MP recorreu ao STJ. A Terceira Seção cassou o acórdão do TJMG, fixando a tese de que a audiência do art. 16 só é necessária se a vítima manifestar expressamente o desejo de se retratar.</p>
+
+    <p><strong>Fundamentação central do Min. Reynaldo Soares da Fonseca:</strong> Questionar novamente a vítima sobre o seu interesse em representar contra o agressor pode agravar seu estado psicológico, na medida em que coloca em dúvida a veracidade de seu relato inicial. Não é raro a vítima estar inserida em um contexto de dependência emocional e/ou financeira.</p>
+
+    <p>🔗 <a class="link-ext" href="https://processo.stj.jus.br/repetitivos/temas_repetitivos/pesquisa.jsp?novaConsulta=true&tipo_pesquisa=T&cod_tema_inicial=1167&cod_tema_final=1167" target="_blank">Tema 1.167 — Pesquisa de temas repetitivos no STJ</a></p>
+    <p>🔗 <a class="link-ext" href="https://www.stj.jus.br/sites/portalp/Paginas/Comunicacao/Noticias/2023/09032023-Representacao-da-vitima-contra-autor-de-violencia-domestica-nao-precisa-ser-confirmada-em-audiencia.aspx" target="_blank">Notícia oficial do STJ sobre o julgamento</a></p>
+
+    <div class="exemplo">
+      <strong>Exemplo — Defesa:</strong> Seu cliente foi denunciado por perseguição/stalking (art. 147-A, CP) contra a ex-namorada — crime de ação penal pública condicionada à representação (§3º). Ela representou na delegacia, mas agora quer desistir. Pode se retratar? <strong>Sim</strong>, desde que: (a) ela manifeste expressamente esse desejo (por escrito ou oralmente), levando essa manifestação ao conhecimento do juiz; (b) essa manifestação chegue aos autos <strong>antes do recebimento da denúncia</strong>; (c) o juiz designe audiência especificamente para confirmar essa retratação. O que o advogado de defesa <strong>não pode fazer</strong>: pressionar, coagir, ameaçar ou chantagear a vítima para que se retrate — isso pode configurar crime de coação no curso do processo (art. 344, CP) e obstrução à justiça.
+    </div>
+  </div>
+
+  <div class="nav">
+    <button class="btn btn-s" onclick="ir(3)">← Voltar</button>
+    <button class="btn btn-p" onclick="ir(5)">Súmulas do STJ →</button>
+  </div>
+</div>
+
+<!-- ==================== TELA 5: SÚMULAS ==================== -->
+<div class="tela" id="t5">
+  <div class="badge">Etapa 6 de 9 — Súmulas do STJ</div>
+  <h1 class="titulo">Súmulas do STJ sobre <em>violência doméstica</em></h1>
+  <p class="desc">As Súmulas do STJ consolidam entendimentos que todo advogado criminalista precisa conhecer. Confira a redação completa de cada uma e sua aplicação prática.</p>
+
+  <div class="card">
+    <h3>Súmula 536 — STJ</h3>
+    <div class="redacao">
+      <span class="rotulo">Texto integral:</span>
+      "A suspensão condicional do processo e a transação penal não se aplicam na hipótese de delitos sujeitos ao rito da Lei Maria da Penha."
+    </div>
+    <p><strong>Aplicação prática:</strong> Consequência direta da ADC 19 (constitucionalidade do art. 41 da Lei Maria da Penha). Mesmo que o crime tenha pena mínima igual ou inferior a 1 ano (requisito do art. 89 da Lei 9.099/95), não cabe sursis processual nem transação penal se o rito é o da Lei Maria da Penha. Isso vale inclusive para vias de fato, ameaça e lesão corporal leve.</p>
+  </div>
+
+  <div class="card">
+    <h3>Súmula 542 — STJ</h3>
+    <div class="redacao">
+      <span class="rotulo">Texto integral:</span>
+      "A ação penal relativa ao crime de lesão corporal resultante de violência doméstica contra a mulher é pública incondicionada."
+    </div>
+    <p><strong>Aplicação prática:</strong> Esta é a súmula central desta aula. Reflete o entendimento fixado na ADI 4.424/DF. O crime de lesão corporal decorrente de violência doméstica contra a mulher — <strong>independentemente da extensão dos ferimentos</strong> (leve, grave ou gravíssima) — é processado mediante ação penal pública incondicionada. A falta de representação da vítima ou sua retratação são irrelevantes para esses crimes.</p>
+  </div>
+
+  <div class="card">
+    <h3>Súmula 588 — STJ</h3>
+    <div class="redacao">
+      <span class="rotulo">Texto integral:</span>
+      "A prática de crime ou contravenção penal contra a mulher com violência ou grave ameaça no ambiente doméstico impossibilita a substituição da pena privativa de liberdade por restritiva de direitos."
+    </div>
+    <p><strong>Aplicação prática:</strong> Mesmo que a pena fixada na sentença seja igual ou inferior a 4 anos (requisito do art. 44 do CP), o juiz <strong>não pode</strong> substituir a pena privativa de liberdade por restritiva de direitos se o crime foi praticado com violência ou grave ameaça contra a mulher em contexto doméstico. Isso impacta diretamente a sentença condenatória e limita as possibilidades de pena alternativa.</p>
+    <div class="alerta alerta-verde">
+      <strong>Para a defesa:</strong> Se o crime não envolve violência ou grave ameaça (por exemplo, violência patrimonial sem emprego de força), a Súmula 588 não se aplica e a substituição pode ser requerida. A defesa deve analisar cuidadosamente a conduta imputada.
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Súmula 589 — STJ</h3>
+    <div class="redacao">
+      <span class="rotulo">Texto integral:</span>
+      "É inaplicável o princípio da insignificância nos crimes ou contravenções penais praticados contra a mulher no âmbito das relações domésticas."
+    </div>
+    <p><strong>Aplicação prática:</strong> A defesa não pode arguir que a lesão foi "ínfima" ou que "não houve prejuízo significativo" para pedir a absolvição com base no princípio da insignificância. No contexto da violência doméstica, a tutela penal não se justifica apenas pelo resultado físico, mas pela proteção da dignidade e da integridade da mulher no ambiente doméstico. Mesmo um tapa, um empurrão ou vias de fato de baixa intensidade configuram infração penal e não admitem o reconhecimento da bagatela.</p>
+  </div>
+
+  <div class="card">
+    <h3>Súmula 600 — STJ</h3>
+    <div class="redacao">
+      <span class="rotulo">Texto integral:</span>
+      "Para a configuração da violência doméstica e familiar prevista no artigo 5º da Lei 11.340/2006 (Lei Maria da Penha) não se exige a coabitação entre autor e vítima."
+    </div>
+    <p><strong>Aplicação prática:</strong> Ex-namorados, ex-companheiros e ex-cônjuges estão abrangidos pela Lei Maria da Penha mesmo que nunca tenham morado juntos ou que já não morem mais juntos. O vínculo afetivo (presente ou passado) é suficiente. Isso é relevante para a competência do juízo: a defesa não pode arguir incompetência da Vara de Violência Doméstica alegando que "eles não moravam juntos".</p>
+  </div>
+
+  <div class="nav">
+    <button class="btn btn-s" onclick="ir(4)">← Voltar</button>
+    <button class="btn btn-p" onclick="ir(6)">Alterações legislativas →</button>
+  </div>
+</div>
+
+<!-- ==================== TELA 6: ALTERAÇÕES LEGISLATIVAS ==================== -->
+<div class="tela" id="t6">
+  <div class="badge">Etapa 7 de 9 — Alterações legislativas</div>
+  <h1 class="titulo">As leis que <em>mudaram</em> a ação penal</h1>
+  <p class="desc">Quatro alterações legislativas transformaram o cenário da ação penal na violência doméstica. Para cada uma, você precisa conhecer: o que mudou, a redação do artigo (antes e depois), a data de vigência e o impacto prático.</p>
+
+  <!-- LEI 13.718/2018 -->
+  <div class="card">
+    <h3><span class="tag tag-lei">Lei 13.718/2018</span> Crimes contra a dignidade sexual — ação penal pública incondicionada</h3>
+    <p><strong>Publicação no DOU:</strong> 25/9/2018<br>
+    <strong>Vigência:</strong> 25/9/2018 (data da publicação — art. 4º da lei)</p>
+
+    <p><strong>O que a lei fez:</strong> Deu nova redação ao art. 225 do Código Penal, tornando <strong>todos</strong> os crimes contra a dignidade sexual (Capítulos I e II do Título VI do CP) de ação penal pública incondicionada, independentemente da idade ou condição da vítima. Antes, a regra geral era ação penal pública condicionada à representação (com exceção de vítima menor de 18 anos ou vulnerável).</p>
+
+    <h4>Redação do art. 225 do CP — antes e depois:</h4>
+    <div class="comparativo">
+      <div class="comp-antes">
+        <div class="comp-titulo" style="color:#EDB0C5">❌ Redação anterior (Lei 12.015/2009):</div>
+        <p style="font-size:15px;font-style:italic;color:#EDB0C5">"Art. 225. Nos crimes definidos nos Capítulos I e II deste Título, procede-se mediante ação penal pública condicionada à representação.<br><br>Parágrafo único. Procede-se, entretanto, mediante ação penal pública incondicionada se a vítima é menor de 18 (dezoito) anos ou pessoa vulnerável."</p>
+      </div>
+      <div class="comp-depois">
+        <div class="comp-titulo" style="color:#9FE1CB">✅ Redação atual (Lei 13.718/2018):</div>
+        <p style="font-size:15px;font-style:italic;color:#9FE1CB">"Art. 225. Nos crimes definidos nos Capítulos I e II deste Título, procede-se mediante ação penal pública incondicionada.<br><br>Parágrafo único. (Revogado)."</p>
+      </div>
+    </div>
+
+    <p><strong>Impacto na Lei Maria da Penha:</strong> Antes da Lei 13.718/2018, o estupro de mulher adulta era, em regra, ação penal pública condicionada à representação — ou seja, a vítima de violência sexual doméstica precisava representar para que o MP pudesse agir. Com a alteração, <strong>todos</strong> os crimes sexuais passaram a ser de ação pública incondicionada: estupro (art. 213), importunação sexual (art. 215-A), assédio sexual (art. 216-A), divulgação de cena de estupro ou pornografia (art. 218-C), entre outros.</p>
+
+    <div class="alerta alerta-verde">
+      <strong>Para a defesa — irretroatividade:</strong> Fatos praticados <strong>antes de 25/9/2018</strong> continuam regidos pela regra anterior (ação condicionada à representação para vítima adulta não vulnerável). A mudança da natureza da ação penal é norma de natureza híbrida/mista (penal e processual) e, sendo mais gravosa para o réu, não retroage (art. 5º, XL, CF). Se o seu cliente é acusado de crime sexual praticado antes dessa data, verifique se houve representação tempestiva.
+    </div>
+  </div>
+
+  <!-- LEI 14.188/2021 -->
+  <div class="card">
+    <h3><span class="tag tag-lei">Lei 14.188/2021</span> Violência psicológica contra a mulher — novo crime autônomo</h3>
+    <p><strong>Publicação no DOU:</strong> 29/7/2021<br>
+    <strong>Vigência:</strong> 29/7/2021 (data da publicação — art. 6º da lei: "Esta Lei entra em vigor na data de sua publicação")</p>
+
+    <p><strong>O que a lei criou:</strong> Inseriu no Código Penal o <strong>art. 147-B</strong>, tipificando como crime autônomo a violência psicológica contra a mulher. Até então, a violência psicológica era definida no art. 7º, inciso II, da Lei Maria da Penha, mas não havia um tipo penal específico — as condutas eram enquadradas em tipos penais já existentes (ameaça, constrangimento ilegal, etc.).</p>
+
+    <h4>Redação completa do art. 147-B do CP:</h4>
+    <div class="redacao">
+      <span class="rotulo">Art. 147-B, CP (incluído pela Lei 14.188/2021):</span>
+      "Causar dano emocional à mulher que a prejudique e perturbe seu pleno desenvolvimento ou que vise a degradar ou a controlar suas ações, comportamentos, crenças e decisões, mediante ameaça, constrangimento, humilhação, manipulação, isolamento, chantagem, ridicularização, limitação do direito de ir e vir ou qualquer outro meio que cause prejuízo à sua saúde psicológica e à autodeterminação:<br><br>
+      Pena — reclusão, de 6 (seis) meses a 2 (dois) anos, e multa, se a conduta não constitui crime mais grave.<br><br>
+      Parágrafo único. A pena é aumentada de metade se o crime é cometido mediante uso de inteligência artificial ou de qualquer outro recurso tecnológico que altere imagem ou som da vítima. (Incluído pela Lei 15.123/2025)"
+    </div>
+
+    <p><strong>Natureza da ação penal:</strong> Ação penal pública <strong>incondicionada</strong>. O tipo penal não prevê exigência de representação.</p>
+
+    <p><strong>Pontos importantes para o advogado:</strong></p>
+    <ul>
+      <li>O crime é subsidiário — a cláusula "se a conduta não constitui crime mais grave" significa que, se a mesma conduta configurar lesão corporal, ameaça com pena mais severa ou outro crime mais grave, aplica-se o tipo penal mais grave, e não o art. 147-B.</li>
+      <li>O sujeito passivo é qualquer mulher — o tipo não se restringe ao contexto de violência doméstica. Porém, quando ocorre no ambiente doméstico e familiar, aplica-se também a Lei Maria da Penha (com todas as suas restrições e medidas protetivas).</li>
+      <li>No contexto da Lei Maria da Penha, mesmo a pena máxima sendo de 2 anos (que em tese admitiria sursis processual), este benefício é vedado pelo art. 41 da Lei 11.340/2006 (Súmula 536 do STJ).</li>
+      <li>O parágrafo único, incluído pela Lei 15.123/2025, acrescenta causa de aumento de metade da pena se o crime é cometido mediante uso de inteligência artificial ou outro recurso tecnológico que altere imagem ou som da vítima (deepfakes, por exemplo).</li>
+    </ul>
+  </div>
+
+  <!-- LEI 14.994/2024 -->
+  <div class="card">
+    <h3><span class="tag tag-lei">Lei 14.994/2024</span> Ameaça — ação penal pública incondicionada e pena em dobro</h3>
+    <p><strong>Publicação no DOU:</strong> 10/10/2024<br>
+    <strong>Vigência:</strong> 10/10/2024 (data da publicação)</p>
+
+    <p><strong>O que a lei fez:</strong> Acrescentou os §§1º e 2º ao art. 147 do Código Penal, trazendo duas mudanças profundas no crime de ameaça:</p>
+    <ol>
+      <li><strong>Pena em dobro</strong> (§1º): quando a ameaça é praticada contra mulher por razões da condição do sexo feminino, a pena é aplicada em dobro. A pena base do crime é detenção de 1 a 6 meses — com a duplicação, a pena passa a ser de 2 meses a 1 ano de detenção.</li>
+      <li><strong>Ação penal pública incondicionada</strong> (§2º): o crime de ameaça em geral continua sendo de ação penal pública condicionada à representação, <strong>exceto</strong> quando praticado contra mulher por razões da condição do sexo feminino — nesse caso, a ação é pública incondicionada.</li>
+    </ol>
+
+    <h4>Redação completa do art. 147 do CP (com os §§ incluídos pela Lei 14.994/2024):</h4>
+    <div class="redacao">
+      <span class="rotulo">Art. 147, CP — Ameaça:</span>
+      "Art. 147. Ameaçar alguém, por palavra, escrito ou gesto, ou qualquer outro meio simbólico, de causar-lhe mal injusto e grave:<br>
+      Pena — detenção, de um a seis meses, ou multa.<br><br>
+      §1º Se o crime é cometido contra a mulher por razões da condição do sexo feminino, nos termos do §1º do art. 121-A deste Código, aplica-se a pena em dobro. <span class='tag-novo'>Incluído pela Lei 14.994/2024</span><br><br>
+      §2º Somente se procede mediante representação, exceto na hipótese prevista no §1º deste artigo. <span class='tag-novo'>Incluído pela Lei 14.994/2024</span>"
+    </div>
+
+    <p><strong>O que são "razões da condição do sexo feminino"?</strong> O §1º do art. 147 remete ao §1º do art. 121-A do CP (feminicídio), que define duas hipóteses: (I) violência doméstica e familiar; ou (II) menosprezo ou discriminação à condição de mulher. Portanto, a ameaça será incondicionada e com pena em dobro quando praticada em contexto de violência doméstica/familiar <strong>ou</strong> por menosprezo/discriminação à condição de mulher.</p>
+
+    <div class="alerta alerta-amarelo">
+      <strong>Para a defesa — estratégias possíveis:</strong><br>
+      (1) <strong>Irretroatividade:</strong> A mudança se aplica apenas a fatos praticados a partir de 10/10/2024. Ameaças anteriores a essa data permanecem como ação penal pública condicionada à representação (salvo se já se enquadrarem em outro tipo incondicionado).<br>
+      (2) <strong>Elemento normativo:</strong> A lei exige que a ameaça seja praticada "contra a mulher por razões da condição do sexo feminino". Se o MP não demonstrar esse elemento na denúncia, a defesa pode arguir que se trata de ameaça na forma simples do <em>caput</em> (condicionada à representação — §2º). Essa tese é particularmente relevante em conflitos familiares genéricos que não envolvam motivação de gênero.<br>
+      (3) <strong>Dosimetria:</strong> A pena em dobro do §1º é causa especial de aumento, não qualificadora. Deve ser aplicada na terceira fase da dosimetria.
+    </div>
+  </div>
+
+  <!-- LEI 15.380/2026 -->
+  <div class="card">
+    <h3><span class="tag tag-lei">Lei 15.380/2026</span> Audiência de retratação — art. 16, parágrafo único</h3>
+    <p><strong>Publicação no DOU:</strong> 7/4/2026<br>
+    <strong>Vigência:</strong> 7/4/2026 (data da publicação)</p>
+
+    <p><strong>O que a lei fez:</strong> Acrescentou parágrafo único ao art. 16 da Lei 11.340/2006 (Lei Maria da Penha), positivando no texto legal os entendimentos que já haviam sido firmados pelo STJ no Tema Repetitivo 1.167 (8/3/2023) e pelo STF na ADI 7.267 (21/8/2023).</p>
+
+    <h4>Redação completa do art. 16 da Lei Maria da Penha (com o parágrafo único incluído pela Lei 15.380/2026):</h4>
+    <div class="redacao">
+      <span class="rotulo">Art. 16 da Lei 11.340/2006:</span>
+      "Art. 16. Nas ações penais públicas condicionadas à representação da ofendida de que trata esta Lei, só será admitida a renúncia à representação perante o juiz, em audiência especialmente designada com tal finalidade, antes do recebimento da denúncia e ouvido o Ministério Público.<br><br>
+      Parágrafo único. A audiência prevista no <em>caput</em> deste artigo tem por objetivo confirmar a retratação da vítima, não a representação, e somente será designada pelo juiz mediante manifestação expressa de seu desejo de se retratar, apresentada por escrito ou oralmente antes do recebimento da denúncia, devendo a retratação ser devidamente registrada nos autos. <span class='tag-novo'>Incluído pela Lei 15.380/2026</span>"
+    </div>
+
+    <p><strong>Os três pilares da alteração:</strong></p>
+    <ol>
+      <li><strong>A audiência confirma a retratação, não a representação:</strong> Se a vítima representou, presume-se que ela quer prosseguir. Não cabe ao juiz convocar audiência para "confirmar" se ela quer manter a representação. A representação já foi feita e é válida até manifestação expressa em contrário.</li>
+      <li><strong>Designação apenas mediante manifestação expressa da vítima:</strong> O juiz não pode designar a audiência de ofício. A vítima é quem deve, por sua própria iniciativa (<em>sponte propria</em>), manifestar o desejo de se retratar — por escrito ou oralmente — e essa manifestação deve chegar ao juiz antes do recebimento da denúncia.</li>
+      <li><strong>Registro nos autos:</strong> A retratação deve ser formalmente registrada nos autos do processo. Isso afasta qualquer possibilidade de "retratação tácita" — não existe retratação presumida por silêncio ou não comparecimento.</li>
+    </ol>
+
+    <div class="exemplo">
+      <strong>Para a defesa:</strong> Se o seu cliente está sendo processado por crime de ação penal pública condicionada à representação (como stalking) e a vítima quer se retratar, oriente-a a manifestar expressamente esse desejo, por escrito (petição ao juiz) ou oralmente (perante o juiz ou a autoridade competente), <strong>antes</strong> de o juiz receber a denúncia. Após o recebimento da denúncia, a retratação pela via do art. 16 não é mais possível. Atenção: o advogado de defesa não pode ser o intermediário dessa manifestação — a vítima deve manifestar o desejo por conta própria, sob pena de se configurar coação.
+    </div>
+
+    <div class="exemplo">
+      <strong>Para o advogado da vítima:</strong> Se a sua cliente representou e não se manifestou pela retratação, o juiz <strong>não pode</strong> designar audiência de ofício para perguntá-la se quer desistir. Se isso ocorrer, impugne imediatamente com base: (a) no parágrafo único do art. 16 da Lei Maria da Penha (Lei 15.380/2026); (b) na ADI 7.267/DF (STF); (c) no Tema Repetitivo 1.167 (STJ). A audiência designada de ofício é nula e qualquer retratação obtida nessas condições não pode produzir efeitos.
+    </div>
+
+    <p>🔗 <a class="link-ext" href="https://www.planalto.gov.br/ccivil_03/_ato2023-2026/2026/lei/L15380.htm" target="_blank">Lei 15.380/2026 — Texto integral no Planalto</a></p>
+  </div>
+
+  <div class="nav">
+    <button class="btn btn-s" onclick="ir(5)">← Voltar</button>
+    <button class="btn btn-p" onclick="ir(7)">Quiz de fixação →</button>
+  </div>
+</div>
+
+<!-- ==================== TELA 7: QUIZ ==================== -->
+<div class="tela" id="t7">
+  <div class="badge">Etapa 8 de 9 — Fixação</div>
+  <h1 class="titulo">Teste seu <em>domínio</em></h1>
+  <p class="desc">Sete questões sobre os temas abordados nesta aula. Feedback imediato com explicação.</p>
+  <div id="quiz"></div>
+  <div class="nav" style="margin-top:32px">
+    <button class="btn btn-s" onclick="ir(6)">← Voltar</button>
+    <button class="btn btn-p" onclick="ir(8)">Resumo final →</button>
+  </div>
+</div>
+
+<!-- ==================== TELA 8: RESUMO ==================== -->
+<div class="tela" id="t8">
+  <div class="badge">Etapa 9 de 9 — Resumo e links</div>
+  <h1 class="titulo">O que <em>fixar</em> desta aula</h1>
+
+  <div class="card">
+    <h3>Mapa rápido — Ação penal na Lei Maria da Penha</h3>
+    <div class="tabela-c"><table>
+      <tr><th>Crime</th><th>Ação penal</th><th>Fundamento</th></tr>
+      <tr><td>Lesão corporal (qualquer grau)</td><td><span class="tag tag-inc">Pública incondicionada</span></td><td>Súmula 542 STJ / ADI 4.424/DF</td></tr>
+      <tr><td>Ameaça contra mulher por razões de gênero (art. 147, §§1º e 2º)</td><td><span class="tag tag-inc">Pública incondicionada</span></td><td>Lei 14.994/2024</td></tr>
+      <tr><td>Crimes sexuais (arts. 213 a 218-C)</td><td><span class="tag tag-inc">Pública incondicionada</span></td><td>Art. 225 CP — Lei 13.718/2018</td></tr>
+      <tr><td>Violência psicológica (art. 147-B)</td><td><span class="tag tag-inc">Pública incondicionada</span></td><td>Lei 14.188/2021</td></tr>
+      <tr><td>Descumprimento de medida protetiva (art. 24-A)</td><td><span class="tag tag-inc">Pública incondicionada</span></td><td>Lei Maria da Penha</td></tr>
+      <tr><td>Feminicídio (art. 121-A)</td><td><span class="tag tag-inc">Pública incondicionada</span></td><td>Lei 14.994/2024</td></tr>
+      <tr><td>Vicaricídio (art. 121-B)</td><td><span class="tag tag-inc">Pública incondicionada</span></td><td>Lei 15.383/2026</td></tr>
+      <tr><td>Vias de fato (art. 21 LCP)</td><td><span class="tag tag-inc">Pública incondicionada</span></td><td>STF, Rcl 27.342</td></tr>
+      <tr><td>Stalking / perseguição (art. 147-A, §3º)</td><td><span class="tag tag-cond">Pública condicionada à representação</span></td><td>Art. 147-A, §3º, CP — qualquer modalidade</td></tr>
+      <tr><td>Calúnia, difamação, injúria simples</td><td><span class="tag tag-priv">Privada (queixa-crime)</span></td><td>Art. 145 CP (com exceções)</td></tr>
+      <tr><td>Injúria racial/preconceituosa (art. 140, §3º)</td><td><span class="tag tag-inc">Pública incondicionada</span></td><td>Lei 14.532/2023</td></tr>
+    </table></div>
+  </div>
+
+  <div class="card">
+    <h3>Checklist prático para o advogado</h3>
+    <ol>
+      <li><strong>Identifique o crime</strong> → Verifique a natureza da ação penal usando o mapa acima</li>
+      <li><strong>Se ação pública incondicionada:</strong> A vítima não pode desistir. Na defesa: foque no mérito. Na assistência: habilite-se como assistente de acusação</li>
+      <li><strong>Se ação pública condicionada à representação:</strong> Verifique representação tempestiva (6 meses). Se a vítima quer se retratar: manifestação expressa antes do recebimento da denúncia (art. 16, parágrafo único — Lei 15.380/2026)</li>
+      <li><strong>Se ação privada:</strong> Prazo decadencial de 6 meses. Requerimento formal para inquérito (art. 5º, §5º, CPP). Queixa-crime por advogado ao juiz</li>
+      <li><strong>Cuidado com irretroatividade:</strong> Lei 14.994/2024 (vigor 10/10/2024), Lei 13.718/2018 (vigor 25/9/2018), Lei 14.188/2021 (vigor 29/7/2021) — só valem para fatos posteriores à vigência</li>
+      <li><strong>Nunca esqueça:</strong> Na Lei Maria da Penha, não cabe transação penal, sursis processual, composição civil (ADC 19 + Súmula 536 STJ), princípio da insignificância (Súmula 589) nem substituição por restritiva de direitos em crimes com violência ou grave ameaça (Súmula 588)</li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <h3>Julgados, súmulas e links desta aula</h3>
+    <p><strong>Julgados do STF:</strong></p>
+    <ul>
+      <li>ADC 19 — STF, Plenário, 9/2/2012 — <a class="link-ext" href="https://portal.stf.jus.br/processos/detalhe.asp?incidente=2584650" target="_blank">Acessar no STF</a></li>
+      <li>ADI 4.424/DF — STF, Plenário, 9/2/2012 — <a class="link-ext" href="https://portal.stf.jus.br/processos/detalhe.asp?incidente=3897992" target="_blank">Acessar no STF</a></li>
+      <li>ADI 7.267/DF — STF, Plenário, 21/8/2023 — <a class="link-ext" href="https://portal.stf.jus.br/noticias/verNoticiaDetalhe.asp?idConteudo=512899&tip=UN" target="_blank">Acessar no STF</a></li>
+    </ul>
+    <p><strong>Tema repetitivo do STJ:</strong></p>
+    <ul>
+      <li>Tema 1.167 — STJ, 3ª Seção, REsp 1.977.547-MG, 8/3/2023 — <a class="link-ext" href="https://processo.stj.jus.br/repetitivos/temas_repetitivos/pesquisa.jsp?novaConsulta=true&tipo_pesquisa=T&cod_tema_inicial=1167&cod_tema_final=1167" target="_blank">Acessar no STJ</a></li>
+    </ul>
+    <p><strong>Súmulas do STJ:</strong> 536, 542, 588, 589, 600</p>
+    <p><strong>Legislação:</strong></p>
+    <ul>
+      <li>Lei 13.718/2018 (crimes sexuais) — <a class="link-ext" href="https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13718.htm" target="_blank">Planalto</a></li>
+      <li>Lei 14.188/2021 (violência psicológica) — <a class="link-ext" href="https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/l14188.htm" target="_blank">Planalto</a></li>
+      <li>Lei 14.994/2024 (feminicídio e ameaça) — <a class="link-ext" href="https://www.planalto.gov.br/ccivil_03/_ato2023-2026/2024/lei/l14994.htm" target="_blank">Planalto</a></li>
+      <li>Lei 15.380/2026 (audiência de retratação) — <a class="link-ext" href="https://www.planalto.gov.br/ccivil_03/_ato2023-2026/2026/lei/L15380.htm" target="_blank">Planalto</a></li>
+    </ul>
+  </div>
+
+  <div class="card" style="text-align:center">
+    <h3>Material de Apoio em PDF</h3>
+    <p>Baixe o conteúdo completo desta aula para consultar offline, imprimir ou levar para a audiência.</p>
+    <a href="https://cdupret.github.io/arquivosLMP/material_m04_a01_acao_penal.pdf" target="_blank" class="btn btn-p" style="display:inline-flex;margin-top:12px;text-decoration:none">📄 Baixar PDF — Aula 1</a>
+  </div>
+
+  <div class="concluido">
+    <div class="ic">✓</div>
+    <div class="tit">Aula 1 do Módulo 4 concluída</div>
+    <div class="sub">Você domina agora a natureza da ação penal em cada crime no contexto da Lei Maria da Penha — da teoria à prática.<br>Continue para a Aula 2: A audiência do art. 16 — como se conduz.</div>
+  </div>
+
+  <div class="nav">
+    <button class="btn btn-s" onclick="ir(0)">↺ Rever do início</button>
+    <button class="btn btn-s" onclick="ir(6)">← Voltar às leis</button>
+  </div>
+</div>
+
+</div><!-- /main -->
+
+<script>
+let atual=0;
+const total=9;
+
+function ir(n){
+  document.querySelectorAll('.tela').forEach(t=>t.classList.remove('on'));
+  document.getElementById('t'+n).classList.add('on');
+  for(let i=0;i<total;i++){
+    const d=document.getElementById('d'+i);
+    const s=d.parentElement.querySelector('.slabel');
+    d.className='dot';s.className='slabel';
+    if(i<n){d.classList.add('d');s.classList.add('d')}
+    else if(i===n){d.classList.add('a');s.classList.add('a')}
+    if(i<total-1){
+      const lid='l'+i;
+      const l=document.getElementById(lid);
+      if(l) l.className=i<n?'sline d':'sline';
+    }
+  }
+  atual=n;
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function toggleAcc(btn){
+  const b=btn.nextElementSibling;
+  b.classList.toggle('open');
+  btn.querySelector('span:last-child').textContent=b.classList.contains('open')?'▲':'▼';
+}
+
+const perguntas=[
+  {q:"1. Maria foi agredida pelo marido e sofreu lesão corporal leve. Ela pode desistir do processo?",
+   opts:["Sim, basta retratar-se na delegacia","Sim, desde que compareça à audiência do art. 16 da Lei Maria da Penha","Não — lesão corporal na Lei Maria da Penha é de ação penal pública incondicionada","Sim, se ela não comparecer à audiência, ocorre retratação tácita"],
+   correta:2,feed:"Correto! A ação penal relativa ao crime de lesão corporal resultante de violência doméstica contra a mulher é pública incondicionada (Súmula 542 do STJ + ADI 4.424/DF do STF). A vítima não pode desistir do processo, pois a titularidade da ação é do Ministério Público."},
+
+  {q:"2. João ameaçou a ex-companheira de morte em março de 2025. Qual a natureza da ação penal?",
+   opts:["Ação penal pública incondicionada — o art. 147, §§1º e 2º, do CP (Lei 14.994/2024) já estava em vigor","Ação penal pública condicionada à representação — a ameaça depende de representação","Ação penal privada — é crime contra a honra","Depende — só é incondicionada se houver lesão corporal junto"],
+   correta:0,feed:"Correto! A Lei 14.994/2024, em vigor desde 10/10/2024, incluiu os §§1º e 2º no art. 147 do CP. O §1º dobra a pena quando a ameaça é praticada contra mulher por razões da condição do sexo feminino, e o §2º torna a ação penal pública incondicionada nessa hipótese. Fato de março/2025 já se sujeita à nova regra."},
+
+  {q:"3. O juiz, sem nenhuma provocação da vítima, designou audiência do art. 16 da Lei Maria da Penha para perguntar se ela queria manter a representação. Isso é correto?",
+   opts:["Sim, o juiz deve sempre designar essa audiência de ofício","Sim, é ato processual obrigatório previsto na Lei Maria da Penha","Não — o STF (ADI 7.267/DF) e o STJ (Tema 1.167) proíbem a designação de ofício, e a Lei 15.380/2026 positivou esse entendimento","Depende de o Ministério Público concordar"],
+   correta:2,feed:"Correto! A ADI 7.267/DF (STF, 21/8/2023) declarou inconstitucional a designação de ofício da audiência de retratação. O Tema 1.167 do STJ (8/3/2023) fixou tese no mesmo sentido. A Lei 15.380/2026 (vigência 7/4/2026) positivou esses entendimentos no parágrafo único do art. 16 da Lei Maria da Penha."},
+
+  {q:"4. Ana foi vítima de difamação reiterada pelo ex-namorado nas redes sociais. Registrou BO, mas não ofereceu queixa-crime. Passados 8 meses, quer processar criminalmente. O que acontece?",
+   opts:["O MP pode oferecer denúncia a qualquer tempo, pois é crime praticado na Lei Maria da Penha","Ana precisa representar perante o juiz na audiência do art. 16","Ocorreu decadência — o prazo de 6 meses para oferecimento da queixa-crime já expirou","Ana pode pedir ao delegado que instaure inquérito de ofício"],
+   correta:2,feed:"Correto! Difamação é crime de ação penal privada (art. 145 do CP — não alterado pela Lei Maria da Penha). O prazo decadencial para oferecimento de queixa-crime é de 6 meses (art. 38, CPP). Passado o prazo, ocorre extinção da punibilidade por decadência. O BO não substitui a queixa-crime, e o delegado não pode instaurar inquérito de ofício em crime de ação privada (art. 5º, §5º, CPP)."},
+
+  {q:"5. A Lei 15.380/2026 acrescentou parágrafo único ao art. 16 da Lei Maria da Penha. Qual das alternativas NÃO reflete o conteúdo da alteração?",
+   opts:["A audiência tem por objetivo confirmar a retratação, não a representação","A audiência somente será designada pelo juiz mediante manifestação expressa da vítima","A retratação deve ser devidamente registrada nos autos","A vítima pode se retratar mesmo após o recebimento da denúncia"],
+   correta:3,feed:"Correto! O parágrafo único do art. 16 mantém a regra do caput: a retratação somente é admitida ANTES do recebimento da denúncia. Após o recebimento da denúncia pelo juiz, não há mais possibilidade de retratação pela via do art. 16."},
+
+  {q:"6. Qual lei tornou todos os crimes contra a dignidade sexual (arts. 213 a 218-C do CP) de ação penal pública incondicionada, alterando o art. 225 do CP?",
+   opts:["Lei 12.015/2009","Lei 13.718/2018, com vigência em 25/9/2018","Lei 14.188/2021","Lei 14.994/2024"],
+   correta:1,feed:"Correto! A Lei 13.718/2018, publicada e com vigência em 25/9/2018, deu nova redação ao art. 225 do CP, tornando todos os crimes dos Capítulos I e II do Título VI de ação penal pública incondicionada. A redação anterior (Lei 12.015/2009) previa ação condicionada como regra geral."},
+
+  {q:"7. Qual é a natureza da ação penal no crime de perseguição/stalking (art. 147-A do CP)?",
+   opts:["Ação penal pública incondicionada","Ação penal pública condicionada à representação, conforme o §3º do art. 147-A, em qualquer modalidade","Ação penal privada — a vítima precisa oferecer queixa-crime","Depende — se for no contexto da Lei Maria da Penha, é incondicionada"],
+   correta:1,feed:"Correto! O crime de perseguição/stalking (art. 147-A do CP) é de ação penal pública condicionada à representação em qualquer modalidade, conforme o §3º do mesmo artigo."}
+];
+
+function renderQuiz(){
+  const c=document.getElementById('quiz');
+  let h='';
+  perguntas.forEach((p,i)=>{
+    h+=`<div class="quiz-q"><h4>${p.q}</h4>`;
+    p.opts.forEach((o,j)=>{
+      h+=`<button class="quiz-opt" data-q="${i}" data-o="${j}" onclick="resp(this,${i},${j})">${String.fromCharCode(65+j)}) ${o}</button>`;
+    });
+    h+=`<div class="quiz-feed" id="f${i}"></div></div>`;
+  });
+  c.innerHTML=h;
+}
+
+function resp(btn,qi,oi){
+  const q=perguntas[qi];
+  document.querySelectorAll(`[data-q="${qi}"]`).forEach(b=>{
+    b.disabled=true;
+    if(+b.dataset.o===q.correta) b.classList.add('certo');
+    else if(b===btn&&oi!==q.correta) b.classList.add('errado');
+  });
+  const f=document.getElementById('f'+qi);
+  f.className=`quiz-feed show ${oi===q.correta?'alerta-verde':'alerta-vermelho'}`;
+  f.innerHTML=oi===q.correta?'✅ '+q.feed:'❌ Incorreto. '+q.feed;
+}
+
+renderQuiz();
+</script>
+</body>
+</html>
