@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Módulo 04 · Aula 5 — Retratação x Renúncia x Perdão · Penha em Cena</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--rosa:#D4537E;--rosa2:#A33360;--fundo:#0E0B14;--fundo2:#17122A;--fundo3:#211A38;--roxo:#7F77DD;--texto:#F0EAF8;--muted:#9B8FBC;--borda:rgba(212,83,126,0.2);--verde:#1D9E75;--dourado:#C9963A;--azul:#3A8ADC}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--fundo);color:var(--texto);min-height:100vh;font-size:18px;line-height:1.75;overflow-x:hidden}
+.bg-p{position:fixed;inset:0;pointer-events:none;z-index:0;background:radial-gradient(ellipse 60% 40% at 20% 20%,rgba(127,119,221,.07) 0%,transparent 60%),radial-gradient(ellipse 40% 60% at 80% 80%,rgba(212,83,126,.06) 0%,transparent 60%),radial-gradient(ellipse 30% 30% at 50% 50%,rgba(201,150,58,.03) 0%,transparent 70%)}
+.header{position:sticky;top:0;z-index:100;background:rgba(14,11,20,.95);border-bottom:1px solid var(--borda);padding:16px 32px;display:flex;align-items:center;gap:14px;backdrop-filter:blur(16px)}
+.logo{font-family:'Playfair Display',serif;font-size:20px;color:var(--rosa);font-weight:700}
+.sep{color:var(--muted);font-size:14px}.info{font-size:15px;color:var(--muted)}
+.prog{background:var(--fundo2);border-bottom:1px solid var(--borda);padding:14px 24px;position:sticky;top:57px;z-index:99}
+.steps{max-width:860px;margin:0 auto;display:flex;align-items:center}
+.step{display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;cursor:pointer;border:none;background:none}
+.dot{width:28px;height:28px;border-radius:50%;border:2px solid rgba(155,143,188,.25);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;color:var(--muted);transition:.3s}
+.dot.a{background:var(--rosa);border-color:var(--rosa);color:#fff;box-shadow:0 0 18px rgba(212,83,126,.4)}
+.dot.d{background:var(--verde);border-color:var(--verde);color:#fff}
+.slabel{font-size:10px;color:var(--muted);white-space:nowrap}.slabel.a{color:var(--rosa)}.slabel.d{color:var(--verde)}
+.sline{flex:1;height:2px;background:rgba(155,143,188,.15);margin-bottom:14px;transition:.3s}.sline.d{background:var(--verde)}
+.main{max-width:860px;margin:0 auto;padding:44px 32px 100px;position:relative;z-index:1}
+.tela{display:none;animation:fadeUp .4s ease}.tela.on{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.badge{display:inline-flex;align-items:center;background:rgba(212,83,126,.12);border:1px solid rgba(212,83,126,.25);color:var(--rosa);padding:8px 18px;border-radius:20px;font-size:14px;font-weight:500;margin-bottom:24px}
+.titulo{font-family:'Playfair Display',serif;font-size:clamp(26px,5vw,38px);font-weight:900;line-height:1.2;margin-bottom:14px}
+.titulo em{font-style:normal;color:var(--rosa)}
+.desc{font-size:19px;color:var(--muted);margin-bottom:36px;max-width:720px;line-height:1.8}
+.card{background:var(--fundo2);border:1px solid var(--borda);border-radius:16px;padding:32px;margin-bottom:24px;transition:border-color .2s}
+.card:hover{border-color:rgba(212,83,126,.35)}
+.card h3{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;margin-bottom:16px;line-height:1.3}
+.card h4{font-size:20px;font-weight:600;margin:20px 0 12px;color:var(--rosa)}
+.card p,.card li{font-size:17px;line-height:1.85;margin-bottom:12px}
+.card ul{padding-left:22px}.card ul li{margin-bottom:8px}
+.card ol{padding-left:22px}.card ol li{margin-bottom:10px}
+.tag{display:inline-block;padding:5px 14px;border-radius:12px;font-size:13px;font-weight:600;margin-right:6px;margin-bottom:6px}
+.tag-ret{background:rgba(212,83,126,.15);color:#EDB0C5;border:1px solid rgba(212,83,126,.3)}
+.tag-ren{background:rgba(127,119,221,.15);color:#B5B0E8;border:1px solid rgba(127,119,221,.3)}
+.tag-per{background:rgba(201,150,58,.15);color:#E8C97A;border:1px solid rgba(201,150,58,.3)}
+.tag-novo{background:rgba(29,158,117,.15);color:#9FE1CB;border:1px solid rgba(29,158,117,.3);font-size:11px;padding:3px 10px}
+.alerta{padding:22px 26px;border-radius:14px;margin:20px 0;font-size:17px;line-height:1.85}
+.alerta-verde{background:rgba(29,158,117,.1);border:1px solid rgba(29,158,117,.25);color:#9FE1CB}
+.alerta-amarelo{background:rgba(201,150,58,.1);border:1px solid rgba(201,150,58,.25);color:#E8C97A}
+.alerta-vermelho{background:rgba(212,83,126,.08);border:1px solid rgba(212,83,126,.2);color:#EDB0C5}
+.alerta-info{background:rgba(127,119,221,.1);border:1px solid rgba(127,119,221,.25);color:#B5B0E8}
+.exemplo{background:rgba(127,119,221,.06);border-left:3px solid var(--roxo);padding:22px 26px;border-radius:0 14px 14px 0;margin:20px 0;font-size:17px;line-height:1.85}
+.exemplo strong{color:var(--roxo)}
+.redacao{background:rgba(201,150,58,.08);border:1px solid rgba(201,150,58,.2);border-radius:12px;padding:20px 24px;margin:16px 0;font-size:16px;line-height:1.8;font-style:italic;color:#E8C97A}
+.redacao .rotulo{font-style:normal;font-weight:600;font-size:14px;margin-bottom:8px;display:block;color:var(--dourado)}
+.tabela-c{overflow-x:auto;margin:20px 0}
+table{width:100%;border-collapse:collapse;font-size:15px}
+th{background:rgba(212,83,126,.15);color:var(--rosa);padding:14px 16px;text-align:left;font-weight:600;border-bottom:2px solid rgba(212,83,126,.3)}
+td{padding:14px 16px;border-bottom:1px solid rgba(155,143,188,.1);vertical-align:top}
+tr:hover{background:rgba(127,119,221,.04)}
+.link-ext{color:var(--roxo);text-decoration:underline;font-weight:500}.link-ext:hover{color:var(--rosa)}
+.quiz-q{background:var(--fundo2);border:1px solid var(--borda);border-radius:16px;padding:28px;margin-bottom:18px}
+.quiz-q h4{font-size:18px;font-weight:500;margin-bottom:16px;line-height:1.6}
+.quiz-opt{display:block;width:100%;text-align:left;padding:14px 18px;margin-bottom:10px;border:2px solid rgba(155,143,188,.15);border-radius:10px;background:var(--fundo3);font-size:16px;color:var(--texto);cursor:pointer;transition:.2s;font-family:'DM Sans',sans-serif}
+.quiz-opt:hover{border-color:var(--roxo);background:rgba(127,119,221,.08)}
+.quiz-opt.certo{border-color:var(--verde);background:rgba(29,158,117,.1);color:#9FE1CB}
+.quiz-opt.errado{border-color:var(--rosa);background:rgba(212,83,126,.1);color:#EDB0C5}
+.quiz-opt:disabled{cursor:default;opacity:.85}
+.quiz-feed{margin-top:12px;padding:16px 18px;border-radius:10px;font-size:16px;line-height:1.75;display:none}
+.quiz-feed.show{display:block}
+.nav{display:flex;align-items:center;justify-content:space-between;margin-top:40px;padding-top:28px;border-top:1px solid var(--borda);gap:12px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:14px 28px;border-radius:10px;font-size:16px;font-weight:500;cursor:pointer;transition:.2s;border:none;font-family:'DM Sans',sans-serif}
+.btn-s{background:rgba(255,255,255,.05);color:var(--muted);border:1px solid rgba(155,143,188,.2)}.btn-s:hover{background:rgba(255,255,255,.09);color:var(--texto)}
+.btn-p{background:var(--rosa);color:#fff;box-shadow:0 4px 18px rgba(212,83,126,.3)}.btn-p:hover{background:var(--rosa2);transform:translateY(-1px);box-shadow:0 6px 24px rgba(212,83,126,.4)}
+.concluido{background:linear-gradient(135deg,rgba(212,83,126,.07),rgba(127,119,221,.05));border:1px solid rgba(212,83,126,.2);border-radius:16px;padding:40px;text-align:center;margin-top:32px}
+.concluido .ic{font-size:48px;margin-bottom:12px}.concluido .tit{font-family:'Playfair Display',serif;font-size:26px;font-weight:900;color:var(--verde);margin-bottom:10px}.concluido .sub{color:var(--muted);font-size:17px;line-height:1.7}
+@media(max-width:700px){.main{padding:24px 16px 60px}.card{padding:22px 18px}.header{padding:12px 16px}.prog{padding:10px 12px}table{font-size:13px}td,th{padding:10px 8px}}
+</style>
+</head>
+<body>
+<div class="bg-p"></div>
+<div class="header"><div class="logo">Penha em Cena</div><span class="sep">·</span><span class="info">Módulo 04 · Aula 5 de 6</span></div>
+
+<div class="prog"><div class="steps">
+<button class="step" onclick="ir(0)"><div class="dot a" id="d0">1</div><div class="slabel a">Intro</div></button><div class="sline" id="l0"></div>
+<button class="step" onclick="ir(1)"><div class="dot" id="d1">2</div><div class="slabel">Retratação</div></button><div class="sline" id="l1"></div>
+<button class="step" onclick="ir(2)"><div class="dot" id="d2">3</div><div class="slabel">Lei 15.380</div></button><div class="sline" id="l2"></div>
+<button class="step" onclick="ir(3)"><div class="dot" id="d3">4</div><div class="slabel">Renúncia</div></button><div class="sline" id="l3"></div>
+<button class="step" onclick="ir(4)"><div class="dot" id="d4">5</div><div class="slabel">Perdão</div></button><div class="sline" id="l4"></div>
+<button class="step" onclick="ir(5)"><div class="dot" id="d5">6</div><div class="slabel">Comparativo</div></button><div class="sline" id="l5"></div>
+<button class="step" onclick="ir(6)"><div class="dot" id="d6">7</div><div class="slabel">Quiz</div></button><div class="sline" id="l6"></div>
+<button class="step" onclick="ir(7)"><div class="dot" id="d7">8</div><div class="slabel">Resumo</div></button>
+</div></div>
+
+<div class="main">
+
+<!-- ===== TELA 0: INTRODUÇÃO ===== -->
+<div class="tela on" id="t0">
+  <div class="badge">Módulo 04 · Audiência de Retratação e Ação Penal</div>
+  <h1 class="titulo">Retratação, renúncia e <em>perdão</em> — as diferenças que mudam a estratégia</h1>
+  <p class="desc">Esses três institutos — retratação da representação, renúncia ao direito de queixa e perdão do ofendido — são frequentemente confundidos na prática, mas têm naturezas completamente distintas, aplicam-se a modalidades diferentes de ação penal e produzem efeitos jurídicos próprios. Confundir um com outro pode gerar erros graves na atuação profissional.</p>
+
+  <div class="card">
+    <h3>O que você vai dominar nesta aula</h3>
+    <ul>
+      <li><strong>Retratação da representação</strong> — o que é, quando cabe, como funciona na Lei Maria da Penha (art. 16), e a mudança trazida pela <strong>Lei 15.380/2026</strong> (parágrafo único do art. 16)</li>
+      <li><strong>Renúncia ao direito de queixa</strong> — conceito, aplicação exclusiva à ação penal privada, formas expressa e tácita (art. 104, CP)</li>
+      <li><strong>Perdão do ofendido</strong> — conceito, momento processual, necessidade de aceitação pelo querelado, aplicação exclusiva à ação privada (arts. 105 e 106, CP)</li>
+      <li>Por que a <strong>Súmula 542 do STJ</strong> esvaziou parte da relevância prática do art. 16 para a lesão corporal</li>
+      <li><strong>Tabela comparativa</strong> completa dos três institutos</li>
+      <li>Exemplos práticos de quando cada um se aplica (ou não) na violência doméstica</li>
+    </ul>
+  </div>
+
+  <div class="nav"><span></span><button class="btn btn-p" onclick="ir(1)">Começar a aula →</button></div>
+</div>
+
+<!-- ===== TELA 1: RETRATAÇÃO ===== -->
+<div class="tela" id="t1">
+  <div class="badge">Etapa 2 de 8 — Retratação da representação</div>
+  <h1 class="titulo"><span class="tag tag-ret">Retratação</span> da <em>representação</em></h1>
+  <p class="desc">A retratação da representação é o ato pelo qual a vítima, que já havia oferecido representação criminal ao MP (nos crimes de ação penal pública condicionada), volta atrás e manifesta o desejo de que a persecução penal não prossiga.</p>
+
+  <div class="card">
+    <h3>Conceito e natureza jurídica</h3>
+    <p><strong>O que é:</strong> A retratação é a revogação, pela vítima, da representação criminal já oferecida. Trata-se de ato unilateral da vítima — não depende de aceitação do agressor.</p>
+    <p><strong>Onde se aplica:</strong> Exclusivamente nos crimes de <strong>ação penal pública condicionada à representação</strong>. Não se aplica aos crimes de ação penal pública incondicionada (a vítima não pode "retirar" nada nesses crimes) nem aos crimes de ação penal privada (que têm seus próprios institutos: renúncia e perdão).</p>
+    <p><strong>Na Lei Maria da Penha:</strong> O art. 16 disciplina procedimento especial e mais rigoroso para a retratação, diferente da regra geral do Código Penal. A <a class="link-ext" href="https://www.planalto.gov.br/ccivil_03/_ato2023-2026/2026/lei/L15380.htm" target="_blank">Lei 15.380/2026</a> trouxe novidades importantes ao acrescentar o parágrafo único ao art. 16.</p>
+  </div>
+
+  <div class="card">
+    <h3>Regra geral (Código Penal) x Regra especial (Lei Maria da Penha)</h3>
+
+    <h4>Regra geral — art. 25 do CPP:</h4>
+    <div class="redacao">
+      <span class="rotulo">Art. 25 do CPP:</span>
+      "A representação será irretratável depois de oferecida a denúncia."
+    </div>
+    <p>Pelo CPP, a retratação é possível a qualquer momento <strong>antes do oferecimento da denúncia</strong>. Basta a vítima manifestar que não deseja mais prosseguir. Não há formalidades especiais.</p>
+
+    <h4>Regra especial — art. 16 da Lei Maria da Penha:</h4>
+    <p>A Lei Maria da Penha criou um procedimento mais rigoroso para a retratação, com duas diferenças fundamentais em relação à regra geral:</p>
+    <ol>
+      <li><strong>Marco temporal diferente:</strong> Na Lei Maria da Penha, a retratação é admitida até o <strong>recebimento da denúncia</strong> (e não até o oferecimento, como na regra geral). Isso dá um pouco mais de tempo para a vítima, pois entre o oferecimento e o recebimento pode haver alguns dias ou semanas.</li>
+      <li><strong>Formalidade:</strong> A retratação deve ser confirmada perante o juiz, em audiência especialmente designada para esse fim, com a presença do Ministério Público.</li>
+    </ol>
+
+    <div class="redacao">
+      <span class="rotulo">Art. 16 da Lei 11.340/2006 (caput):</span>
+      "Nas ações penais públicas condicionadas à representação da ofendida de que trata esta Lei, só será admitida a renúncia à representação perante o juiz, em audiência especialmente designada com tal finalidade, antes do recebimento da denúncia e ouvido o Ministério Público."
+    </div>
+
+    <div class="alerta alerta-amarelo">
+      <strong>Observação terminológica:</strong> O caput do art. 16 usa a expressão "renúncia à representação", mas a doutrina e a jurisprudência consolidaram que o instituto correto é a <strong>retratação</strong> da representação. Renúncia é instituto da ação penal privada (art. 104, CP). A Lei Maria da Penha usou o termo tecnicamente incorreto, mas o sentido é claro: trata-se da retratação da representação já oferecida. O <a class="link-ext" href="https://processo.stj.jus.br/repetitivos/temas_repetitivos/pesquisa.jsp?novaConsulta=true&tipo_pesquisa=T&cod_tema_inicial=1167&cod_tema_final=1167" target="_blank">Tema 1.167 do STJ</a> e a <a class="link-ext" href="https://portal.stf.jus.br/noticias/verNoticiaDetalhe.asp?idConteudo=512899&tip=UN" target="_blank">ADI 7.267 do STF</a> confirmaram essa interpretação.
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Quando a retratação se aplica na Lei Maria da Penha?</h3>
+    <p>Apenas nos crimes de ação penal pública condicionada à representação praticados no contexto de violência doméstica. Na prática atual (2026), o espaço é muito reduzido:</p>
+
+    <ul>
+      <li><strong>Cabe retratação:</strong> Perseguição/stalking (art. 147-A, §3º, CP) — em qualquer modalidade, é de ação penal pública condicionada à representação</li>
+      <li><strong>NÃO cabe retratação:</strong> Lesão corporal — é ação pública incondicionada (Súmula 542 STJ + ADI 4.424/DF)</li>
+      <li><strong>NÃO cabe retratação:</strong> Ameaça contra mulher por razões de gênero — tornou-se incondicionada (Lei 14.994/2024)</li>
+      <li><strong>NÃO cabe retratação:</strong> Crimes sexuais — incondicionada (Lei 13.718/2018)</li>
+      <li><strong>NÃO cabe retratação:</strong> Violência psicológica — incondicionada (Lei 14.188/2021)</li>
+    </ul>
+
+    <div class="alerta alerta-verde">
+      <strong>Por que a Súmula 542 do STJ esvaziou parte da relevância prática do art. 16:</strong> Antes dos julgamentos da <a class="link-ext" href="https://portal.stf.jus.br/processos/detalhe.asp?incidente=2584650" target="_blank">ADC 19</a> e da <a class="link-ext" href="https://portal.stf.jus.br/processos/detalhe.asp?incidente=3897992" target="_blank">ADI 4.424/DF</a> pelo STF em 2012, havia intenso debate sobre a natureza da ação penal nos crimes de lesão corporal leve praticados em violência doméstica. Embora o art. 41 da Lei Maria da Penha já afastasse a aplicação da Lei 9.099/95, havia controvérsia sobre se esse artigo era constitucional. O STF julgou as duas ações na mesma sessão, em 9/2/2012:
+      <ul style="margin-top:10px">
+        <li><strong>ADC 19:</strong> Declarou constitucional o art. 41 da Lei Maria da Penha — ou seja, confirmou que a Lei 9.099/95 <strong>não se aplica</strong> aos crimes de violência doméstica contra a mulher, independentemente da pena prevista.</li>
+        <li><strong>ADI 4.424:</strong> Fixou que a ação penal nos crimes de lesão corporal em violência doméstica é <strong>pública incondicionada</strong>.</li>
+      </ul>
+      <p style="margin-top:10px"><strong>A lógica é a seguinte:</strong> O art. 88 da Lei 9.099/95 é o dispositivo que tornou a lesão corporal leve e a lesão culposa crimes de ação penal pública condicionada à representação. Como o art. 41 da Lei Maria da Penha afasta a aplicação de toda a Lei 9.099/95 — e o STF confirmou que esse afastamento é constitucional (ADC 19) —, o art. 88 não se aplica à violência doméstica. Sem o art. 88, volta a valer a regra geral do Código Penal: a lesão corporal é de ação penal pública incondicionada. Resultado: a vítima não precisa representar, e portanto não pode se retratar.</p>
+      <p style="margin-top:10px">Com a Súmula 542 do STJ consolidando esse entendimento, o art. 16 perdeu relevância para o crime mais comum na violência doméstica (lesão corporal). Hoje, o art. 16 aplica-se essencialmente ao stalking (art. 147-A, §3º, CP) e a eventuais crimes condicionados remanescentes.</p>
+    </div>
+
+    <div class="alerta alerta-info">
+      <strong>Dica prática para o advogado de defesa:</strong> Nos crimes em que a retratação é possível (como o stalking), se a vítima quer se retratar, o tempo é curto — o marco é o recebimento da denúncia pelo juiz. O advogado pode despachar diretamente com o juiz, requerendo que a audiência de retratação seja designada com urgência, para evitar que a denúncia seja recebida antes de a vítima ter a oportunidade de se manifestar. Lembre-se: a manifestação expressa da vítima deve chegar aos autos antes do recebimento (art. 16, parágrafo único — <a class="link-ext" href="https://www.planalto.gov.br/ccivil_03/_ato2023-2026/2026/lei/L15380.htm" target="_blank">Lei 15.380/2026</a>).
+    </div>
+  </div>
+
+  <div class="exemplo">
+    <strong>Exemplo prático:</strong> Carla representou contra o ex-namorado por stalking (art. 147-A, CP). Três semanas depois, ela procura o advogado e diz que quer se retratar porque "ele parou de persegui-la". O MP já ofereceu a denúncia, mas o juiz ainda não a recebeu. A retratação ainda é possível? <strong>Sim</strong> — o marco temporal do art. 16 é o recebimento da denúncia, não o oferecimento. Carla precisa manifestar expressamente esse desejo (por escrito ou oralmente), e essa manifestação deve chegar ao juiz antes do recebimento. O juiz então designa audiência para confirmar a retratação, com a presença do MP.
+  </div>
+
+  <div class="nav">
+    <button class="btn btn-s" onclick="ir(0)">← Voltar</button>
+    <button class="btn btn-p" onclick="ir(2)">Lei 15.380/2026 — o que mudou →</button>
+  </div>
+</div>
+
+<!-- ===== TELA 2: LEI 15.380/2026 ===== -->
+<div class="tela" id="t2">
+  <div class="badge">Etapa 3 de 8 — A Lei 15.380/2026</div>
+  <h1 class="titulo">O que a <em>Lei 15.380/2026</em> mudou no art. 16</h1>
+  <p class="desc">A <a class="link-ext" href="https://www.planalto.gov.br/ccivil_03/_ato2023-2026/2026/lei/L15380.htm" target="_blank">Lei 15.380</a>, publicada no DOU em 7 de abril de 2026 (com vigência na mesma data), acrescentou um parágrafo único ao art. 16 da Lei Maria da Penha. Essa alteração positivou no texto legal entendimentos que já haviam sido firmados pelo STJ (<a class="link-ext" href="https://processo.stj.jus.br/repetitivos/temas_repetitivos/pesquisa.jsp?novaConsulta=true&tipo_pesquisa=T&cod_tema_inicial=1167&cod_tema_final=1167" target="_blank">Tema 1.167</a>) e pelo STF (<a class="link-ext" href="https://portal.stf.jus.br/noticias/verNoticiaDetalhe.asp?idConteudo=512899&tip=UN" target="_blank">ADI 7.267/DF</a>).</p>
+
+  <div class="card">
+    <h3>Redação completa do art. 16 com o parágrafo único</h3>
+    <div class="redacao">
+      <span class="rotulo">Art. 16 da Lei 11.340/2006 (redação atualizada pela Lei 15.380/2026):</span>
+      "Art. 16. Nas ações penais públicas condicionadas à representação da ofendida de que trata esta Lei, só será admitida a renúncia à representação perante o juiz, em audiência especialmente designada com tal finalidade, antes do recebimento da denúncia e ouvido o Ministério Público.<br><br>
+      Parágrafo único. A audiência prevista no <em>caput</em> deste artigo tem por objetivo confirmar a retratação da vítima, não a representação, e somente será designada pelo juiz mediante manifestação expressa de seu desejo de se retratar, apresentada por escrito ou oralmente antes do recebimento da denúncia, devendo a retratação ser devidamente registrada nos autos. <span class='tag-novo'>Incluído pela Lei 15.380/2026</span>"
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Os três pilares da alteração</h3>
+
+    <h4>1. A audiência confirma a retratação, não a representação</h4>
+    <p>O parágrafo único esclarece definitivamente: a finalidade da audiência do art. 16 é <strong>confirmar</strong> uma retratação já manifestada pela vítima, e não "perguntar" se ela quer manter a representação. Se a vítima representou, presume-se que ela quer prosseguir. Não cabe ao juiz questioná-la de ofício. Essa distinção é fundamental: a representação, uma vez feita, é válida até que sobrevenha manifestação expressa em sentido contrário.</p>
+
+    <h4>2. Designação apenas mediante manifestação expressa da vítima</h4>
+    <p>O juiz <strong>não pode</strong> designar a audiência de ofício. A iniciativa deve ser exclusivamente da vítima. Ela deve, por sua própria vontade (<em>sponte propria</em>), manifestar o desejo de se retratar — por escrito (petição, requerimento) ou oralmente (perante o juiz, o MP ou a autoridade policial, que levará ao juiz). Sem essa manifestação prévia, não há audiência.</p>
+    <p>Essa regra visa proteger a vítima de duas formas: (a) impedir que o juiz, ao designar audiência de ofício, crie uma situação constrangedora de pressão para que a vítima desista; e (b) impedir que o agressor ou terceiros usem a audiência como mecanismo de intimidação.</p>
+
+    <h4>3. Registro nos autos</h4>
+    <p>A retratação deve ser <strong>devidamente registrada nos autos</strong>. Isso elimina qualquer possibilidade de retratação tácita ou presumida. Silêncio não é retratação. Não comparecimento à audiência não é retratação. A retratação deve ser um ato formal, documentado, verificável.</p>
+  </div>
+
+  <div class="card">
+    <h3>O contexto jurisprudencial que levou à alteração</h3>
+    <p>A Lei 15.380/2026 não surgiu do nada. Ela é o resultado de um longo processo de amadurecimento jurisprudencial:</p>
+    <ul>
+      <li><strong>Tema 1.167 do STJ</strong> (REsp 1.977.547-MG, 3ª Seção, 8/3/2023, Rel. Min. Reynaldo Soares da Fonseca — Info 766): fixou que a audiência tem por objetivo confirmar a retratação, não a representação, e não pode ser designada de ofício.</li>
+      <li><strong>ADI 7.267/DF</strong> (STF, Plenário, sessão virtual finalizada em 21/8/2023, Rel. Min. Edson Fachin, unânime): declarou inconstitucional a designação de ofício da audiência e o reconhecimento de retratação tácita pelo não comparecimento.</li>
+      <li><strong>PL 3.112/2023</strong> (Deputada Laura Carneiro, relatado no Senado pela Senadora Mara Gabrilli): projeto que deu origem à Lei 15.380/2026.</li>
+    </ul>
+    <p>A justificativa do PL menciona expressamente que a mudança busca "evitar situações de pressão ou coação sobre a vítima" e "impedir a revitimização no curso do processo".</p>
+    <p>🔗 <a class="link-ext" href="https://www.planalto.gov.br/ccivil_03/_ato2023-2026/2026/lei/L15380.htm" target="_blank">Lei 15.380/2026 — Texto integral no Planalto</a></p>
+  </div>
+
+  <div class="exemplo">
+    <strong>Exemplo prático — Antes e depois da Lei 15.380/2026:</strong><br>
+    <strong>Situação:</strong> Fernanda representou contra o ex-companheiro por stalking. O juiz, sem que Fernanda tenha se manifestado, designa audiência do art. 16. Fernanda não comparece.<br><br>
+    <strong>Antes da Lei 15.380/2026 (e dos julgamentos do STJ e STF):</strong> Alguns tribunais reconheciam retratação tácita pelo não comparecimento e extinguiam o processo.<br><br>
+    <strong>Depois da Lei 15.380/2026:</strong> (a) O juiz não poderia sequer ter designado a audiência, pois Fernanda não se manifestou; (b) o não comparecimento não gera qualquer efeito processual; (c) o processo prossegue normalmente. Se Fernanda quiser se retratar, ela mesma deverá tomar a iniciativa de manifestar esse desejo, expressamente, antes do recebimento da denúncia.
+  </div>
+
+  <div class="nav">
+    <button class="btn btn-s" onclick="ir(1)">← Voltar</button>
+    <button class="btn btn-p" onclick="ir(3)">Renúncia ao direito de queixa →</button>
+  </div>
+</div>
+
+<!-- ===== TELA 3: RENÚNCIA ===== -->
+<div class="tela" id="t3">
+  <div class="badge">Etapa 4 de 8 — Renúncia ao direito de queixa</div>
+  <h1 class="titulo"><span class="tag tag-ren">Renúncia</span> ao direito de <em>queixa ou de representação</em></h1>
+
+  <div class="card">
+    <h3>Conceito e natureza jurídica</h3>
+    <p><strong>O que é:</strong> A renúncia é o ato voluntário pelo qual o ofendido abdica de um direito que lhe assiste na esfera penal, antes de exercê-lo. Trata-se de ato <strong>unilateral</strong> — não depende de aceitação do autor do crime — e <strong>irretratável</strong> (uma vez renunciado, o direito não volta).</p>
+
+    <p><strong>A renúncia pode ter dois objetos diferentes, conforme a modalidade de ação penal:</strong></p>
+    <ul>
+      <li><strong>Renúncia ao direito de queixa</strong> — nos crimes de <strong>ação penal privada</strong>. A vítima abdica do direito de oferecer queixa-crime. Fundamento: art. 104 do CP e art. 107, V, do CP. Exemplo: vítima de injúria (art. 140, CP) que renuncia ao direito de processar.</li>
+      <li><strong>Renúncia ao direito de representação</strong> — nos crimes de <strong>ação penal pública condicionada à representação</strong>. A vítima abdica do direito de representar criminalmente. Na Lei Maria da Penha, o art. 16 usa justamente a expressão "renúncia à representação" (embora a doutrina e a jurisprudência tratem o ato como "retratação", conforme vimos na etapa anterior). Quando ocorre após a representação já ter sido oferecida, chama-se retratação da representação.</li>
+    </ul>
+
+    <p><strong>Momento:</strong> Sempre <strong>antes</strong> do exercício do direito (antes do oferecimento da queixa-crime ou antes da representação criminal). A renúncia pressupõe que o ofendido ainda não exerceu o direito — se já exerceu (ofereceu queixa ou representou), os institutos aplicáveis são outros (perdão do ofendido, na ação privada; ou retratação da representação, na ação condicionada).</p>
+    <p><strong>Efeito:</strong> Extingue a punibilidade do agente (art. 107, V, CP).</p>
+
+    <div class="redacao">
+      <span class="rotulo">Art. 104 do Código Penal:</span>
+      "O direito de queixa não pode ser exercido quando renunciado expressa ou tacitamente.<br><br>
+      Parágrafo único. Importa renúncia tácita ao direito de queixa a prática de ato incompatível com a vontade de exercê-lo; não a implica, todavia, o fato de receber o ofendido a indenização do dano causado pelo crime."
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Formas de renúncia</h3>
+    <h4>Renúncia expressa:</h4>
+    <p>Declaração assinada pelo ofendido, por seu representante legal ou procurador com poderes especiais (art. 50, CPP). Exemplo: a vítima assina documento dizendo que renuncia ao direito de processar o agressor por calúnia.</p>
+
+    <h4>Renúncia tácita:</h4>
+    <p>Resulta da prática de ato incompatível com a vontade de exercer o direito de queixa (art. 104, parágrafo único, CP). Exemplo clássico na violência doméstica: a vítima de injúria que convida o agressor para ser padrinho de casamento do seu filho — ato incompatível com a vontade de processá-lo.</p>
+    <p><strong>Exceção importante:</strong> Receber indenização pelo dano <strong>não</strong> configura renúncia tácita (art. 104, parágrafo único, parte final, CP). A vítima pode receber indenização e ainda assim oferecer queixa.</p>
+
+    <h4>Indivisibilidade:</h4>
+    <p>Se houver mais de um autor do crime, a renúncia em relação a um deles se estende a todos (art. 49, CPP). Isso decorre do princípio da indivisibilidade da ação penal privada.</p>
+  </div>
+
+  <div class="card">
+    <h3>Aplicação na Lei Maria da Penha</h3>
+    <p>Na Lei Maria da Penha, a renúncia pode ocorrer em dois contextos:</p>
+    <ul>
+      <li><strong>Renúncia ao direito de queixa</strong> — nos crimes de ação penal privada praticados em violência doméstica (essencialmente os crimes contra a honra: calúnia, difamação, injúria simples). A vítima abdica do direito de oferecer queixa-crime antes de fazê-lo.</li>
+      <li><strong>Renúncia ao direito de representação</strong> — nos crimes de ação penal pública condicionada praticados em violência doméstica (como o stalking). A vítima abdica do direito de representar antes de fazê-lo. Se a vítima já representou e quer voltar atrás, o instituto é a retratação da representação (art. 16 da Lei Maria da Penha), com todas as formalidades vistas na etapa anterior.</li>
+    </ul>
+
+    <div class="exemplo">
+      <strong>Exemplo prático:</strong> Sua cliente foi vítima de injúria pelo ex-marido (ele a chamou de "vagabunda" na frente dos filhos). Três meses depois, a vítima e o agressor se reconciliaram e voltaram a morar juntos. A vítima nunca ofereceu queixa-crime. Passados 6 meses do fato, a vítima procura um advogado querendo processar. O que acontece? Duas possibilidades: (a) se ela não ofereceu queixa no prazo de 6 meses, ocorreu <strong>decadência</strong>; ou (b) se a reconciliação configurar ato incompatível com a vontade de queixa (análise caso a caso), pode ter havido <strong>renúncia tácita</strong>. Em ambos os casos, a punibilidade está extinta.
+    </div>
+  </div>
+
+  <div class="nav">
+    <button class="btn btn-s" onclick="ir(2)">← Voltar</button>
+    <button class="btn btn-p" onclick="ir(4)">Perdão do ofendido →</button>
+  </div>
+</div>
+
+<!-- ===== TELA 4: PERDÃO ===== -->
+<div class="tela" id="t4">
+  <div class="badge">Etapa 5 de 8 — Perdão do ofendido</div>
+  <h1 class="titulo"><span class="tag tag-per">Perdão</span> do <em>ofendido</em></h1>
+
+  <div class="card">
+    <h3>Conceito e natureza jurídica</h3>
+    <p><strong>O que é:</strong> O perdão do ofendido é o ato voluntário pelo qual o querelante (vítima que já ofereceu queixa-crime) desiste de prosseguir com a ação penal privada, impedindo a continuação do processo.</p>
+    <p><strong>Onde se aplica:</strong> Exclusivamente nos crimes de <strong>ação penal privada</strong> (art. 105, CP: "O perdão do ofendido, nos crimes em que somente se procede mediante queixa, obsta ao prosseguimento da ação").</p>
+    <p><strong>Momento:</strong> <strong>Após</strong> o oferecimento da queixa-crime (início da ação penal privada) e <strong>antes</strong> do trânsito em julgado da sentença condenatória (art. 106, §2º, CP).</p>
+    <p><strong>Diferença crucial da renúncia e da retratação:</strong> O perdão é ato <strong>bilateral</strong> — depende de <strong>aceitação pelo querelado</strong> (art. 106, III, CP). Se o querelado recusar o perdão, a ação penal prossegue normalmente. Isso porque o réu pode ter interesse em provar sua inocência.</p>
+    <p><strong>Efeito:</strong> Se aceito pelo querelado, extingue a punibilidade (art. 107, V, CP).</p>
+
+    <div class="redacao">
+      <span class="rotulo">Art. 105 do Código Penal:</span>
+      "O perdão do ofendido, nos crimes em que somente se procede mediante queixa, obsta ao prosseguimento da ação."
+    </div>
+
+    <div class="redacao" style="margin-top:12px">
+      <span class="rotulo">Art. 106 do Código Penal:</span>
+      "O perdão, no processo ou fora dele, expresso ou tácito:<br>
+      I — se concedido a qualquer dos querelados, a todos aproveita;<br>
+      II — se concedido por um dos ofendidos, não prejudica o direito dos outros;<br>
+      III — se o querelado o recusa, não produz efeito.<br><br>
+      §1º Perdão tácito é o que resulta da prática de ato incompatível com a vontade de prosseguir na ação.<br>
+      §2º Não é admissível o perdão depois que passa em julgado a sentença condenatória."
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Aplicação na Lei Maria da Penha</h3>
+    <p>Assim como a renúncia, o perdão do ofendido tem aplicação restrita na Lei Maria da Penha: somente nos crimes de ação penal privada (crimes contra a honra) praticados no contexto de violência doméstica.</p>
+    <p><strong>O perdão NÃO se aplica:</strong></p>
+    <ul>
+      <li>Aos crimes de ação pública incondicionada (lesão corporal, ameaça por razões de gênero, crimes sexuais, etc.) — a vítima não é parte, o MP conduz</li>
+      <li>Aos crimes de ação pública condicionada (stalking) — o instrumento nesses crimes é a retratação da representação (art. 16 da Lei Maria da Penha), e não o perdão</li>
+    </ul>
+    <div class="alerta alerta-vermelho">
+      <strong>Erro comum na prática:</strong> A vítima de lesão corporal doméstica diz ao advogado: "Eu já perdoei ele, quero retirar tudo." O advogado inexperiente pode pensar em "perdão do ofendido". Mas isso é <strong>impossível</strong>: (a) lesão corporal doméstica é ação pública incondicionada — a vítima não é querelante; (b) o perdão só existe na ação privada; (c) o "perdão" da vítima no sentido emocional não produz nenhum efeito jurídico no processo criminal. O processo prossegue independentemente da vontade dela (Súmula 542 STJ).
+    </div>
+  </div>
+
+  <div class="exemplo">
+    <strong>Exemplo prático:</strong> Sua cliente ofereceu queixa-crime contra o ex-marido por difamação (ele divulgou em grupo de WhatsApp que ela "tem um amante"). O processo está em curso. Dois meses depois, a vítima quer perdoar. O que acontece? (a) O advogado da vítima comunica ao juiz o perdão (pode ser por petição ou mesmo verbalmente em audiência); (b) o juiz intima o querelado para dizer se aceita ou recusa o perdão (prazo de 3 dias — art. 58, CPP); (c) se o querelado aceitar (ou não se manifestar, o que equivale à aceitação — art. 58, parágrafo único, CPP), a punibilidade é extinta; (d) se o querelado recusar, a ação prossegue.
+  </div>
+
+  <div class="nav">
+    <button class="btn btn-s" onclick="ir(3)">← Voltar</button>
+    <button class="btn btn-p" onclick="ir(5)">Tabela comparativa →</button>
+  </div>
+</div>
+
+<!-- ===== TELA 5: COMPARATIVO ===== -->
+<div class="tela" id="t5">
+  <div class="badge">Etapa 6 de 8 — Tabela comparativa</div>
+  <h1 class="titulo">Retratação x Renúncia x <em>Perdão</em> — Comparativo completo</h1>
+
+  <div class="card">
+    <div class="tabela-c">
+      <table>
+        <tr>
+          <th style="width:20%">Critério</th>
+          <th style="width:27%"><span class="tag tag-ret">Retratação</span></th>
+          <th style="width:27%"><span class="tag tag-ren">Renúncia</span></th>
+          <th style="width:26%"><span class="tag tag-per">Perdão</span></th>
+        </tr>
+        <tr>
+          <td><strong>O que é</strong></td>
+          <td>Revogação da representação criminal já oferecida</td>
+          <td>Abdicação do direito de oferecer queixa-crime (ação privada) ou do direito de representar (ação condicionada)</td>
+          <td>Desistência de prosseguir com a ação penal privada já iniciada</td>
+        </tr>
+        <tr>
+          <td><strong>Ação penal</strong></td>
+          <td>Pública <strong>condicionada</strong> à representação</td>
+          <td>Privada (renúncia ao direito de queixa) ou pública condicionada (renúncia ao direito de representação)</td>
+          <td>Privada (queixa-crime)</td>
+        </tr>
+        <tr>
+          <td><strong>Momento</strong></td>
+          <td>Antes do <strong>recebimento</strong> da denúncia (art. 16 Lei Maria da Penha)</td>
+          <td>Antes do exercício do direito (antes de oferecer queixa ou representar)</td>
+          <td>Após o oferecimento da queixa e antes do trânsito em julgado</td>
+        </tr>
+        <tr>
+          <td><strong>Natureza</strong></td>
+          <td>Ato <strong>unilateral</strong> da vítima</td>
+          <td>Ato <strong>unilateral</strong> do ofendido</td>
+          <td>Ato <strong>bilateral</strong> — depende de aceitação do querelado</td>
+        </tr>
+        <tr>
+          <td><strong>Formalidade na Lei Maria da Penha</strong></td>
+          <td>Manifestação expressa + audiência perante o juiz + presença do MP + registro nos autos (art. 16, parágrafo único — Lei 15.380/2026)</td>
+          <td>Expressa (declaração assinada — art. 50 CPP) ou tácita (ato incompatível — art. 104 CP)</td>
+          <td>Expresso ou tácito, no processo ou fora dele (art. 106 CP). Depende de aceitação</td>
+        </tr>
+        <tr>
+          <td><strong>Fundamento legal</strong></td>
+          <td>Art. 16 Lei Maria da Penha + art. 25 CPP</td>
+          <td>Art. 104 CP + art. 107, V, CP</td>
+          <td>Arts. 105 e 106 CP + art. 107, V, CP</td>
+        </tr>
+        <tr>
+          <td><strong>Efeito</strong></td>
+          <td>Extinção da punibilidade (pela falta de condição de procedibilidade)</td>
+          <td>Extinção da punibilidade (art. 107, V)</td>
+          <td>Extinção da punibilidade se aceito (art. 107, V)</td>
+        </tr>
+        <tr>
+          <td><strong>Exemplo na violência doméstica</strong></td>
+          <td>Vítima de stalking que se retrata antes do recebimento da denúncia</td>
+          <td>Vítima de injúria que renuncia ao direito de queixa; ou vítima de stalking que renuncia ao direito de representar (antes de representar)</td>
+          <td>Vítima de difamação que perdoa o querelado após oferecer queixa</td>
+        </tr>
+        <tr>
+          <td><strong>Aplicação prática atual na Lei Maria da Penha</strong></td>
+          <td>Restrita — apenas crimes condicionados (stalking, basicamente)</td>
+          <td>Crimes de ação privada (honra) e crimes condicionados (stalking — antes de representar)</td>
+          <td>Restrita — apenas crimes de ação privada (honra)</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>O que NÃO se aplica à Lei Maria da Penha quando a ação é pública incondicionada</h3>
+    <p>Nos crimes de ação penal pública incondicionada (que são a maioria na violência doméstica), <strong>nenhum dos três institutos se aplica</strong>:</p>
+    <ul>
+      <li>Não cabe retratação — porque não houve representação a ser retratada</li>
+      <li>Não cabe renúncia — porque não há direito de queixa a renunciar</li>
+      <li>Não cabe perdão do ofendido — porque a vítima não é querelante</li>
+    </ul>
+    <p>O "perdão" no sentido emocional, o "desejo de desistir", a "reconciliação com o agressor" — nada disso produz efeito jurídico no processo criminal quando a ação é pública incondicionada. O MP é obrigado a prosseguir (princípio da obrigatoriedade), e o juiz não pode extinguir o processo por vontade da vítima.</p>
+    <div class="alerta alerta-info">
+      <strong>Para o advogado:</strong> Quando a vítima diz que quer "desistir de tudo" e o crime é de ação pública incondicionada, o papel do advogado é: (a) explicar, com empatia, que o processo não depende dela; (b) orientar sobre a rede de apoio (CRAM, DEAM, Defensoria); (c) se for advogado da vítima, manter-se habilitado como assistente para proteger os interesses dela; (d) se for advogado de defesa, informar ao cliente que a "desistência" da vítima não tem efeito processual e focar na defesa de mérito.
+    </div>
+  </div>
+
+  <div class="nav">
+    <button class="btn btn-s" onclick="ir(4)">← Voltar</button>
+    <button class="btn btn-p" onclick="ir(6)">Quiz de fixação →</button>
+  </div>
+</div>
+
+<!-- ===== TELA 6: QUIZ ===== -->
+<div class="tela" id="t6">
+  <div class="badge">Etapa 7 de 8 — Fixação</div>
+  <h1 class="titulo">Teste seu <em>domínio</em></h1>
+  <p class="desc">Seis questões sobre retratação, renúncia e perdão na Lei Maria da Penha.</p>
+  <div id="quiz"></div>
+  <div class="nav" style="margin-top:32px">
+    <button class="btn btn-s" onclick="ir(5)">← Voltar</button>
+    <button class="btn btn-p" onclick="ir(7)">Resumo final →</button>
+  </div>
+</div>
+
+<!-- ===== TELA 7: RESUMO ===== -->
+<div class="tela" id="t7">
+  <div class="badge">Etapa 8 de 8 — Resumo</div>
+  <h1 class="titulo">O que <em>fixar</em> desta aula</h1>
+
+  <div class="card">
+    <h3>Regra de ouro</h3>
+    <p style="font-size:19px;line-height:1.8">Antes de pensar em retratação, renúncia ou perdão, <strong>identifique a natureza da ação penal</strong>. Se a ação é pública incondicionada — que é a regra na Lei Maria da Penha —, nenhum desses três institutos se aplica. A vítima não pode desistir, o processo prossegue, e o advogado deve focar no mérito (na defesa) ou no acolhimento e proteção (na assistência à vítima).</p>
+  </div>
+
+  <div class="card">
+    <h3>Resumo dos três institutos</h3>
+    <ul>
+      <li><strong>Retratação da representação</strong> — ação condicionada — antes do recebimento da denúncia — unilateral — art. 16 Lei Maria da Penha (com parágrafo único, Lei 15.380/2026): exige manifestação expressa da vítima, designação pelo juiz apenas a pedido, registro nos autos</li>
+      <li><strong>Renúncia ao direito de queixa</strong> — ação privada — antes do oferecimento da queixa — unilateral e irretratável — art. 104 CP — expressa ou tácita</li>
+      <li><strong>Perdão do ofendido</strong> — ação privada — após a queixa e antes do trânsito em julgado — bilateral (depende de aceitação) — arts. 105 e 106 CP</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>Fundamentos legais e julgados</h3>
+    <ul>
+      <li>Art. 16 da Lei 11.340/2006 (caput + parágrafo único — Lei 15.380/2026) — <a class="link-ext" href="https://www.planalto.gov.br/ccivil_03/_ato2023-2026/2026/lei/L15380.htm" target="_blank">Planalto</a></li>
+      <li>Tema 1.167 — STJ, 3ª Seção, REsp 1.977.547-MG, 8/3/2023 — <a class="link-ext" href="https://processo.stj.jus.br/repetitivos/temas_repetitivos/pesquisa.jsp?novaConsulta=true&tipo_pesquisa=T&cod_tema_inicial=1167&cod_tema_final=1167" target="_blank">STJ</a></li>
+      <li>ADI 7.267/DF — STF, 21/8/2023 — <a class="link-ext" href="https://portal.stf.jus.br/noticias/verNoticiaDetalhe.asp?idConteudo=512899&tip=UN" target="_blank">STF</a></li>
+      <li>ADI 4.424/DF — STF, 9/2/2012 — <a class="link-ext" href="https://portal.stf.jus.br/processos/detalhe.asp?incidente=3897992" target="_blank">STF</a></li>
+      <li>Súmula 542 do STJ</li>
+      <li>Arts. 104, 105, 106 e 107 do Código Penal</li>
+      <li>Art. 25 do CPP</li>
+    </ul>
+  </div>
+
+  <div class="card" style="text-align:center">
+    <h3>Material de Apoio em PDF</h3>
+    <p>Baixe o conteúdo completo desta aula para consultar offline, imprimir ou levar para a audiência.</p>
+    <a href="https://cdupret.github.io/arquivosLMP/material_m04_a05_retratacao_renuncia_perdao.pdf" target="_blank" class="btn btn-p" style="display:inline-flex;margin-top:12px;text-decoration:none">📄 Baixar PDF — Aula 5</a>
+  </div>
+
+  <div class="concluido">
+    <div class="ic">✓</div>
+    <div class="tit">Aula 5 do Módulo 4 concluída</div>
+    <div class="sub">Você domina agora as diferenças entre retratação, renúncia e perdão — e sabe exatamente quando cada um se aplica (ou não) na Lei Maria da Penha.<br>Continue para a Aula 6: Súmula 542 STJ e impactos na prática.</div>
+  </div>
+
+  <div class="nav">
+    <button class="btn btn-s" onclick="ir(0)">↺ Rever do início</button>
+    <button class="btn btn-s" onclick="ir(5)">← Voltar</button>
+  </div>
+</div>
+
+</div><!-- /main -->
+
+<script>
+let atual=0;const total=8;
+function ir(n){document.querySelectorAll('.tela').forEach(t=>t.classList.remove('on'));document.getElementById('t'+n).classList.add('on');for(let i=0;i<total;i++){const d=document.getElementById('d'+i),s=d.parentElement.querySelector('.slabel');d.className='dot';s.className='slabel';if(i<n){d.classList.add('d');s.classList.add('d')}else if(i===n){d.classList.add('a');s.classList.add('a')}if(i<total-1){const l=document.getElementById('l'+i);if(l)l.className=i<n?'sline d':'sline'}}atual=n;window.scrollTo({top:0,behavior:'smooth'})}
+
+const perguntas=[
+  {q:"1. A retratação da representação se aplica a qual modalidade de ação penal?",
+   opts:["Ação penal pública incondicionada","Ação penal pública condicionada à representação","Ação penal privada","Todas as modalidades"],
+   correta:1,feed:"A retratação é a revogação da representação já oferecida. Só existe representação nos crimes de ação penal pública condicionada. Portanto, a retratação só se aplica a essa modalidade."},
+
+  {q:"2. A Lei 15.380/2026 acrescentou parágrafo único ao art. 16 da Lei Maria da Penha. Qual das alternativas reflete corretamente a alteração?",
+   opts:["A audiência do art. 16 passa a ser obrigatória em todos os processos da Lei Maria da Penha","O juiz pode designar a audiência de ofício sempre que entender conveniente","A audiência tem por objetivo confirmar a retratação (não a representação), só pode ser designada mediante manifestação expressa da vítima, e a retratação deve ser registrada nos autos","A vítima agora pode se retratar a qualquer momento do processo, inclusive após a condenação"],
+   correta:2,feed:"A Lei 15.380/2026 (vigência 7/4/2026) estabelece três pilares: (1) a audiência confirma a retratação, não a representação; (2) só é designada mediante manifestação expressa da vítima; (3) a retratação deve ser registrada nos autos."},
+
+  {q:"3. O perdão do ofendido depende de aceitação do querelado?",
+   opts:["Não — é ato unilateral, como a renúncia","Sim — se o querelado recusar, o perdão não produz efeito e a ação prossegue","Depende — só precisa de aceitação se for perdão tácito","Não — o juiz decide se aceita ou não"],
+   correta:1,feed:"O perdão do ofendido é ato bilateral — depende de aceitação do querelado (art. 106, III, CP). Se recusado, a ação prossegue. Isso porque o réu pode ter interesse em provar sua inocência."},
+
+  {q:"4. A vítima de lesão corporal doméstica diz ao advogado que 'já perdoou' o agressor e quer 'retirar tudo'. Qual é a orientação correta?",
+   opts:["Solicitar ao juiz audiência do art. 16 para formalizar o perdão","Informar que, como a lesão corporal é de ação penal pública incondicionada, não cabe retratação, renúncia nem perdão — o processo prossegue independentemente da vontade da vítima","Orientar a vítima a não comparecer às audiências para que o processo prescreva","Peticionar ao MP pedindo o arquivamento por falta de interesse da vítima"],
+   correta:1,feed:"Lesão corporal em violência doméstica é ação pública incondicionada (Súmula 542 STJ + ADI 4.424/DF). Nenhum dos três institutos (retratação, renúncia, perdão) se aplica. O processo prossegue com o MP como titular."},
+
+  {q:"5. Em que momento pode ocorrer a renúncia ao direito de queixa?",
+   opts:["Antes do oferecimento da queixa-crime","Após o oferecimento da queixa e antes da sentença","A qualquer momento do processo","Somente na audiência do art. 16 da Lei Maria da Penha"],
+   correta:0,feed:"A renúncia ocorre antes do oferecimento da queixa-crime (art. 104, CP). É um ato pré-processual. Após o oferecimento da queixa, o instrumento é o perdão do ofendido (art. 105, CP), não a renúncia."},
+
+  {q:"6. A Súmula 542 do STJ esvaziou parte da relevância prática do art. 16 da Lei Maria da Penha. Por quê?",
+   opts:["Porque revogou expressamente o art. 16","Porque tornou a lesão corporal doméstica de ação pública incondicionada — eliminando a necessidade de representação e, consequentemente, a possibilidade de retratação para o crime mais comum na violência doméstica","Porque determinou que o art. 16 só se aplica a crimes hediondos","Porque transferiu a competência do juízo de violência doméstica para o JECRIM"],
+   correta:1,feed:"A Súmula 542 consolidou que a lesão corporal em violência doméstica é incondicionada. Como não há representação, não há retratação. O art. 16 ficou restrito a crimes condicionados remanescentes (como o stalking)."}
+];
+
+function renderQuiz(){const c=document.getElementById('quiz');let h='';perguntas.forEach((p,i)=>{h+=`<div class="quiz-q"><h4>${p.q}</h4>`;p.opts.forEach((o,j)=>{h+=`<button class="quiz-opt" data-q="${i}" data-o="${j}" onclick="resp(this,${i},${j})">${String.fromCharCode(65+j)}) ${o}</button>`});h+=`<div class="quiz-feed" id="f${i}"></div></div>`});c.innerHTML=h}
+function resp(btn,qi,oi){const q=perguntas[qi];document.querySelectorAll(`[data-q="${qi}"]`).forEach(b=>{b.disabled=true;if(+b.dataset.o===q.correta)b.classList.add('certo');else if(b===btn&&oi!==q.correta)b.classList.add('errado')});const f=document.getElementById('f'+qi);f.className=`quiz-feed show ${oi===q.correta?'alerta-verde':'alerta-vermelho'}`;f.innerHTML=oi===q.correta?'✅ '+q.feed:'❌ Incorreto. '+q.feed}
+renderQuiz();
+</script>
+</body>
+</html>
